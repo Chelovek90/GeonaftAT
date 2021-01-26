@@ -12,7 +12,7 @@ import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 public abstract class BaseTest {
-    private static WindowsDriver<RemoteWebElement> desktopSession;
+    protected static WindowsDriver<RemoteWebElement> desktopSession;
     private String geonaftPath = "F:\\Geonaft\\3.7.37.8\\644\\Geosteering.Launcher.exe";
     private String winAppDriverPath = "C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe";
     private Runtime runtime = Runtime.getRuntime();

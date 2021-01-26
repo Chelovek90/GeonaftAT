@@ -26,6 +26,7 @@ public class TreeProject extends BaseAction {
         super(driver);
         this.treeProjectWindow = treeProjectSelector;
     }
+
     protected String condition = "ExpandCollapse.ExpandCollapseState";
 
     public boolean checkExpander(RemoteWebElement element) {
@@ -63,7 +64,7 @@ public class TreeProject extends BaseAction {
     }
 
     private RemoteWebElement rootTreeFolder;
-    public void unfoldRootFolder(RootFolderSelector selector) {
+    public void unfoldFolder(RootFolderSelector selector) {
         this.rootTreeFolder = (RemoteWebElement) treeProjectWindow.findElementByName(selector.folderSelector);
         if (checkExpander(rootTreeFolder)) {
             horizontalScroll(treeProjectWindow, rootTreeFolder);
@@ -71,7 +72,7 @@ public class TreeProject extends BaseAction {
         }
     }
 
-    public void unfoldSubFolder(SubFolderSelector selector, String folderName) {
+    public void unfoldFolder(SubFolderSelector selector, String folderName) {
         List<WebElement> list = rootTreeFolder.findElementsByName(selector.folderSelector);
         searchElementByName(list, folderName);
         this.rootTreeFolder = (RemoteWebElement)targetFolder;
@@ -81,7 +82,7 @@ public class TreeProject extends BaseAction {
         }
     }
 
-    public void unfoldSubFolder(SubFolderSelector selector) {
+    public void unfoldFolder(SubFolderSelector selector) {
         this.rootTreeFolder = (RemoteWebElement) rootTreeFolder.findElementsByName(selector.folderSelector);
         if (checkExpander(rootTreeFolder)) {
             horizontalScroll(treeProjectWindow, rootTreeFolder);
