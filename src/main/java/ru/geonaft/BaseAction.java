@@ -27,8 +27,6 @@ import java.util.List;
 
 public abstract class BaseAction extends Base{
 
-    protected WebElement target;
-
     public BaseAction(WindowsDriver<RemoteWebElement> driver) {
         super(driver);
     }
@@ -116,6 +114,13 @@ public abstract class BaseAction extends Base{
     protected void rightClick(RemoteWebElement element) {
         RemoteWebElement elementButton = (RemoteWebElement) element.findElementByClassName(clickablePoint);
         actions.contextClick(elementButton).perform();
+    }
+
+    private String checkBox = "CheckBox";
+
+    protected void clickCheckBox(RemoteWebElement element) {
+        RemoteWebElement checkBox = (RemoteWebElement) element.findElementByClassName(this.checkBox);
+        checkBox.click();
     }
 
     public void moveTo(RemoteWebElement element) {
