@@ -5,15 +5,20 @@ import io.appium.java_client.windows.WindowsDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.PageFactory;
+import ru.geonaft.view.ribbone.Ribbon;
+import ru.geonaft.view.treeProject.TreeProject;
 
 import java.awt.*;
 import java.util.List;
 
 public abstract class Base {
 
+    protected Ribbon ribbon;
+    protected TreeProject treeProject;
+
     protected List<String> entityName;
 
-    private WindowsDriver<RemoteWebElement> driver;
+    protected WindowsDriver<RemoteWebElement> driver;
     protected Robot robot;
     protected Actions actions;
 
