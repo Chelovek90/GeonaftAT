@@ -50,4 +50,15 @@ public class Ribbon extends BaseAction {
         modulesGroups.get(moduleSelector.indexGroup).findElement(By.name(moduleSelector.moduleSelector)).click();
 
     }
+
+    private String fileButton = "RibbonApplicationMenu";
+    @WindowsFindBy(accessibility = "bCloseProject")
+    private RemoteWebElement closeProjectButton;
+    @WindowsFindBy(accessibility = "No")
+    private RemoteWebElement noButton;
+    public void closeProject() {
+        ribbonPanel.findElementByClassName(fileButton).click();
+        closeProjectButton.click();
+        noButton.click();
+    }
 }

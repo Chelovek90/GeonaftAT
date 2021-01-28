@@ -43,7 +43,7 @@
                     <!--true - Статус билда не зависит от прохождения тестов-->
                     <testFailureIgnore>true</testFailureIgnore>
                     <includes>
-                        <include>**/*LoaderTest*.java</include>
+                        <include>**/*.java</include>
                     </includes>
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"

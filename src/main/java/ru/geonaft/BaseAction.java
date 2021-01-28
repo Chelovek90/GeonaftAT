@@ -168,7 +168,6 @@ public abstract class BaseAction extends Base{
         nameFiled.get(1).click();
         pastFromBuffer();
         window.findElementByName(openButtonSelector).click();
-        waitLoading();
     }
 
     @WindowsFindBy(accessibility = "IndicatorText")
