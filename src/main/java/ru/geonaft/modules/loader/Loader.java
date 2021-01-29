@@ -11,14 +11,15 @@ import ru.geonaft.view.ribbone.Ribbon;
 import ru.geonaft.view.ribbone.modulesSelector.ModuleSelector;
 import ru.geonaft.view.treeProject.TreeProject;
 import ru.geonaft.view.treeProject.selectors.SubFolderSelector;
+import ru.geonaft.view.workSpace.editor.BaseWorkSpace;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static ru.geonaft.modules.loader.previewFilds.PreviewFieldsSelector.*;
+import static ru.geonaft.view.treeProject.selectors.RootFolderSelector.SURFACES;
 import static ru.geonaft.view.treeProject.selectors.RootFolderSelector.WELLS;
 import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.*;
 import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.LOGS;
@@ -31,8 +32,6 @@ public class Loader extends BaseAction implements OpenModule{
     private String surfaceName;
     private String imageName;
 
-//    private List<String> folders;
-
     public Loader getTree() {
         this.treeProject = new TreeProject(driver);
         return this;
@@ -40,6 +39,11 @@ public class Loader extends BaseAction implements OpenModule{
 
     public Loader getRibbon() {
         this.ribbon = new Ribbon(driver);
+        return this;
+    }
+
+    public Loader getWorkSpace() {
+        this.workSpace = new BaseWorkSpace(driver);
         return this;
     }
 
@@ -54,7 +58,7 @@ public class Loader extends BaseAction implements OpenModule{
     @Step("Open loader")
     @Override
     public Loader openModule() {
-        getRibbon();
+//        getRibbon();
         ribbon.openModule(ModuleSelector.LOADER);
         this.loaderWindow = (RemoteWebElement) windowsElement.findElementByName(loaderWindowSelector);
         return this;
@@ -96,19 +100,21 @@ public class Loader extends BaseAction implements OpenModule{
     private String openFileButtonSelector = "Открыть файл";
     private String loadButtonSelector = "Загрузить";
 
-    @Step("Uploading to the project - {entity}")
+    @Step("Uploading to the project - {what}")
     public Loader loadEntity(String from, String fileName, SubFolderSelector what) {
         this.entityName = new ArrayList<>();
         loaderWindow.findElementByName(openFileButtonSelector).click();
         loadFile(from, fileName);
         doPreview(what);
-        loaderWindow.findElementByName(loadButtonSelector).click();
+        RemoteWebElement loaderButton = (RemoteWebElement) loaderWindow.findElementByName(loadButtonSelector);
+        assertThat(loaderButton.getAttribute("IsEnabled"), is(equalTo("True")));
+        loaderButton.click();
         waitLoading();
         return this;
     }
 
-    public void openEditorLoadedFile(SubFolderSelector what) {
-        getTree();
+    public Loader openEditorLoadedFile(SubFolderSelector what) {
+//        getTree();
         switch (what){
             case LOG:
                 treeProject
@@ -117,14 +123,22 @@ public class Loader extends BaseAction implements OpenModule{
                         .unfoldFolder(LOGS)
                         .searchElementByName(LOG, logName)
                         .openEditorTargetFolder();
-
-
+                clickOkInAttention();
+                break;
+            case SURFACE:
+                treeProject
+                        .unfoldFolder(SURFACES)
+                        .searchElementByName(SURFACE, surfaceName)
+                        .openEditorTargetFolder();
         }
+        workSpace.compareCountHeaders();
+        return this;
     }
 
-    @Step("Checking the uploaded data {entity} in the data editor")
+    @Step("Checking the uploaded data in the data editor")
     public Loader checkDataInEditor() {
-
+//        getWorkSpace();
+        workSpace.checkDataEditor();
         return this;
     }
 }

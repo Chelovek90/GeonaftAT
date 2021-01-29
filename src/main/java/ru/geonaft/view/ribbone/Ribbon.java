@@ -49,6 +49,7 @@ public class Ribbon extends BaseAction {
         clickRibbonTab(TabSelector.PROJECT);
         modulesGroups.get(moduleSelector.indexGroup).findElement(By.name(moduleSelector.moduleSelector)).click();
 
+
     }
 
     private String fileButton = "RibbonApplicationMenu";

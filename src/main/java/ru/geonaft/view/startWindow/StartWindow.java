@@ -9,6 +9,9 @@ import ru.geonaft.BaseAction;
 
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+
 public class StartWindow extends BaseAction {
 
     protected List<WebElement> buttonsStartWindowGF;
@@ -43,5 +46,8 @@ public class StartWindow extends BaseAction {
             yesNotificationWindow.click();
             waitLoading();
         }
+        String windowName = geonaftWindow.getText();
+        assertThat("Window name does not match the project name", windowName, containsString(fileName));
+        System.out.println("Project name - " + windowName);
     }
 }
