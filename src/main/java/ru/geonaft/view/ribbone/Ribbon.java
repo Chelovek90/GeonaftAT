@@ -5,7 +5,7 @@ import io.appium.java_client.windows.WindowsDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
-import ru.geonaft.BaseAction;
+import ru.geonaft.Base;
 import ru.geonaft.view.ribbone.modulesSelector.ModuleSelector;
 import ru.geonaft.view.ribbone.modulesSelector.TabSelector;
 
@@ -16,7 +16,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.not;
 
-public class Ribbon extends BaseAction {
+public class Ribbon extends Base {
 
     protected RemoteWebElement ribbonPanel;
     @WindowsFindBy(accessibility = "RibbonGeo")

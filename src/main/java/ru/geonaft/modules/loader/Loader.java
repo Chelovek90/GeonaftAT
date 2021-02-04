@@ -5,7 +5,8 @@ import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
-import ru.geonaft.BaseAction;
+import ru.geonaft.Base;
+import ru.geonaft.helpers.BaseAction;
 import ru.geonaft.modules.loader.previewFilds.PreviewFieldsSelector;
 import ru.geonaft.view.ribbone.Ribbon;
 import ru.geonaft.view.ribbone.modulesSelector.ModuleSelector;
@@ -13,24 +14,16 @@ import ru.geonaft.view.treeProject.TreeProject;
 import ru.geonaft.view.treeProject.selectors.SubFolderSelector;
 import ru.geonaft.view.workSpace.editor.BaseWorkSpace;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static ru.geonaft.NameEntityToProject.*;
 import static ru.geonaft.modules.loader.previewFilds.PreviewFieldsSelector.*;
-import static ru.geonaft.view.treeProject.selectors.RootFolderSelector.SURFACES;
-import static ru.geonaft.view.treeProject.selectors.RootFolderSelector.WELLS;
-import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.*;
-import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.LOGS;
+import static ru.geonaft.view.treeProject.selectors.RootFolderSelector.PICTURES;
+import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.PICTURE;
 
-public class Loader extends BaseAction implements OpenModule{
-
-    private String wellName;
-    private String logName;
-    private String logs;
-    private String surfaceName;
-    private String imageName;
+public class Loader extends Base implements OpenModule{
 
     public Loader getTree() {
         this.treeProject = new TreeProject(driver);
@@ -51,6 +44,7 @@ public class Loader extends BaseAction implements OpenModule{
 
     public Loader(WindowsDriver<RemoteWebElement> driver) {
         super(driver);
+        this.baseAction = new BaseAction(driver);
     }
 
     private String loaderWindowSelector = "ЗАГРУЗЧИК ДАННЫХ";
@@ -83,15 +77,27 @@ public class Loader extends BaseAction implements OpenModule{
     public Loader doPreview(SubFolderSelector entity) {
         switch (entity){
             case LOG:
-                this.wellName = getNameByIdFromPreview(PreviewFieldsSelector.WELL_ID);
-                this.logName = getNameBySelectorFromPreview(PreviewFieldsSelector.LOG_SELECTOR);
+                wellInProject.setName(getNameByIdFromPreview(PreviewFieldsSelector.WELL_ID));
+                logInProject.setName(getNameBySelectorFromPreview(PreviewFieldsSelector.LOG_SELECTOR));
+                assertThat("Field with log name is empty", logInProject, is(notNullValue()));
                 checkDataPreview(CURVE_SELECTOR);
                 break;
             case SURFACE:
-                this.surfaceName = getNameByIdFromPreview(SURFACE_ID);
+                surfaceInProject.setName(getNameByIdFromPreview(SURFACE_ID));
+                assertThat("Field with surface name is empty", surfaceInProject, is(notNullValue()));
                 break;
             case IMAGE:
-                this.imageName = getNameByIdFromPreview(IMAGE_ID);
+                wellInProject.setName(getNameByIdFromPreview(PreviewFieldsSelector.WELL_ID));
+                imageInProject.setName(getNameByIdFromPreview(IMAGE_ID));
+                assertThat("Field with image name is empty", imageInProject, is(notNullValue()));
+                checkDataPreview(SECTOR_SELECTOR);
+                break;
+            case POLYGON:
+                checkDataPreview(SURFACE_SELECTOR);
+                break;
+            case PICTURE:
+                pictureInProject.setName(getNameByIdFromPreview(PICTURE_ID));
+                assertThat("Field with picture name is empty", pictureInProject, is(notNullValue()));
                 break;
         }
         return this;
@@ -102,43 +108,39 @@ public class Loader extends BaseAction implements OpenModule{
 
     @Step("Uploading to the project - {what}")
     public Loader loadEntity(String from, String fileName, SubFolderSelector what) {
-        this.entityName = new ArrayList<>();
         loaderWindow.findElementByName(openFileButtonSelector).click();
-        loadFile(from, fileName);
+        baseAction.loadFile(from, fileName);
+        baseAction.waitLoading();
         doPreview(what);
         RemoteWebElement loaderButton = (RemoteWebElement) loaderWindow.findElementByName(loadButtonSelector);
         assertThat(loaderButton.getAttribute("IsEnabled"), is(equalTo("True")));
         loaderButton.click();
-        waitLoading();
+        baseAction.waitLoading();
         return this;
     }
 
     public Loader openEditorLoadedFile(SubFolderSelector what) {
 //        getTree();
-        switch (what){
-            case LOG:
-                treeProject
-                        .unfoldFolder(WELLS)
-                        .unfoldFolder(WELL, wellName)
-                        .unfoldFolder(LOGS)
-                        .searchElementByName(LOG, logName)
-                        .openEditorTargetFolder();
-                clickOkInAttention();
-                break;
-            case SURFACE:
-                treeProject
-                        .unfoldFolder(SURFACES)
-                        .searchElementByName(SURFACE, surfaceName)
-                        .openEditorTargetFolder();
-        }
-        workSpace.compareCountHeaders();
+        treeProject.openEditorFromContext(what);
         return this;
     }
 
     @Step("Checking the uploaded data in the data editor")
-    public Loader checkDataInEditor() {
+    public Loader checkDataInEditor(String name) {
 //        getWorkSpace();
-        workSpace.checkDataEditor();
+        workSpace.checkDataEditor(name);
+        return this;
+    }
+
+    @Step("Checking data in the folder")
+    public Loader checkDataFolder(SubFolderSelector subFolder) {
+        switch (subFolder){
+            case PICTURE:
+                treeProject
+                        .unfoldFolder(PICTURES)
+                        .searchElementByName(PICTURE, pictureInProject.name);
+                break;
+        }
         return this;
     }
 }

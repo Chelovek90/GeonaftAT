@@ -6,18 +6,23 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.geonaft.BaseAction;
+import ru.geonaft.Base;
+import ru.geonaft.helpers.BaseAction;
 import ru.geonaft.view.treeProject.selectors.RootFolderSelector;
 import ru.geonaft.view.treeProject.selectors.SubFolderSelector;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static ru.geonaft.NameEntityToProject.*;
+import static ru.geonaft.view.treeProject.selectors.RootFolderSelector.*;
+import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.*;
 
-public class TreeProject extends BaseAction {
-    protected WebElement targetFolder;
+public class TreeProject extends Base {
 
-    protected RemoteWebElement treeProjectWindow;
+    private WebElement targetFolder;
+
+    private RemoteWebElement treeProjectWindow;
 
     @WindowsFindBy(accessibility = "TreeView")
     private RemoteWebElement treeProjectSelector;
@@ -25,7 +30,17 @@ public class TreeProject extends BaseAction {
     public TreeProject(WindowsDriver<RemoteWebElement> driver) {
         super(driver);
         this.treeProjectWindow = treeProjectSelector;
+        this.baseAction = new BaseAction(driver);
     }
+
+    private String nameField = "TextBlock";
+    private String attributeName = "Name";
+    public String getFolderName(RemoteWebElement element) {
+        String fileName;
+        fileName = element.findElementByClassName(nameField).getAttribute(attributeName);
+        return fileName;
+    }
+
 
     protected String condition = "ExpandCollapse.ExpandCollapseState";
 
@@ -34,7 +49,7 @@ public class TreeProject extends BaseAction {
         boolean collapsed = false;
         switch (expanderCondition){
             case "LeafNode":
-                assertTrue(collapsed, "Block " + getFileName(element) + " is empty");
+                assertTrue(collapsed, "Block " + getFolderName(element) + " is empty");
                 break;
             case "Expanded":
                 break;
@@ -45,8 +60,9 @@ public class TreeProject extends BaseAction {
         return collapsed;
     }
 
-    public TreeProject searchElementByName(SubFolderSelector selector, String folderName) {
-        List<WebElement> list = rootTreeFolder.findElementsByName(selector.folderSelector);
+    private String clickablePoint = "TextBlock";
+    public TreeProject searchElementByName(SubFolderSelector folder, String folderName) {
+        List<WebElement> list = rootTreeFolder.findElementsByName(folder.folderSelector);
         targetFolder = list.stream()
                 .filter(surface -> surface.findElement(By.className(clickablePoint)).getText().equals(folderName))
                 .findFirst().orElse(null);
@@ -61,17 +77,17 @@ public class TreeProject extends BaseAction {
     protected RemoteWebElement okButton;
 
     public void openEditorFromContextMenu(RemoteWebElement element) {
-        rightClick(element);
+        baseAction.rightClick(element);
         List<WebElement> items = contextMenu.findElementsByClassName(menuItem);
         items.get(0).click();
     }
 
     private RemoteWebElement rootTreeFolder;
-    public TreeProject unfoldFolder(RootFolderSelector selector) {
-        this.rootTreeFolder = (RemoteWebElement) treeProjectWindow.findElementByName(selector.folderSelector);
+    public TreeProject unfoldFolder(RootFolderSelector folder) {
+        this.rootTreeFolder = (RemoteWebElement) treeProjectWindow.findElementByName(folder.folderSelector);
         if (checkExpander(rootTreeFolder)) {
-            horizontalScroll(treeProjectWindow, rootTreeFolder);
-            doubleClick(rootTreeFolder);
+            baseAction.horizontalScroll(treeProjectWindow, rootTreeFolder);
+            baseAction.doubleClick(rootTreeFolder);
         }
         return this;
     }
@@ -80,8 +96,8 @@ public class TreeProject extends BaseAction {
         searchElementByName(selector, folderName);
         this.rootTreeFolder = (RemoteWebElement)targetFolder;
         if (checkExpander(rootTreeFolder)) {
-            horizontalScroll(treeProjectWindow, rootTreeFolder);
-            doubleClick(rootTreeFolder);
+            baseAction.horizontalScroll(treeProjectWindow, rootTreeFolder);
+            baseAction.doubleClick(rootTreeFolder);
         }
         return this;
     }
@@ -89,30 +105,71 @@ public class TreeProject extends BaseAction {
     public TreeProject unfoldFolder(SubFolderSelector selector) {
         RemoteWebElement subFolder = (RemoteWebElement) rootTreeFolder.findElementByName(selector.folderSelector);
         if (checkExpander(subFolder)) {
-            horizontalScroll(treeProjectWindow, subFolder);
-            doubleClick(subFolder);
+            baseAction.horizontalScroll(treeProjectWindow, subFolder);
+            baseAction.doubleClick(subFolder);
             this.rootTreeFolder = subFolder;
         }
         return this;
     }
 
     public void openEditorTargetFolder() {
-        horizontalScroll(treeProjectWindow, (RemoteWebElement) targetFolder);
+        baseAction.horizontalScroll(treeProjectWindow, (RemoteWebElement) targetFolder);
         openEditorFromContextMenu((RemoteWebElement)targetFolder);
     }
 
-    public void clickCheckBox(SubFolderSelector selector) {
-        RemoteWebElement needClick = (RemoteWebElement) rootTreeFolder.findElementByName(selector.folderSelector);
-        horizontalScroll(treeProjectWindow, needClick);
-        clickCheckBox(needClick);
+//    public void openEditorFolder(RootFolderSelector selector) {
+//        RemoteWebElement rootFolder = (RemoteWebElement) treeProjectWindow.findElementByName(selector.folderSelector);
+//        baseAction.horizontalScroll(treeProjectWindow, rootFolder);
+//        openEditorFromContextMenu(rootFolder);
+//    }
+
+//    public void checkDataFolder(RootFolderSelector rootFolderSelector, String screenName, SubFolderSelector subFolderSelector) {
+//        unfoldFolder(rootFolderSelector);
+//        List<WebElement> list = rootTreeFolder.findElementsByClassName(subFolderSelector.folderSelector);
+//        baseAction.takeScreenshotToAttachOnAllureReport(treeProjectWindow, screenName , PRIMARY);
+//        String message = ("Folder " + rootFolderSelector+ " is empty");
+//        assertThat(message, list, is(notNullValue()));
+//    }
+
+    public void openEditorFromContext(SubFolderSelector what) {
+//        getTree();
+        switch (what){
+            case LOG:
+                treeProject
+                        .unfoldFolder(WELLS)
+                        .unfoldFolder(WELL, wellInProject.name)
+                        .unfoldFolder(LOGS)
+                        .searchElementByName(LOG, logInProject.name)
+                        .openEditorTargetFolder();
+                baseAction.clickOkInAttention();
+                break;
+            case SURFACE:
+                treeProject
+                        .unfoldFolder(SURFACES)
+                        .searchElementByName(SURFACE, surfaceInProject.name)
+                        .openEditorTargetFolder();
+                break;
+            case POLYGON:
+                treeProject
+                        .unfoldFolder(POLYGONS)
+                        .openEditorTargetFolder();
+                break;
+            case IMAGE:
+                treeProject
+                        .unfoldFolder(WELLS)
+                        .unfoldFolder(WELL, wellInProject.name)
+                        .unfoldFolder(IMAGES)
+                        .searchElementByName(IMAGE, imageInProject.name)
+                        .openEditorTargetFolder();
+                break;
+            case PICTURE:
+                treeProject
+                        .unfoldFolder(PICTURES)
+                        .searchElementByName(PICTURE, pictureInProject.name)
+                        .openEditorTargetFolder();
+                break;
+
+        }
+        workSpace.compareCountHeaders();
     }
-
-    public void clickCheckBox(SubFolderSelector selector, String folderName) {
-        searchElementByName(selector, folderName);
-        horizontalScroll(treeProjectWindow, (RemoteWebElement) targetFolder);
-        clickCheckBox((RemoteWebElement) targetFolder);
-    }
-
-
-
 }

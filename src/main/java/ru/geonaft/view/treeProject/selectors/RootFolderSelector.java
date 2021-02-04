@@ -6,7 +6,10 @@ public enum RootFolderSelector {
     CONTACTS("Geosteering.UI.Controls.DataTreeView.DataTree.FluidContactsTreeViewItem"),
     ZONES("Geosteering.UI.Controls.DataTreeView.DataTree.ZonesTreeViewItem"),
     STRATIGRAPHY("Geosteering.UI.Controls.DataTreeView.DataTree.StratigraphyTreeViewItem"),
-    SURFACES("Geosteering.UI.Controls.DataTreeView.DataTree.SurfacesTreeViewItem");
+    SURFACES("Geosteering.UI.Controls.DataTreeView.DataTree.SurfacesTreeViewItem"),
+    POLYGONS("Geosteering.UI.Controls.DataTreeView.DataTree.PolygonsTreeViewItem"),
+    PICTURES("Geosteering.UI.Controls.DataTreeView.DataTree.PicturesTreeViewItem"),
+    ;
 
     public final String folderSelector;
 

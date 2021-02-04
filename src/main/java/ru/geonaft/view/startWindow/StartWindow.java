@@ -5,14 +5,15 @@ import io.appium.java_client.windows.WindowsDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.geonaft.BaseAction;
+import ru.geonaft.Base;
+import ru.geonaft.helpers.BaseAction;
 
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
 
-public class StartWindow extends BaseAction {
+public class StartWindow extends Base {
 
     protected List<WebElement> buttonsStartWindowGF;
     private String button = "Button";
@@ -21,6 +22,7 @@ public class StartWindow extends BaseAction {
     public StartWindow(WindowsDriver<RemoteWebElement> driver) {
         super(driver);
         this.buttonsStartWindowGF = startWindowGF.findElementsByClassName(button);
+        this.baseAction = new BaseAction(driver);
     }
 
     public StartWindow clickOpenButton() {
@@ -40,11 +42,11 @@ public class StartWindow extends BaseAction {
     private RemoteWebElement yesNotificationWindow;
     public void openProject(String path, String fileName) {
         clickOpenButton();
-        loadFile(path, fileName);
+        baseAction.loadFile(path, fileName);
         List<WebElement> notification = windowsElement.findElementsByName(notificationWindowSelector);
         if (notification.size() != 0){
             yesNotificationWindow.click();
-            waitLoading();
+            baseAction.waitLoading();
         }
         String windowName = geonaftWindow.getText();
         assertThat("Window name does not match the project name", windowName, containsString(fileName));

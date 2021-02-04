@@ -5,18 +5,23 @@ import io.appium.java_client.pagefactory.WindowsFindBy;
 import io.appium.java_client.windows.WindowsDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import ru.geonaft.helpers.BaseAction;
 import ru.geonaft.view.ribbone.Ribbon;
 import ru.geonaft.view.treeProject.TreeProject;
 import ru.geonaft.view.workSpace.editor.BaseWorkSpace;
 
 import java.awt.*;
-import java.util.List;
 
 public abstract class Base {
 
     @WindowsFindBy(accessibility = "MainShall")
     protected RemoteWebElement geonaftWindow;
+    @FindBy(className = "Window")
+    protected RemoteWebElement windowsElement;
+
+    protected BaseAction baseAction;
 
     protected int numberHeaders;
 
@@ -24,15 +29,13 @@ public abstract class Base {
     public static TreeProject treeProject;
     public static BaseWorkSpace workSpace;
 
-    protected List<String> entityName;
-
     protected WindowsDriver<RemoteWebElement> driver;
-    protected Robot robot;
-    public Actions actions;
+    public static Robot robot;
+    public static Actions actions;
 
     public enum appointment {
-        ACTUAL,
-        EXPECTED
+        PRIMARY,
+        SECONDARY
     }
 
     public Base(WindowsDriver<RemoteWebElement> driver) {

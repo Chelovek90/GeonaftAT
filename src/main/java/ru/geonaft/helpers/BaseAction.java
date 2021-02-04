@@ -1,7 +1,9 @@
-package ru.geonaft;
+package ru.geonaft.helpers;
 
+import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.WindowsFindBy;
 import io.appium.java_client.windows.WindowsDriver;
+import io.qameta.allure.Attachment;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.Keys;
@@ -9,7 +11,8 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.geonaft.helpers.GifSequenceWriter;
+import org.openqa.selenium.support.PageFactory;
+import ru.geonaft.ScreenshotPaths;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.comparison.ImageDiff;
 import ru.yandex.qatools.ashot.comparison.ImageDiffer;
@@ -23,12 +26,19 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
-public abstract class BaseAction extends Base{
+import static ru.geonaft.Base.*;
+
+public class BaseAction {
+
+    WindowsDriver<RemoteWebElement> driver;
 
     public BaseAction(WindowsDriver<RemoteWebElement> driver) {
-        super(driver);
+        this.driver = driver;
+        PageFactory.initElements(new AppiumFieldDecorator(driver), this);
     }
 
     protected void copyInBuffer(String s) {
@@ -53,48 +63,53 @@ public abstract class BaseAction extends Base{
         return fileName;
     }
 
-    protected void makeElementScreenshot(RemoteWebElement element, appointment appointment) {
-        String fileName = getFileName(element);
+    @Attachment(value = "Test screenshot", type = "image/png")
+    public byte[] takeScreenshotToAttachOnAllureReport(RemoteWebElement element, String fileName, appointment appointment) {
+        byte[] bytes = null;
         File screen = element.getScreenshotAs(OutputType.FILE);
-        if (appointment == Base.appointment.ACTUAL) {
+        if (appointment == appointment.SECONDARY) {
             try {
-                FileUtils.copyFile(screen, new File(BasePaths.actualDir + fileName + ".png"));
+                FileUtils.copyFile(screen, new File(ScreenshotPaths.secondaryDir + fileName + ".png"));
+                bytes = Files.readAllBytes(Paths.get(String.valueOf(screen)));
             } catch (IOException e) {
-                System.out.println("ScreenShot is not created");
+                System.out.println("Secondary screenshot is not created");
             }
-        } else if (appointment == Base.appointment.EXPECTED){
+        } else if (appointment == appointment.PRIMARY){
             try {
-                FileUtils.copyFile(screen, new File(BasePaths.expectedDir + fileName + ".png"));
+                FileUtils.copyFile(screen, new File(ScreenshotPaths.primaryDir + fileName + ".png"));
+                bytes = Files.readAllBytes(Paths.get(String.valueOf(screen)));
             } catch (IOException e) {
+                System.out.println("Primary screenshot is not created");
             }
         }
+        return bytes;
     }
 
-    protected void takeDiffImage(RemoteWebElement element) {
+    public void takeDiffImage(RemoteWebElement element) {
         String fileName = getFileName(element);
         try {
-            Screenshot actualScreenshot = new Screenshot(ImageIO.read(new File(BasePaths.actualDir + fileName + ".png")));
-            Screenshot expectedScreenshot = new Screenshot(ImageIO.read(new File(BasePaths.expectedDir + fileName + ".png")));
-            ImageDiff diff = new ImageDiffer().makeDiff(expectedScreenshot, actualScreenshot);
-            File diffFile = new File(BasePaths.diffDir + fileName + ".png");
+            Screenshot secondaryScreenshot = new Screenshot(ImageIO.read(new File(ScreenshotPaths.secondaryDir + fileName + ".png")));
+            Screenshot primaryScreenshot = new Screenshot(ImageIO.read(new File(ScreenshotPaths.primaryDir + fileName + ".png")));
+            ImageDiff diff = new ImageDiffer().makeDiff(primaryScreenshot, secondaryScreenshot);
+            File diffFile = new File(ScreenshotPaths.diffDir + fileName + ".png");
             ImageIO.write(diff.getMarkedImage(), "png", diffFile);
             int diffPoint = diff.getDiffSize();
             Assertions.assertNotEquals(diffPoint, 0);
         } catch (IOException e) {
-            System.out.println("File is not created");
+            System.out.println("File different is not created");
         }
     }
 
-    protected void createGiffFile(String fileName) {
+    public void createGiffFile(String fileName) {
         try {
-            BufferedImage first = ImageIO.read(new File(BasePaths.actualDir + fileName + ".png"));
-            ImageOutputStream output = new FileImageOutputStream(new File(BasePaths.resultGifsDir + fileName + ".gif"));
+            BufferedImage first = ImageIO.read(new File(ScreenshotPaths.secondaryDir + fileName + ".png"));
+            ImageOutputStream output = new FileImageOutputStream(new File(ScreenshotPaths.resultGifsDir + fileName + ".gif"));
             GifSequenceWriter writer = new GifSequenceWriter(output, first.getType(), 250, true);
             writer.writeToSequence(first);
             File[] images = new File[]{
-                    new File(BasePaths.actualDir + fileName + ".png"),
-                    new File(BasePaths.expectedDir + fileName + ".png"),
-                    new File(BasePaths.diffDir + fileName + ".png"),
+                    new File(ScreenshotPaths.secondaryDir + fileName + ".png"),
+                    new File(ScreenshotPaths.primaryDir + fileName + ".png"),
+                    new File(ScreenshotPaths.diffDir + fileName + ".png"),
             };
             for (File image : images) {
                 BufferedImage next = ImageIO.read(image);
@@ -102,16 +117,16 @@ public abstract class BaseAction extends Base{
             }
             writer.close();
             output.close();
-        }catch (Exception e){}
+        }catch (Exception e){System.out.println("Gif file is not created");}
     }
 
-    protected String clickablePoint = "TextBlock";
-    protected void doubleClick(RemoteWebElement element) {
+    private String clickablePoint = "TextBlock";
+    public void doubleClick(RemoteWebElement element) {
         RemoteWebElement elementButton = (RemoteWebElement) element.findElementByClassName(clickablePoint);
         actions.doubleClick(elementButton).perform();
     }
 
-    protected void rightClick(RemoteWebElement element) {
+    public void rightClick(RemoteWebElement element) {
         RemoteWebElement elementButton = (RemoteWebElement) element.findElementByClassName(clickablePoint);
         actions.contextClick(elementButton).perform();
     }
@@ -127,7 +142,7 @@ public abstract class BaseAction extends Base{
         actions.moveToElement(element).build().perform();
     }
 
-    protected void horizontalScroll(RemoteWebElement mainView, RemoteWebElement element) {
+    public void horizontalScroll(RemoteWebElement mainView, RemoteWebElement element) {
 
         int topMainView = mainView.getLocation().getY();
         int heightMainView = mainView.getSize().getHeight();
@@ -157,7 +172,7 @@ public abstract class BaseAction extends Base{
     private String nameFieldSelector = "Имя файла:";
     private String openButtonSelector = "Открыть";
     private String CancelButtonSelector = "Отмена";
-    protected void loadFile(String path, String fileName) {
+    public void loadFile(String path, String fileName) {
         copyInBuffer(path);
         RemoteWebElement window = openingWindowSelector;
         window.findElementByName(pathFieldSelector).click();
@@ -172,7 +187,7 @@ public abstract class BaseAction extends Base{
 
     @WindowsFindBy(accessibility = "IndicatorText")
     private java.util.List<WebElement> indicatorLoad;
-    protected void waitLoading() {
+    public void waitLoading() {
         boolean load = true;
         while (load) {
             java.util.List<WebElement> indicator = indicatorLoad;
