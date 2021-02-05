@@ -9,6 +9,7 @@ public enum RootFolderSelector {
     SURFACES("Geosteering.UI.Controls.DataTreeView.DataTree.SurfacesTreeViewItem"),
     POLYGONS("Geosteering.UI.Controls.DataTreeView.DataTree.PolygonsTreeViewItem"),
     PICTURES("Geosteering.UI.Controls.DataTreeView.DataTree.PicturesTreeViewItem"),
+    TEMPLATES("Geosteering.UI.Controls.DataTreeView.PropertiesTemplates.TemplatesTreeViewItem"),
     ;
 
     public final String folderSelector;

@@ -4,11 +4,11 @@ public enum PreviewFieldsSelector {
 
     WELL_ID("cbName"),
 
-    LOGS("tboxMapTemplateViewModel"),
-
-    TIME_LOGS("tboxMapTemplateViewModel"),
+    ENTITY_ID("tboxMapTemplateViewModel"),
 
     LOG_SELECTOR("Geosteering.Geonaft.Module.Dataloader.Classes.DataTree.Items.LogTreeItem"),
+
+    TRAJECTORY_ID("tboxTrajectoryViewModel"),
 
     CURVE_SELECTOR("Geosteering.Geonaft.Module.Dataloader.Classes.DataTree.Items.CurveTreeItem"),
 
@@ -19,8 +19,6 @@ public enum PreviewFieldsSelector {
     SURFACE_ID("tboxSurfaceViewModel"),
 
     SURFACE_SELECTOR("Geosteering.Geonaft.Module.Dataloader.Classes.DataTree.Items.PolygonTreeItem"),
-
-    PICTURE_ID("tboxMapTemplateViewModel"),
     ;
 
 

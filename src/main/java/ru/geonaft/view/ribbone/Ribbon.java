@@ -31,11 +31,12 @@ public class Ribbon extends Base {
 
     private String tabButtonSelector = "RibbonTabHeader";
     private String groupSelector = "RibbonGroup";
+    private String isSelectedSelector = "SelectionItem.IsSelected";
 
     public void clickRibbonTab(TabSelector selector) {
         RemoteWebElement ribbonTab = (RemoteWebElement) ribbonPanel
                 .findElementByClassName(selector.tabSelector);
-        if (ribbonTab.getAttribute("SelectionItem.IsSelected").equals("False")) {
+        if (ribbonTab.getAttribute(isSelectedSelector).equals("False")) {
             RemoteWebElement ribbonButtonTab = (RemoteWebElement) ribbonTab
                     .findElementByClassName(tabButtonSelector);
             ribbonButtonTab.click();

@@ -33,7 +33,7 @@ public abstract class Base {
     public static Robot robot;
     public static Actions actions;
 
-    public enum appointment {
+    public enum Appointment {
         PRIMARY,
         SECONDARY
     }

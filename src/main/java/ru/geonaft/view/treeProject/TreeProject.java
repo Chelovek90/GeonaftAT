@@ -13,6 +13,9 @@ import ru.geonaft.view.treeProject.selectors.SubFolderSelector;
 
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static ru.geonaft.NameEntityToProject.*;
 import static ru.geonaft.view.treeProject.selectors.RootFolderSelector.*;
@@ -141,7 +144,14 @@ public class TreeProject extends Base {
                         .unfoldFolder(LOGS)
                         .searchElementByName(LOG, logInProject.name)
                         .openEditorTargetFolder();
-                baseAction.clickOkInAttention();
+                baseAction.clickOkInAttention((RemoteWebElement) driver.findElementByClassName("DataEditorView"));
+                break;
+            case TRAJECTORY:
+                treeProject
+                        .unfoldFolder(WELLS)
+                        .unfoldFolder(WELL, wellInProject.name)
+                        .searchElementByName(TRAJECTORY, trajectoryInProject.name)
+                        .openEditorTargetFolder();
                 break;
             case SURFACE:
                 treeProject
@@ -171,5 +181,24 @@ public class TreeProject extends Base {
 
         }
         workSpace.compareCountHeaders();
+    }
+
+    public void checkDataFolder(SubFolderSelector subFolder) {
+        switch (subFolder){
+            case PICTURE:
+                unfoldFolder(PICTURES);
+                searchElementByName(PICTURE, pictureInProject.name);
+                break;
+            case POLYGON:
+                unfoldFolder(POLYGONS);
+                List<WebElement> list = rootTreeFolder.findElementsByClassName(POLYGON.folderSelector);
+                assertThat("Polygon is not loaded", list, is(notNullValue()));
+                break;
+//            case PALETTE:
+//                unfoldFolder(TEMPLATES);
+//                List<WebElement> list = rootTreeFolder.findElementsByClassName(POLYGON.folderSelector);
+//                assertThat("Polygon is not loaded", list, is(notNullValue()));
+//                break;
+        }
     }
 }

@@ -21,7 +21,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static ru.geonaft.NameEntityToProject.*;
 import static ru.geonaft.modules.loader.previewFilds.PreviewFieldsSelector.*;
 import static ru.geonaft.view.treeProject.selectors.RootFolderSelector.PICTURES;
+import static ru.geonaft.view.treeProject.selectors.RootFolderSelector.POLYGONS;
 import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.PICTURE;
+import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.POLYGON;
 
 public class Loader extends Base implements OpenModule{
 
@@ -52,7 +54,6 @@ public class Loader extends Base implements OpenModule{
     @Step("Open loader")
     @Override
     public Loader openModule() {
-//        getRibbon();
         ribbon.openModule(ModuleSelector.LOADER);
         this.loaderWindow = (RemoteWebElement) windowsElement.findElementByName(loaderWindowSelector);
         return this;
@@ -78,8 +79,14 @@ public class Loader extends Base implements OpenModule{
         switch (entity){
             case LOG:
                 wellInProject.setName(getNameByIdFromPreview(PreviewFieldsSelector.WELL_ID));
-                logInProject.setName(getNameBySelectorFromPreview(PreviewFieldsSelector.LOG_SELECTOR));
+                logInProject.setName(getNameBySelectorFromPreview(LOG_SELECTOR));
                 assertThat("Field with log name is empty", logInProject, is(notNullValue()));
+                checkDataPreview(CURVE_SELECTOR);
+                break;
+            case TRAJECTORY:
+                wellInProject.setName(getNameByIdFromPreview(WELL_ID));
+                trajectoryInProject.setName(getNameByIdFromPreview(TRAJECTORY_ID));
+                assertThat("Field with trajectory name is empty", trajectoryInProject, is(notNullValue()));
                 checkDataPreview(CURVE_SELECTOR);
                 break;
             case SURFACE:
@@ -87,7 +94,7 @@ public class Loader extends Base implements OpenModule{
                 assertThat("Field with surface name is empty", surfaceInProject, is(notNullValue()));
                 break;
             case IMAGE:
-                wellInProject.setName(getNameByIdFromPreview(PreviewFieldsSelector.WELL_ID));
+                wellInProject.setName(getNameByIdFromPreview(WELL_ID));
                 imageInProject.setName(getNameByIdFromPreview(IMAGE_ID));
                 assertThat("Field with image name is empty", imageInProject, is(notNullValue()));
                 checkDataPreview(SECTOR_SELECTOR);
@@ -96,8 +103,12 @@ public class Loader extends Base implements OpenModule{
                 checkDataPreview(SURFACE_SELECTOR);
                 break;
             case PICTURE:
-                pictureInProject.setName(getNameByIdFromPreview(PICTURE_ID));
+                pictureInProject.setName(getNameByIdFromPreview(ENTITY_ID));
                 assertThat("Field with picture name is empty", pictureInProject, is(notNullValue()));
+                break;
+            case PALETTE:
+                paletteInProject.setName(getNameByIdFromPreview(ENTITY_ID));
+                assertThat("Field with palette name is empty", pictureInProject, is(notNullValue()));
                 break;
         }
         return this;
@@ -105,42 +116,35 @@ public class Loader extends Base implements OpenModule{
 
     private String openFileButtonSelector = "Открыть файл";
     private String loadButtonSelector = "Загрузить";
+    private String IsEnabledSelector = "IsEnabled";
 
     @Step("Uploading to the project - {what}")
     public Loader loadEntity(String from, String fileName, SubFolderSelector what) {
         loaderWindow.findElementByName(openFileButtonSelector).click();
         baseAction.loadFile(from, fileName);
-        baseAction.waitLoading();
+        baseAction.waitLoading(loaderWindow);
         doPreview(what);
         RemoteWebElement loaderButton = (RemoteWebElement) loaderWindow.findElementByName(loadButtonSelector);
-        assertThat(loaderButton.getAttribute("IsEnabled"), is(equalTo("True")));
+        assertThat(loaderButton.getAttribute(IsEnabledSelector), is(equalTo("True")));
         loaderButton.click();
-        baseAction.waitLoading();
+        baseAction.waitLoading(loaderWindow);
         return this;
     }
 
     public Loader openEditorLoadedFile(SubFolderSelector what) {
-//        getTree();
         treeProject.openEditorFromContext(what);
         return this;
     }
 
     @Step("Checking the uploaded data in the data editor")
     public Loader checkDataInEditor(String name) {
-//        getWorkSpace();
         workSpace.checkDataEditor(name);
         return this;
     }
 
     @Step("Checking data in the folder")
     public Loader checkDataFolder(SubFolderSelector subFolder) {
-        switch (subFolder){
-            case PICTURE:
-                treeProject
-                        .unfoldFolder(PICTURES)
-                        .searchElementByName(PICTURE, pictureInProject.name);
-                break;
-        }
+        treeProject.checkDataFolder(subFolder);
         return this;
     }
 }

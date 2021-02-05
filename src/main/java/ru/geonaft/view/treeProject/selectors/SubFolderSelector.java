@@ -26,6 +26,8 @@ public enum SubFolderSelector {
     POLYGON("Geosteering.UI.Controls.DataTreeView.DataTree.PolygonTreeViewItem"),
 
     PICTURE("Geosteering.UI.Controls.DataTreeView.DataTree.PictureTreeViewItem"),
+
+    PALETTE("Geosteering.UI.Controls.DataTreeView.DataTree.PalettesTreeViewItem"),
     ;
 
     public final String folderSelector;

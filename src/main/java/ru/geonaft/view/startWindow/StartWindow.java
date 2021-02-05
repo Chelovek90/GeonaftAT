@@ -46,7 +46,7 @@ public class StartWindow extends Base {
         List<WebElement> notification = windowsElement.findElementsByName(notificationWindowSelector);
         if (notification.size() != 0){
             yesNotificationWindow.click();
-            baseAction.waitLoading();
+            baseAction.waitLoading(geonaftWindow);
         }
         String windowName = geonaftWindow.getText();
         assertThat("Window name does not match the project name", windowName, containsString(fileName));

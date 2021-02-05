@@ -7,12 +7,14 @@ import io.qameta.allure.Attachment;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import ru.geonaft.ScreenshotPaths;
+import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.comparison.ImageDiff;
 import ru.yandex.qatools.ashot.comparison.ImageDiffer;
@@ -27,6 +29,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -47,7 +50,7 @@ public class BaseAction {
         clipboard.setContents(stringSelection, null);
     }
 
-    protected void pastFromBuffer(){
+    protected void pastFromBuffer() {
         actions.sendKeys(Keys.chord(Keys.LEFT_CONTROL, "v")).build().perform();
     }
 
@@ -57,58 +60,109 @@ public class BaseAction {
 
     private String nameField = "TextBlock";
     private String attributeName = "Name";
+
     public String getFileName(RemoteWebElement element) {
         String fileName;
         fileName = element.findElementByClassName(nameField).getAttribute(attributeName);
         return fileName;
     }
 
+//    @Attachment(value = "Test screenshot", type = "image/png")
+//    public byte[] takeScreenshotToAttachOnAllureReport(RemoteWebElement element, String fileName, Appointment appointment) {
+//        byte[] bytes = null;
+//        File screen = element.getScreenshotAs(OutputType.FILE);
+//        if (appointment == appointment.SECONDARY) {
+//            try {
+//                FileUtils.copyFile(screen, new File(ScreenshotPaths.secondaryDir + fileName + ".png"));
+//                bytes = Files.readAllBytes(Paths.get(String.valueOf(screen)));
+//            } catch (IOException e) {
+//                System.out.println("Secondary screenshot is not created");
+//            }
+//        } else if (appointment == appointment.PRIMARY){
+//            try {
+//                FileUtils.copyFile(screen, new File(ScreenshotPaths.primaryDir + fileName + ".png"));
+//                bytes = Files.readAllBytes(Paths.get(String.valueOf(screen)));
+//            } catch (IOException e) {
+//                System.out.println("Primary screenshot is not created");
+//            }
+//        }
+//        return bytes;
+//    }
+
     @Attachment(value = "Test screenshot", type = "image/png")
-    public byte[] takeScreenshotToAttachOnAllureReport(RemoteWebElement element, String fileName, appointment appointment) {
+    public byte[] takeScreenshotToAttachOnAllureReport(RemoteWebElement element, String fileName, Appointment appointment) {
         byte[] bytes = null;
-        File screen = element.getScreenshotAs(OutputType.FILE);
-        if (appointment == appointment.SECONDARY) {
-            try {
-                FileUtils.copyFile(screen, new File(ScreenshotPaths.secondaryDir + fileName + ".png"));
-                bytes = Files.readAllBytes(Paths.get(String.valueOf(screen)));
-            } catch (IOException e) {
-                System.out.println("Secondary screenshot is not created");
-            }
-        } else if (appointment == appointment.PRIMARY){
-            try {
-                FileUtils.copyFile(screen, new File(ScreenshotPaths.primaryDir + fileName + ".png"));
-                bytes = Files.readAllBytes(Paths.get(String.valueOf(screen)));
-            } catch (IOException e) {
-                System.out.println("Primary screenshot is not created");
-            }
+        File screenshot = element.getScreenshotAs(OutputType.FILE);
+        switch (appointment) {
+            case PRIMARY:
+                try {
+                    FileUtils.copyFile(screenshot, new File(ScreenshotPaths.primaryDir + fileName + ".png"));
+                    bytes = Files.readAllBytes(Paths.get(String.valueOf(screenshot)));
+                } catch (IOException e) {
+                    System.out.println("Primary screenshot is not created");
+                }
+
+                break;
+            case SECONDARY:
+                try {
+                    FileUtils.copyFile(screenshot, new File(ScreenshotPaths.primaryDir + fileName + ".png"));
+                    bytes = Files.readAllBytes(Paths.get(String.valueOf(screenshot)));
+                } catch (IOException e) {
+                    System.out.println("Secondary screenshot is not created");
+                }
         }
         return bytes;
     }
 
-    public void takeDiffImage(RemoteWebElement element) {
-        String fileName = getFileName(element);
+//    public int takeDiffImage(String fileName) {
+//        int diffPoint = 1;
+//        try {
+//            Screenshot secondaryScreenshot = new Screenshot(ImageIO.read(new File(ScreenshotPaths.secondaryDir + fileName + ".png")));
+//            Screenshot primaryScreenshot = new Screenshot(ImageIO.read(new File(ScreenshotPaths.primaryDir + fileName + ".png")));
+//            ImageDiff diff = new ImageDiffer().makeDiff(primaryScreenshot, secondaryScreenshot);
+//            File diffFile = new File(ScreenshotPaths.diffDir + fileName + ".png");
+//            ImageIO.write(diff.getMarkedImage(), "png", diffFile);
+//            diffPoint = diff.getDiffSize();
+////            Assertions.assertNotEquals(diffPoint, 0);
+//        } catch (IOException e) {
+//            System.out.println("File different is not created");
+//        }
+//        return diffPoint;
+//    }
+
+
+    protected int takeDiffImage(String fileName) {
+        int diffPoint = 1;
+
         try {
-            Screenshot secondaryScreenshot = new Screenshot(ImageIO.read(new File(ScreenshotPaths.secondaryDir + fileName + ".png")));
-            Screenshot primaryScreenshot = new Screenshot(ImageIO.read(new File(ScreenshotPaths.primaryDir + fileName + ".png")));
-            ImageDiff diff = new ImageDiffer().makeDiff(primaryScreenshot, secondaryScreenshot);
-            File diffFile = new File(ScreenshotPaths.diffDir + fileName + ".png");
-            ImageIO.write(diff.getMarkedImage(), "png", diffFile);
-            int diffPoint = diff.getDiffSize();
-            Assertions.assertNotEquals(diffPoint, 0);
+            Files.createDirectories(Path.of(ScreenshotPaths.diffDir + fileName + ".png"));
+
+            Screenshot primaryScreen = new Screenshot(ImageIO.read(new File(ScreenshotPaths.primaryDir + fileName + ".png")));
+            Screenshot secondaryScreen = new Screenshot(ImageIO.read(new File(ScreenshotPaths.secondaryDir + fileName + ".png")));
+            ImageDiff differ = new ImageDiffer().makeDiff(primaryScreen, secondaryScreen);
+
+
+            File diffImage = new File(ScreenshotPaths.diffDir + fileName + ".png");
+            ImageIO.write(differ.getMarkedImage(), "png", diffImage);
         } catch (IOException e) {
-            System.out.println("File different is not created");
+            System.out.println("Picture different is not created");
         }
+        return diffPoint;
     }
 
-    public void createGiffFile(String fileName) {
+
+    public byte[] createGiffFile(String fileName) {
+        byte[] bytes = null;
         try {
-            BufferedImage first = ImageIO.read(new File(ScreenshotPaths.secondaryDir + fileName + ".png"));
+            Files.createDirectories(Path.of(ScreenshotPaths.resultGifsDir + fileName + ".png"));
+
+            BufferedImage first = ImageIO.read(new File(ScreenshotPaths.primaryDir + fileName + ".png"));
             ImageOutputStream output = new FileImageOutputStream(new File(ScreenshotPaths.resultGifsDir + fileName + ".gif"));
             GifSequenceWriter writer = new GifSequenceWriter(output, first.getType(), 250, true);
             writer.writeToSequence(first);
             File[] images = new File[]{
-                    new File(ScreenshotPaths.secondaryDir + fileName + ".png"),
                     new File(ScreenshotPaths.primaryDir + fileName + ".png"),
+                    new File(ScreenshotPaths.secondaryDir + fileName + ".png"),
                     new File(ScreenshotPaths.diffDir + fileName + ".png"),
             };
             for (File image : images) {
@@ -117,10 +171,14 @@ public class BaseAction {
             }
             writer.close();
             output.close();
-        }catch (Exception e){System.out.println("Gif file is not created");}
+        } catch (Exception e) {
+            System.out.println("Gif picture file is not created");
+        }
+        return bytes;
     }
 
     private String clickablePoint = "TextBlock";
+
     public void doubleClick(RemoteWebElement element) {
         RemoteWebElement elementButton = (RemoteWebElement) element.findElementByClassName(clickablePoint);
         actions.doubleClick(elementButton).perform();
@@ -146,14 +204,14 @@ public class BaseAction {
 
         int topMainView = mainView.getLocation().getY();
         int heightMainView = mainView.getSize().getHeight();
-        int centerMainView = topMainView + heightMainView/2;
+        int centerMainView = topMainView + heightMainView / 2;
         int bottomMainView = topMainView + heightMainView - 40;
 
         int topElement = element.getLocation().getY();
         int heightElement = element.getSize().getHeight();
         int bottomElement = topElement + heightElement;
 
-        if(topElement < topMainView) {
+        if (topElement < topMainView) {
             moveTo(mainView);
             while (element.getLocation().getY() < topMainView) {
                 robot.mouseWheel(-1);
@@ -172,6 +230,7 @@ public class BaseAction {
     private String nameFieldSelector = "Имя файла:";
     private String openButtonSelector = "Открыть";
     private String CancelButtonSelector = "Отмена";
+
     public void loadFile(String path, String fileName) {
         copyInBuffer(path);
         RemoteWebElement window = openingWindowSelector;
@@ -185,12 +244,13 @@ public class BaseAction {
         window.findElementByName(openButtonSelector).click();
     }
 
-    @WindowsFindBy(accessibility = "IndicatorText")
-    private java.util.List<WebElement> indicatorLoad;
-    public void waitLoading() {
+//    @WindowsFindBy(accessibility = "IndicatorText")
+    private List<WebElement> indicatorLoad;
+    private String loadIndicatorSelector = "WaitIndicator";
+    public void waitLoading(RemoteWebElement window) {
         boolean load = true;
-        while (load) {
-            java.util.List<WebElement> indicator = indicatorLoad;
+         while (load) {
+            List<WebElement> indicator = window.findElementsByClassName(loadIndicatorSelector);
             if (indicator.size() == 0) {
                 load = false;
             }
@@ -202,16 +262,18 @@ public class BaseAction {
     private String attentionWindowSelector = "Предупреждение";
     @WindowsFindBy(accessibility = "OKButton")
     private RemoteWebElement okAttentionWindow;
-    public void clickOkInAttention() {
-        for (int i = 0; i <=5; i++) {
+
+    public void clickOkInAttention(RemoteWebElement window) {
+        for (int i = 0; i <= 3; i++) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             List<WebElement> list = windowsElement.findElementsByName(attentionWindowSelector);
-            if (list.size() != 0) {okAttentionWindow.click();
-                waitLoading();
+            if (list.size() != 0) {
+                okAttentionWindow.click();
+                waitLoading(window);
                 break;
             }
         }

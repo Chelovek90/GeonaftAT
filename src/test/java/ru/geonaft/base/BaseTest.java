@@ -1,30 +1,36 @@
 package ru.geonaft.base;
 
+import io.appium.java_client.pagefactory.WindowsFindBy;
 import io.appium.java_client.windows.WindowsDriver;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebElement;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public abstract class BaseTest {
     protected static WindowsDriver<RemoteWebElement> desktopSession;
-    private String geonaftPath = "F:\\Geonaft\\3.7.37.8\\644\\Geosteering.Launcher.exe";
-    private String winAppDriverPath = "C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe";
-    private Runtime runtime = Runtime.getRuntime();
-    private Process geonaftProcess;
+    private static String geonaftPath = "D:\\Installer\\Geonaft\\3.8.0.21\\709\\Geosteering.Launcher.exe";
+    private static String winAppDriverPath = "C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe";
+    private static Runtime runtime = Runtime.getRuntime();
+    private static Process geonaftProcess;
 
+//    @WindowsFindBy(accessibility = "MainShall")
+    protected static List<RemoteWebElement> geonaftWindow;
     @BeforeAll
     public static void setUp() throws IOException, InterruptedException {
 
-//        geonaftProcess = runtime.exec(geonaftPath);
-//        Thread.sleep(10000);
 //        File file = new File(winAppDriverPath);
 //        Desktop.getDesktop().open(file);
+//
+//        geonaftProcess = runtime.exec(geonaftPath);
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("platformName", "Windows");
@@ -35,13 +41,21 @@ public abstract class BaseTest {
         desktopSession.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 //        desktopSession.manage().window().maximize();
 
+//        boolean loadApp = true;
+//        while (loadApp) {
+//            List<RemoteWebElement> app = desktopSession.findElementsByAccessibilityId("MainShall");
+//            if (app.size() != 0) {
+//                loadApp = false;
+//            }
+//        }
+
     }
 
-    @AfterEach
-    public void tearDown() throws IOException {
+    @AfterAll
+    public static void tearDown() throws IOException {
 //        geonaftProcess.destroy();
 //        Runtime.getRuntime().exec("taskkill /F /IM WinAppDriver.exe");
-        desktopSession.quit();
+//        desktopSession.quit();
     }
 
     public void restartDesktopSession() throws MalformedURLException {

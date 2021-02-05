@@ -3,15 +3,14 @@ package testsLoader;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
 import io.qameta.allure.TmsLink;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.geonaft.Base;
 import ru.geonaft.base.BaseTest;
 import ru.geonaft.modules.loader.Loader;
 import ru.geonaft.view.ribbone.Ribbon;
+import ru.geonaft.view.startWindow.StartWindow;
 import ru.geonaft.view.treeProject.TreeProject;
 import ru.geonaft.view.treeProject.selectors.SubFolderSelector;
 import ru.geonaft.view.workSpace.editor.BaseWorkSpace;
@@ -22,26 +21,27 @@ import static ru.geonaft.NameEntityToProject.logInProject;
 import static ru.geonaft.NameEntityToProject.surfaceInProject;
 import static ru.geonaft.base.TestsDataEnums.*;
 import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.*;
+import static testsLoader.FilesForTestLoader.pathCleanProject;
 
 public class ShouldLoadEntityAllFormats extends BaseTest {
 
-    @BeforeEach
-    public void openProject() {
-//        new StartWindow(desktopSession)
-//                .openProject(PathsToFiles.pathCleanProject, "clearProjectForTests");
+    @BeforeAll
+    public static void openProject() {
+        new StartWindow(desktopSession)
+                .openProject(pathCleanProject, "clearProjectForTests");
         Base.ribbon = new Ribbon(desktopSession);
         Base.treeProject = new TreeProject(desktopSession);
         Base.workSpace = new BaseWorkSpace(desktopSession);
     }
-//
-//    @AfterEach
-//    public void closeProject() {
-//        new Ribbon(desktopSession)
-//                .closeProject();
-//    }
+
+    @AfterAll
+    public static void closeProject() {
+        new Ribbon(desktopSession)
+                .closeProject();
+    }
 
 
-    //    @Disabled
+    @Disabled
     @Test
     @DisplayName("Check loading polygon")
     @Feature(value = "Loader")
@@ -51,7 +51,7 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
         new Loader(desktopSession)
                 .openModule()
                 .loadEntity(polygonForTest.path, polygonForTest.name, POLYGON)
-                .checkDataInEditor(polygonForTest.name);
+                .checkDataFolder(POLYGON);
     }
 
 
@@ -74,7 +74,7 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
                 .checkDataInEditor(surfaceInProject.name);
     }
 
-    //    @Disabled
+//    @Disabled
     @Test
     @DisplayName("Check loading trajectory")
     @Feature(value = "Loader")
@@ -84,11 +84,11 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
         new Loader(desktopSession)
                 .openModule()
                 .loadEntity(trajectoryForTest.path, trajectoryForTest.name, TRAJECTORY)
-                .openEditorLoadedFile(LOG)
-                .checkDataInEditor(logForTest.name);
+                .openEditorLoadedFile(TRAJECTORY)
+                .checkDataInEditor(trajectoryForTest.name);
     }
 
-    //    @Disabled
+//    @Disabled
     @Test
     @DisplayName("Check loading log")
     @Feature(value = "Loader")
@@ -102,7 +102,7 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
                 .checkDataInEditor(logInProject.name);
     }
 
-    //    @Disabled
+    @Disabled
     @Test
     @DisplayName("Check loading image")
     @Feature(value = "Loader")
@@ -120,7 +120,7 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
         return Stream.of("bmp.bmp", "jpeg.jpg", "png.png", "tif.tif");
     }
 
-    //    @Disabled
+//    @Disabled
     @ParameterizedTest
     @MethodSource("pictureNameGenerator")
     @DisplayName("Check loading picture")
@@ -134,5 +134,17 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
                 .checkDataFolder(PICTURE);
     }
 
-
+//    @Disabled
+//    @ParameterizedTest
+//    @MethodSource("pictureNameGenerator")
+//    @DisplayName("Check loading picture")
+//    @Feature(value = "Loader")
+//    @Story(value = "Picture")
+//    @TmsLink("16054")
+//    public void TestLoadedPalette(String name) {
+//        new Loader(desktopSession)
+//                .openModule()
+//                .loadEntity(paletteForTest.path, paletteForTest.name, PICTURE)
+//                .checkDataFolder(PICTURE);
+//    }
 }
