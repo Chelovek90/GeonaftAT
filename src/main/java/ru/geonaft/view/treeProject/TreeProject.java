@@ -67,7 +67,7 @@ public class TreeProject extends Base {
     public TreeProject searchElementByName(SubFolderSelector folder, String folderName) {
         List<WebElement> list = rootTreeFolder.findElementsByName(folder.folderSelector);
         targetFolder = list.stream()
-                .filter(surface -> surface.findElement(By.className(clickablePoint)).getText().equals(folderName))
+                .filter(entity -> entity.findElement(By.className(clickablePoint)).getText().equals(folderName))
                 .findFirst().orElse(null);
         assertTrue(targetFolder != null, "Search element by name " + folderName + " returned no results");
         return this;

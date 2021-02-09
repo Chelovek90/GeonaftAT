@@ -3,6 +3,7 @@ package ru.geonaft.base;
 public enum  TestsDataEnums {
     surfaceForTest("D:\\Data for testing\\Поверхности\\IRAP", null),
     logForTest("D:\\Data for testing\\Каротажи", "12_actual_DATA_GEONAFT.las"),
+    timeLogForTest("D:\\Data for testing\\По времени", "Gavr_4P_Las_3-0_General_Time.las"),
     imageForTest("D:\\Data for testing\\Имиджы", "Имидж.las"),
     trajectoryForTest("D:\\Data for testing\\Траектории", "Траектория_факт"),
     polygonForTest("D:\\Data for testing\\Полигоны", "Полигон"),

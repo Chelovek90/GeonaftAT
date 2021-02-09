@@ -58,4 +58,12 @@ public class BaseWorkSpace extends Base {
             numberHeaders = count;
         }
     }
+
+    public void closeFirstTab() {
+        workSpaceWindow
+                .findElementByClassName(tabHeadersPanel)
+                .findElement(By.className(closeButtonSelector))
+                .click();
+
+    }
 }

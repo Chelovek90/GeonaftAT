@@ -44,17 +44,21 @@ public class BaseAction {
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
     }
 
-    protected void copyInBuffer(String s) {
+    public void copyInBuffer(String s) {
         StringSelection stringSelection = new StringSelection(s);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, null);
     }
 
-    protected void pastFromBuffer() {
+    public void pastFromBuffer() {
         actions.sendKeys(Keys.chord(Keys.LEFT_CONTROL, "v")).build().perform();
     }
 
-    protected void enterClick() {
+    public void ctr_A() {
+        actions.sendKeys(Keys.chord(Keys.LEFT_CONTROL, "a")).build().perform();
+    }
+
+    public void enterClick() {
         actions.sendKeys(Keys.chord(Keys.ENTER)).build().perform();
     }
 

@@ -10,38 +10,48 @@ import ru.geonaft.Base;
 import ru.geonaft.base.BaseTest;
 import ru.geonaft.modules.loader.Loader;
 import ru.geonaft.view.ribbone.Ribbon;
-import ru.geonaft.view.startWindow.StartWindow;
 import ru.geonaft.view.treeProject.TreeProject;
 import ru.geonaft.view.treeProject.selectors.SubFolderSelector;
 import ru.geonaft.view.workSpace.editor.BaseWorkSpace;
 
 import java.util.stream.Stream;
 
-import static ru.geonaft.NameEntityToProject.logInProject;
-import static ru.geonaft.NameEntityToProject.surfaceInProject;
+import static ru.geonaft.NameEntityToProject.*;
 import static ru.geonaft.base.TestsDataEnums.*;
 import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.*;
-import static testsLoader.FilesForTestLoader.pathCleanProject;
 
 public class ShouldLoadEntityAllFormats extends BaseTest {
 
     @BeforeAll
     public static void openProject() {
-        new StartWindow(desktopSession)
-                .openProject(pathCleanProject, "clearProjectForTests");
+//        new StartWindow(desktopSession)
+//                .openProject(pathCleanProject, "clearProjectForTests3.7.37.21");
         Base.ribbon = new Ribbon(desktopSession);
         Base.treeProject = new TreeProject(desktopSession);
         Base.workSpace = new BaseWorkSpace(desktopSession);
     }
 
-    @AfterAll
-    public static void closeProject() {
-        new Ribbon(desktopSession)
-                .closeProject();
+//    @AfterAll
+//    public static void closeProject() {
+//        new Ribbon(desktopSession)
+//                .closeProject();
+//    }
+
+
+//    @Disabled
+    @Test
+    @DisplayName("Check work element preview window")
+    @Feature(value = "Loader")
+    @Story(value = "Preview")
+    @TmsLink("6439")
+    public void TestWorkWithWindow() {
+        new Loader(desktopSession)
+                .openModule()
+                .checkWorkElementsPreviewWindow();
     }
 
 
-    @Disabled
+//    @Disabled
     @Test
     @DisplayName("Check loading polygon")
     @Feature(value = "Loader")
@@ -71,7 +81,21 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
                 .openModule()
                 .loadEntity(surfaceForTest.path, fileName, SubFolderSelector.SURFACE)
                 .openEditorLoadedFile(SURFACE)
-                .checkDataInEditor(surfaceInProject.name);
+                .checkDataInEditor(surfaceInProject);
+    }
+
+    //    @Disabled
+    @Test
+    @DisplayName("Renaming a trajectory in the loader")
+    @Feature(value = "Loader")
+    @Story(value = "Trajectory")
+    @TmsLink("7456")
+    public void TestChangeNameLoaderTrajectory() {
+        new Loader(desktopSession)
+                .openModule()
+                .loadEntityWithRename(trajectoryForTest.path, trajectoryForTest.name, TRAJECTORY)
+                .openEditorLoadedFile(TRAJECTORY)
+                .checkDataInEditor(trajectoryInProject);
     }
 
 //    @Disabled
@@ -85,7 +109,7 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
                 .openModule()
                 .loadEntity(trajectoryForTest.path, trajectoryForTest.name, TRAJECTORY)
                 .openEditorLoadedFile(TRAJECTORY)
-                .checkDataInEditor(trajectoryForTest.name);
+                .checkDataInEditor(trajectoryInProject);
     }
 
 //    @Disabled
@@ -99,10 +123,10 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
                 .openModule()
                 .loadEntity(logForTest.path, logForTest.name, LOG)
                 .openEditorLoadedFile(LOG)
-                .checkDataInEditor(logInProject.name);
+                .checkDataInEditor(logInProject);
     }
 
-    @Disabled
+//    @Disabled
     @Test
     @DisplayName("Check loading image")
     @Feature(value = "Loader")
@@ -113,7 +137,7 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
                 .openModule()
                 .loadEntity(imageForTest.path, imageForTest.name, IMAGE)
                 .openEditorLoadedFile(IMAGE)
-                .checkDataInEditor(imageForTest.name);
+                .checkDataInEditor(imageInProject);
     }
 
     public static Stream<String> pictureNameGenerator() {
@@ -132,6 +156,22 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
                 .openModule()
                 .loadEntity(pictureForTest.path, name, PICTURE)
                 .checkDataFolder(PICTURE);
+    }
+
+
+/*
+* Фактически выполняется во всех кейчас на загрузку
+*/
+    @Disabled
+    @Test
+    @DisplayName("Check preview window")
+    @Feature(value = "Loader")
+    @Story(value = "Log")
+    @TmsLink("12821")
+    public void TestPreviewInTheWindowLoader() {
+        new Loader(desktopSession)
+                .openModule()
+                .loadEntity(logForTest.path, logForTest.name, LOG);
     }
 
 //    @Disabled
