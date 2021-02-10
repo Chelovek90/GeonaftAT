@@ -6,10 +6,7 @@ import io.appium.java_client.windows.WindowsDriver;
 import io.qameta.allure.Attachment;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -109,7 +106,7 @@ public class BaseAction {
                 break;
             case SECONDARY:
                 try {
-                    FileUtils.copyFile(screenshot, new File(ScreenshotPaths.primaryDir + fileName + ".png"));
+                    FileUtils.copyFile(screenshot, new File(ScreenshotPaths.secondaryDir + fileName + ".png"));
                     bytes = Files.readAllBytes(Paths.get(String.valueOf(screenshot)));
                 } catch (IOException e) {
                     System.out.println("Secondary screenshot is not created");
@@ -135,11 +132,11 @@ public class BaseAction {
 //    }
 
 
-    protected int takeDiffImage(String fileName) {
+    public int takeDiffImage(String fileName) {
         int diffPoint = 1;
 
         try {
-            Files.createDirectories(Path.of(ScreenshotPaths.diffDir + fileName + ".png"));
+            Files.createDirectories(Path.of(ScreenshotPaths.diffDir));
 
             Screenshot primaryScreen = new Screenshot(ImageIO.read(new File(ScreenshotPaths.primaryDir + fileName + ".png")));
             Screenshot secondaryScreen = new Screenshot(ImageIO.read(new File(ScreenshotPaths.secondaryDir + fileName + ".png")));
@@ -158,11 +155,11 @@ public class BaseAction {
     public byte[] createGiffFile(String fileName) {
         byte[] bytes = null;
         try {
-            Files.createDirectories(Path.of(ScreenshotPaths.resultGifsDir + fileName + ".png"));
+            Files.createDirectories(Path.of(ScreenshotPaths.resultGifsDir));
 
             BufferedImage first = ImageIO.read(new File(ScreenshotPaths.primaryDir + fileName + ".png"));
             ImageOutputStream output = new FileImageOutputStream(new File(ScreenshotPaths.resultGifsDir + fileName + ".gif"));
-            GifSequenceWriter writer = new GifSequenceWriter(output, first.getType(), 250, true);
+            GifSequenceWriter writer = new GifSequenceWriter(output, first.getType(), 550, true);
             writer.writeToSequence(first);
             File[] images = new File[]{
                     new File(ScreenshotPaths.primaryDir + fileName + ".png"),
@@ -234,6 +231,21 @@ public class BaseAction {
     private String nameFieldSelector = "Имя файла:";
     private String openButtonSelector = "Открыть";
     private String CancelButtonSelector = "Отмена";
+
+
+    public int multiFileLoad(String path) {
+        copyInBuffer(path);
+        RemoteWebElement window = openingWindowSelector;
+        window.findElementByName(pathFieldSelector).click();
+        pastFromBuffer();
+        enterClick();
+        window.findElementByClassName("UIItemsView").click();
+        ctr_A();
+        int count = window.findElementByClassName("UIItemsView").findElements(By.className("UIItem")).size();
+        window.findElementByName(openButtonSelector).click();
+        return count;
+    }
+
 
     public void loadFile(String path, String fileName) {
         copyInBuffer(path);

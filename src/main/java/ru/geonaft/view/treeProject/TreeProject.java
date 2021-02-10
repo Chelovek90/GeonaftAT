@@ -11,10 +11,11 @@ import ru.geonaft.helpers.BaseAction;
 import ru.geonaft.view.treeProject.selectors.RootFolderSelector;
 import ru.geonaft.view.treeProject.selectors.SubFolderSelector;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static ru.geonaft.NameEntityToProject.*;
@@ -138,61 +139,69 @@ public class TreeProject extends Base {
 //        getTree();
         switch (what){
             case LOG:
-                treeProject
-                        .unfoldFolder(WELLS)
-                        .unfoldFolder(WELL, wellInProject.name)
-                        .unfoldFolder(LOGS)
-                        .searchElementByName(LOG, logInProject.name)
-                        .openEditorTargetFolder();
+                unfoldFolder(WELLS);
+                unfoldFolder(WELL, wellInProject.name);
+                unfoldFolder(LOGS);
+                searchElementByName(LOG, logInProject.name);
+                openEditorTargetFolder();
                 baseAction.clickOkInAttention((RemoteWebElement) driver.findElementByClassName("DataEditorView"));
                 break;
             case TRAJECTORY:
-                treeProject
-                        .unfoldFolder(WELLS)
-                        .unfoldFolder(WELL, wellInProject.name)
-                        .searchElementByName(TRAJECTORY, trajectoryInProject.name)
-                        .openEditorTargetFolder();
+                unfoldFolder(WELLS);
+                unfoldFolder(WELL, wellInProject.name);
+                searchElementByName(TRAJECTORY, trajectoryInProject.name);
+                openEditorTargetFolder();
                 break;
             case SURFACE:
-                treeProject
-                        .unfoldFolder(SURFACES)
-                        .searchElementByName(SURFACE, surfaceInProject.name)
-                        .openEditorTargetFolder();
+                unfoldFolder(SURFACES);
+                searchElementByName(SURFACE, surfaceInProject.name);
+                openEditorTargetFolder();
                 break;
             case POLYGON:
-                treeProject
-                        .unfoldFolder(POLYGONS)
-                        .openEditorTargetFolder();
+                unfoldFolder(POLYGONS);
+                openEditorTargetFolder();
                 break;
             case IMAGE:
-                treeProject
-                        .unfoldFolder(WELLS)
-                        .unfoldFolder(WELL, wellInProject.name)
-                        .unfoldFolder(IMAGES)
-                        .searchElementByName(IMAGE, imageInProject.name)
-                        .openEditorTargetFolder();
+                unfoldFolder(WELLS);
+                unfoldFolder(WELL, wellInProject.name);
+                unfoldFolder(IMAGES);
+                searchElementByName(IMAGE, imageInProject.name);
+                openEditorTargetFolder();
                 break;
             case PICTURE:
-                treeProject
-                        .unfoldFolder(PICTURES)
-                        .searchElementByName(PICTURE, pictureInProject.name)
-                        .openEditorTargetFolder();
+                unfoldFolder(PICTURES);
+                searchElementByName(PICTURE, pictureInProject.name);
+                openEditorTargetFolder();
                 break;
 
         }
         workSpace.compareCountHeaders();
     }
 
-    public void checkDataFolder(SubFolderSelector subFolder) {
-        switch (subFolder){
+    public void checkDataFolder(SubFolderSelector folder) {
+        switch (folder){
             case PICTURE:
                 unfoldFolder(PICTURES);
                 searchElementByName(PICTURE, pictureInProject.name);
                 break;
             case POLYGON:
                 unfoldFolder(POLYGONS);
-                List<WebElement> list = rootTreeFolder.findElementsByClassName(POLYGON.folderSelector);
-                assertThat("Polygon is not loaded", list, is(notNullValue()));
+                List<WebElement> polygonList = rootTreeFolder.findElementsByClassName(POLYGON.folderSelector);
+                assertThat("Polygon is not loaded", polygonList, is(notNullValue()));
+                break;
+            case SURFACE:
+                unfoldFolder(SURFACES);
+                List<String> list = rootTreeFolder.findElementsByName(folder.folderSelector)
+                        .stream()
+                        .map(surface -> getFolderName((RemoteWebElement) surface))
+                        .sorted()
+                        .collect(Collectors.toList());
+                assertThat("Surfaces folder is empty", list, is(notNullValue()));
+                fileNameList.sort(Comparator.naturalOrder());
+                list.sort(Comparator.naturalOrder());
+                assertThat("The loaded data does not match",fileNameList, equalTo(list));
+                baseAction.horizontalScroll(treeProjectWindow, rootTreeFolder);
+                baseAction.takeScreenshotToAttachOnAllureReport(treeProjectWindow, list.toString(), Appointment.PRIMARY);
                 break;
 //            case PALETTE:
 //                unfoldFolder(TEMPLATES);

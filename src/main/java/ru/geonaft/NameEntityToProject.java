@@ -1,6 +1,8 @@
 package ru.geonaft;
 
 
+import java.util.List;
+
 public enum NameEntityToProject {
     wellInProject(null),
     logInProject(null),
@@ -10,6 +12,7 @@ public enum NameEntityToProject {
     polygonInProject(null),
     pictureInProject(null),
     paletteInProject(null),
+    patternInProject(null),
             ;
 
     public String name;
@@ -20,4 +23,8 @@ public enum NameEntityToProject {
     public void setName(String name) {
         this.name = name;
     }
+
+    public static List<String> fileNameList;
 }
+
+

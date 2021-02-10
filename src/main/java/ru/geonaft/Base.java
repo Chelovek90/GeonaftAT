@@ -13,6 +13,7 @@ import ru.geonaft.view.treeProject.TreeProject;
 import ru.geonaft.view.workSpace.editor.BaseWorkSpace;
 
 import java.awt.*;
+import java.util.List;
 
 public abstract class Base {
 

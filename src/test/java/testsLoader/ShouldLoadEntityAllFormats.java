@@ -14,8 +14,11 @@ import ru.geonaft.view.treeProject.TreeProject;
 import ru.geonaft.view.treeProject.selectors.SubFolderSelector;
 import ru.geonaft.view.workSpace.editor.BaseWorkSpace;
 
+import java.util.List;
 import java.util.stream.Stream;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static ru.geonaft.NameEntityToProject.*;
 import static ru.geonaft.base.TestsDataEnums.*;
 import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.*;
@@ -31,16 +34,16 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
         Base.workSpace = new BaseWorkSpace(desktopSession);
     }
 
-//    @AfterAll
-//    public static void closeProject() {
+//    @AfterEach
+//    public void closeProject() {
 //        new Ribbon(desktopSession)
 //                .closeProject();
 //    }
 
 
-//    @Disabled
+    //    @Disabled
     @Test
-    @DisplayName("Check work element preview window")
+    @DisplayName("Checking the activity of preview window elements")
     @Feature(value = "Loader")
     @Story(value = "Preview")
     @TmsLink("6439")
@@ -51,9 +54,9 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
     }
 
 
-//    @Disabled
+    //    @Disabled
     @Test
-    @DisplayName("Check loading polygon")
+    @DisplayName("Checking loading polygon")
     @Feature(value = "Loader")
     @Story(value = "Polygon")
     @TmsLink("6582")
@@ -66,13 +69,13 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
 
 
     public static Stream<String> surfaceNameGenerator() {
-        return Stream.of("CPS.cps3", "GRD.grd","Zmap.zmap", "IRAP.irap");
+        return Stream.of("CPS.cps3", "GRD.grd", "Zmap.zmap", "IRAP.irap");
     }
 
     //    @Disabled
     @ParameterizedTest
     @MethodSource("surfaceNameGenerator")
-    @DisplayName("Check loading surfaces of all formats")
+    @DisplayName("Checking loading surfaces of all formats")
     @Feature(value = "Loader")
     @Story(value = "Surfaces")
     @TmsLink("7460")
@@ -98,9 +101,9 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
                 .checkDataInEditor(trajectoryInProject);
     }
 
-//    @Disabled
+    //    @Disabled
     @Test
-    @DisplayName("Check loading trajectory")
+    @DisplayName("Checking loading trajectory")
     @Feature(value = "Loader")
     @Story(value = "Trajectory")
     @TmsLink("7798")
@@ -112,9 +115,9 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
                 .checkDataInEditor(trajectoryInProject);
     }
 
-//    @Disabled
+    //    @Disabled
     @Test
-    @DisplayName("Check loading log")
+    @DisplayName("Checking loading log")
     @Feature(value = "Loader")
     @Story(value = "Log")
     @TmsLink("7800")
@@ -126,9 +129,9 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
                 .checkDataInEditor(logInProject);
     }
 
-//    @Disabled
+    //    @Disabled
     @Test
-    @DisplayName("Check loading image")
+    @DisplayName("Checking loading image")
     @Feature(value = "Loader")
     @Story(value = "Image")
     @TmsLink("7802")
@@ -140,11 +143,34 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
                 .checkDataInEditor(imageInProject);
     }
 
+    /*
+     * Подумать о необходимости этого кейса тут, не могу проверить,
+     * что тип данны в поле предпросмотра совпадает
+     */
+    public static Stream<String> patternNameGenerator() {
+        return Stream.of("Шаблон карты.json", "Шаблон разреза.json", "Шаблон скважины.json");
+    }
+
+    //    @Disabled
+    @ParameterizedTest
+    @MethodSource("patternNameGenerator")
+    @DisplayName("Checking preview in the window loader pattern: Map, Well, Cross section")
+    @Feature(value = "Loader")
+    @Story(value = "Image")
+    @TmsLink("7802")
+    public void TestLoadedPattern_Map_Well_CrossSection(String name) {
+        new Loader(desktopSession)
+                .openModule()
+                .loadFileFromWindow(patternForTest.path, name)
+                .doPreview(PATTERN);
+        assertThat("Pattern name does not match", name, is(containsString(patternInProject.name)));
+    }
+
     public static Stream<String> pictureNameGenerator() {
         return Stream.of("bmp.bmp", "jpeg.jpg", "png.png", "tif.tif");
     }
 
-//    @Disabled
+    //    @Disabled
     @ParameterizedTest
     @MethodSource("pictureNameGenerator")
     @DisplayName("Check loading picture")
@@ -159,9 +185,26 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
     }
 
 
-/*
-* Фактически выполняется во всех кейчас на загрузку
-*/
+    /*
+     *Исправить номер кейса для многофайловой загрузки
+     */
+    //    @Disabled
+    @Test
+    @DisplayName("Checking multi-file surfaces loading")
+    @Feature(value = "Loader")
+    @Story(value = "Multi-file(surfaces)")
+    @TmsLink("11382")
+    public void TestExportSurfaces() {
+        new Loader(desktopSession)
+                .openModule()
+                .multiFileLoad(surfaceForTest.path, SURFACE)
+                .checkDataFolder(SURFACE);
+    }
+
+
+    /*
+     * Фактически выполняется во всех кейчас на загрузку
+     */
     @Disabled
     @Test
     @DisplayName("Check preview window")
@@ -187,4 +230,5 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
 //                .loadEntity(paletteForTest.path, paletteForTest.name, PICTURE)
 //                .checkDataFolder(PICTURE);
 //    }
+
 }

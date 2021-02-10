@@ -9,6 +9,7 @@ public enum  TestsDataEnums {
     polygonForTest("D:\\Data for testing\\Полигоны", "Полигон"),
     pictureForTest("D:\\ScreenShot\\форматы", null),
     paletteForTest("D:\\Data for testing\\Палитры", "Палитра для дискретной.json"),
+    patternForTest("D:\\Data for testing\\Шаблоны\\Map_Well_CrossSection", null),
     ;
 
     public final String path;

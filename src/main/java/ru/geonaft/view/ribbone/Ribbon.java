@@ -37,9 +37,9 @@ public class Ribbon extends Base {
         RemoteWebElement ribbonTab = (RemoteWebElement) ribbonPanel
                 .findElementByClassName(selector.tabSelector);
         if (ribbonTab.getAttribute(isSelectedSelector).equals("False")) {
-            RemoteWebElement ribbonButtonTab = (RemoteWebElement) ribbonTab
-                    .findElementByClassName(tabButtonSelector);
-            ribbonButtonTab.click();
+            ribbonTab.
+                    findElementByClassName(tabButtonSelector)
+                    .click();
         }
         this.modulesGroups = ribbonTab
                 .findElementsByClassName(groupSelector);
@@ -48,7 +48,9 @@ public class Ribbon extends Base {
 
     public void openModule(ModuleSelector moduleSelector) {
         clickRibbonTab(TabSelector.PROJECT);
-        modulesGroups.get(moduleSelector.indexGroup).findElement(By.name(moduleSelector.moduleSelector)).click();
+        modulesGroups.get(moduleSelector.indexGroup)
+                .findElement(By.name(moduleSelector.moduleSelector))
+                .click();
 
 
     }
@@ -58,6 +60,7 @@ public class Ribbon extends Base {
     private RemoteWebElement closeProjectButton;
     @WindowsFindBy(accessibility = "No")
     private RemoteWebElement noButton;
+
     public void closeProject() {
         ribbonPanel.findElementByClassName(fileButton).click();
         closeProjectButton.click();

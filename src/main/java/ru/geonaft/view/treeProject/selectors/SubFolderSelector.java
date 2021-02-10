@@ -28,6 +28,8 @@ public enum SubFolderSelector {
     PICTURE("Geosteering.UI.Controls.DataTreeView.DataTree.PictureTreeViewItem"),
 
     PALETTE("Geosteering.UI.Controls.DataTreeView.DataTree.PalettesTreeViewItem"),
+
+    PATTERN("Geosteering.UI.Controls.DataTreeView.DataTree.PalettesTreeViewItem"),
     ;
 
     public final String folderSelector;
