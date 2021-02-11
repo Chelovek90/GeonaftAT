@@ -10,4 +10,5 @@ public abstract class FilesForTestLoader {
     static String pathToPolygon = "D:\\Data for testing\\Полигоны";
 
     static String pathCleanProject = "D:\\Data for testing\\Проекты";
+    static String nameCleanProject = "clearProjectForTests3.7.37.21";
 }

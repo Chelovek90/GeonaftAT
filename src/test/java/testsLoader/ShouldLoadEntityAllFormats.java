@@ -6,15 +6,12 @@ import io.qameta.allure.TmsLink;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import ru.geonaft.Base;
 import ru.geonaft.base.BaseTest;
 import ru.geonaft.modules.loader.Loader;
-import ru.geonaft.view.ribbone.Ribbon;
-import ru.geonaft.view.treeProject.TreeProject;
+import ru.geonaft.view.startWindow.StartWindow;
 import ru.geonaft.view.treeProject.selectors.SubFolderSelector;
 import ru.geonaft.view.workSpace.editor.BaseWorkSpace;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -22,16 +19,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static ru.geonaft.NameEntityToProject.*;
 import static ru.geonaft.base.TestsDataEnums.*;
 import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.*;
+import static testsLoader.FilesForTestLoader.*;
 
 public class ShouldLoadEntityAllFormats extends BaseTest {
 
     @BeforeAll
     public static void openProject() {
-//        new StartWindow(desktopSession)
-//                .openProject(pathCleanProject, "clearProjectForTests3.7.37.21");
-        Base.ribbon = new Ribbon(desktopSession);
-        Base.treeProject = new TreeProject(desktopSession);
-        Base.workSpace = new BaseWorkSpace(desktopSession);
+        new StartWindow(desktopSession)
+                .openProject(pathCleanProject, nameCleanProject);
+        new BaseWorkSpace(desktopSession)
+                .setCountHeaders();
     }
 
 //    @AfterEach
@@ -41,7 +38,7 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
 //    }
 
 
-    //    @Disabled
+        @Disabled
     @Test
     @DisplayName("Checking the activity of preview window elements")
     @Feature(value = "Loader")
@@ -54,7 +51,7 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
     }
 
 
-    //    @Disabled
+//        @Disabled
     @Test
     @DisplayName("Checking loading polygon")
     @Feature(value = "Loader")
@@ -87,7 +84,7 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
                 .checkDataInEditor(surfaceInProject);
     }
 
-    //    @Disabled
+        @Disabled
     @Test
     @DisplayName("Renaming a trajectory in the loader")
     @Feature(value = "Loader")
@@ -101,7 +98,7 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
                 .checkDataInEditor(trajectoryInProject);
     }
 
-    //    @Disabled
+        @Disabled
     @Test
     @DisplayName("Checking loading trajectory")
     @Feature(value = "Loader")
@@ -115,7 +112,7 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
                 .checkDataInEditor(trajectoryInProject);
     }
 
-    //    @Disabled
+        @Disabled
     @Test
     @DisplayName("Checking loading log")
     @Feature(value = "Loader")
@@ -129,7 +126,7 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
                 .checkDataInEditor(logInProject);
     }
 
-    //    @Disabled
+        @Disabled
     @Test
     @DisplayName("Checking loading image")
     @Feature(value = "Loader")
@@ -151,12 +148,12 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
         return Stream.of("Шаблон карты.json", "Шаблон разреза.json", "Шаблон скважины.json");
     }
 
-    //    @Disabled
+        @Disabled
     @ParameterizedTest
     @MethodSource("patternNameGenerator")
     @DisplayName("Checking preview in the window loader pattern: Map, Well, Cross section")
     @Feature(value = "Loader")
-    @Story(value = "Image")
+    @Story(value = "Pattern")
     @TmsLink("7802")
     public void TestLoadedPattern_Map_Well_CrossSection(String name) {
         new Loader(desktopSession)
@@ -184,17 +181,31 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
                 .checkDataFolder(PICTURE);
     }
 
+        @Disabled
+    @Test
+    @DisplayName("Checking multi-file pictures loading")
+    @Feature(value = "Loader")
+    @Story(value = "Multi-file(pictures)")
+    @TmsLink("9327")
+    public void TestMultiFileLoadedPicture() {
+        new Loader(desktopSession)
+                .openModule()
+                .multiFileLoad(pictureForTest.path, PICTURE)
+                .doMultiFilePreview(PICTURE);
+//                .checkDataFolder(PICTURE);
+    }
+
 
     /*
      *Исправить номер кейса для многофайловой загрузки
      */
-    //    @Disabled
+        @Disabled
     @Test
     @DisplayName("Checking multi-file surfaces loading")
     @Feature(value = "Loader")
     @Story(value = "Multi-file(surfaces)")
     @TmsLink("11382")
-    public void TestExportSurfaces() {
+    public void TestMultiFileLoadedSurfaces() {
         new Loader(desktopSession)
                 .openModule()
                 .multiFileLoad(surfaceForTest.path, SURFACE)

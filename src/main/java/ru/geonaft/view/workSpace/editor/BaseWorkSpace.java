@@ -11,8 +11,7 @@ import ru.geonaft.helpers.BaseAction;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static ru.geonaft.Base.Appointment.*;
 
@@ -31,10 +30,6 @@ public class BaseWorkSpace extends Base {
         super(driver);
         this.baseAction = new BaseAction(driver);
         this.workSpaceWindow = rootWindowSelector;
-        this.numberHeaders = workSpaceWindow
-                .findElementByClassName(tabHeadersPanel)
-                .findElements(By.className(closeButtonSelector))
-                .size();
     }
 
     @WindowsFindBy(accessibility = "dataPresenter")
@@ -59,11 +54,29 @@ public class BaseWorkSpace extends Base {
         }
     }
 
+    public void setCountHeaders() {
+        this.numberHeaders = workSpaceWindow
+                .findElementByClassName(tabHeadersPanel)
+                .findElements(By.className(closeButtonSelector))
+                .size();
+    }
+
     public void closeFirstTab() {
         workSpaceWindow
                 .findElementByClassName(tabHeadersPanel)
                 .findElement(By.className(closeButtonSelector))
                 .click();
+
+    }
+
+    private String tabNameValue = "HelpTextHelpText";
+    private String tabNameSelector = "TabCaptionControl";
+    public void checkTabName(String nameWell) {
+        String tabName = workSpaceWindow
+                .findElementByClassName(tabHeadersPanel)
+                .findElement(By.className(tabNameSelector))
+                .getAttribute(tabNameValue);
+        assertThat("Tab name does not contains well name", tabName, containsString(nameWell) );
 
     }
 }

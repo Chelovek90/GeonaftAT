@@ -1,9 +1,11 @@
-package ru.geonaft.view.ribbone.modulesSelector;
+package ru.geonaft.view.ribbon.modulesSelector;
 
 public enum TabSelector {
     PROJECT("ProjectTab"),
     PROJECT_TOOLS("ProjectToolsTab"),
-    OPTION("OptionsTab");
+    OPTION("OptionsTab"),
+    CS("CsMainTab"),
+    ;
 
     public final String tabSelector;
 

@@ -5,6 +5,7 @@ public enum PreviewFieldsSelector {
     WELL_ID("cbName"),
 
     ENTITY_ID("tboxMapTemplateViewModel"),
+    CB_ENTITY_ID("cbMapTemplateViewModel"),
 
     LOG_SELECTOR("Geosteering.Geonaft.Module.Dataloader.Classes.DataTree.Items.LogTreeItem"),
 
@@ -19,12 +20,14 @@ public enum PreviewFieldsSelector {
     SURFACE_ID("tboxSurfaceViewModel"),
 
     SURFACE_SELECTOR("Geosteering.Geonaft.Module.Dataloader.Classes.DataTree.Items.PolygonTreeItem"),
+
+    ROW_SELECTOR("Geosteering.UI.Infrastructure.ViewModels.TreeViewItems.WarningTreeItem"),
     ;
 
 
-    public final String value;
+    public final String selector;
 
-    PreviewFieldsSelector(String value) {
-        this.value = value;
+    PreviewFieldsSelector(String selector) {
+        this.selector = selector;
     }
 }

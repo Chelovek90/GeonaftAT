@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class BaseTest {
     protected static WindowsDriver<RemoteWebElement> desktopSession;
-    private static String geonaftPath = "D:\\Installer\\Geonaft\\3.8.0.21\\709\\Geosteering.Launcher.exe";
+    private static String geonaftPath = "D:\\Installer\\Geonaft\\3.7.37.21\\708\\Geosteering.Launcher.exe";
     private static String winAppDriverPath = "C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe";
     private static Runtime runtime = Runtime.getRuntime();
     private static Process geonaftProcess;
@@ -27,8 +27,8 @@ public abstract class BaseTest {
     @BeforeAll
     public static void setUp() throws IOException, InterruptedException {
 
-//        File file = new File(winAppDriverPath);
-//        Desktop.getDesktop().open(file);
+        File file = new File(winAppDriverPath);
+        Desktop.getDesktop().open(file);
 //
 //        geonaftProcess = runtime.exec(geonaftPath);
 
@@ -54,8 +54,8 @@ public abstract class BaseTest {
     @AfterAll
     public static void tearDown() throws IOException {
 //        geonaftProcess.destroy();
-//        Runtime.getRuntime().exec("taskkill /F /IM WinAppDriver.exe");
-//        desktopSession.quit();
+        Runtime.getRuntime().exec("taskkill /F /IM WinAppDriver.exe");
+        desktopSession.quit();
     }
 
     public void restartDesktopSession() throws MalformedURLException {

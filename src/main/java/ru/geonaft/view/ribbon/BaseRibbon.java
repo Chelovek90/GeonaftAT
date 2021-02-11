@@ -1,4 +1,4 @@
-package ru.geonaft.view.ribbone;
+package ru.geonaft.view.ribbon;
 
 import io.appium.java_client.pagefactory.WindowsFindBy;
 import io.appium.java_client.windows.WindowsDriver;
@@ -6,8 +6,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 import ru.geonaft.Base;
-import ru.geonaft.view.ribbone.modulesSelector.ModuleSelector;
-import ru.geonaft.view.ribbone.modulesSelector.TabSelector;
+import ru.geonaft.view.ribbon.modulesSelector.ModuleSelector;
+import ru.geonaft.view.ribbon.modulesSelector.TabSelector;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.not;
 
-public class Ribbon extends Base {
+public class BaseRibbon extends Base {
 
     protected RemoteWebElement ribbonPanel;
     @WindowsFindBy(accessibility = "RibbonGeo")
@@ -24,7 +24,7 @@ public class Ribbon extends Base {
 
     protected List<WebElement> modulesGroups;
 
-    public Ribbon(WindowsDriver<RemoteWebElement> driver) {
+    public BaseRibbon(WindowsDriver<RemoteWebElement> driver) {
         super(driver);
         this.ribbonPanel = ribbonPanelSelector;
     }
@@ -37,9 +37,7 @@ public class Ribbon extends Base {
         RemoteWebElement ribbonTab = (RemoteWebElement) ribbonPanel
                 .findElementByClassName(selector.tabSelector);
         if (ribbonTab.getAttribute(isSelectedSelector).equals("False")) {
-            ribbonTab.
-                    findElementByClassName(tabButtonSelector)
-                    .click();
+            ribbonTab.findElementByClassName(tabButtonSelector).click();
         }
         this.modulesGroups = ribbonTab
                 .findElementsByClassName(groupSelector);
@@ -51,8 +49,6 @@ public class Ribbon extends Base {
         modulesGroups.get(moduleSelector.indexGroup)
                 .findElement(By.name(moduleSelector.moduleSelector))
                 .click();
-
-
     }
 
     private String fileButton = "RibbonApplicationMenu";

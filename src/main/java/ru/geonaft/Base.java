@@ -8,12 +8,12 @@ import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import ru.geonaft.helpers.BaseAction;
-import ru.geonaft.view.ribbone.Ribbon;
+import ru.geonaft.view.ribbon.BaseRibbon;
 import ru.geonaft.view.treeProject.TreeProject;
 import ru.geonaft.view.workSpace.editor.BaseWorkSpace;
 
 import java.awt.*;
-import java.util.List;
+import java.util.Random;
 
 public abstract class Base {
 
@@ -26,13 +26,11 @@ public abstract class Base {
 
     protected int numberHeaders;
 
-    public static Ribbon ribbon;
-    public static TreeProject treeProject;
-    public static BaseWorkSpace workSpace;
-
     protected WindowsDriver<RemoteWebElement> driver;
     public static Robot robot;
     public static Actions actions;
+    public static Random random;
+
 
     public enum Appointment {
         PRIMARY,
@@ -47,6 +45,8 @@ public abstract class Base {
         } catch (AWTException e) {
             e.printStackTrace();
         }
+        baseAction = new BaseAction(driver);
+        random = new Random();
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
     }
 

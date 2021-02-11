@@ -192,13 +192,18 @@ public class BaseAction {
 
     private String checkBox = "CheckBox";
 
-    protected void clickCheckBox(RemoteWebElement element) {
+    public void clickCheckBox(RemoteWebElement element) {
         RemoteWebElement checkBox = (RemoteWebElement) element.findElementByClassName(this.checkBox);
         checkBox.click();
     }
 
     public void moveTo(RemoteWebElement element) {
         actions.moveToElement(element).build().perform();
+    }
+
+    public void click(WebElement element) {
+        actions.moveToElement(element).build().perform();
+        element.click();
     }
 
     public void horizontalScroll(RemoteWebElement mainView, RemoteWebElement element) {
@@ -233,7 +238,7 @@ public class BaseAction {
     private String CancelButtonSelector = "Отмена";
 
 
-    public int multiFileLoad(String path) {
+    public void multiFileLoad(String path) {
         copyInBuffer(path);
         RemoteWebElement window = openingWindowSelector;
         window.findElementByName(pathFieldSelector).click();
@@ -241,23 +246,21 @@ public class BaseAction {
         enterClick();
         window.findElementByClassName("UIItemsView").click();
         ctr_A();
-        int count = window.findElementByClassName("UIItemsView").findElements(By.className("UIItem")).size();
         window.findElementByName(openButtonSelector).click();
-        return count;
     }
 
 
     public void loadFile(String path, String fileName) {
         copyInBuffer(path);
         RemoteWebElement window = openingWindowSelector;
-        window.findElementByName(pathFieldSelector).click();
+        click(window.findElementByName(pathFieldSelector));
         pastFromBuffer();
         enterClick();
         copyInBuffer(fileName);
         java.util.List<WebElement> nameFiled = window.findElementsByName(nameFieldSelector);
-        nameFiled.get(1).click();
+        click(nameFiled.get(1));
         pastFromBuffer();
-        window.findElementByName(openButtonSelector).click();
+        click(window.findElementByName(openButtonSelector));
     }
 
 //    @WindowsFindBy(accessibility = "IndicatorText")

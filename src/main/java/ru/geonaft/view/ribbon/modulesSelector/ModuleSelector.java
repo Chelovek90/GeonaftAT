@@ -1,4 +1,4 @@
-package ru.geonaft.view.ribbone.modulesSelector;
+package ru.geonaft.view.ribbon.modulesSelector;
 
 public enum ModuleSelector {
     LOADER(0,"Geosteering.Geonaft.Module.Dataloader.Modularity.DataLoaderToolbarInfo"),

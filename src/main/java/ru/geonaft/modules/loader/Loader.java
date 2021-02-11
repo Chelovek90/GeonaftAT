@@ -11,31 +11,27 @@ import ru.geonaft.Base;
 import ru.geonaft.NameEntityToProject;
 import ru.geonaft.helpers.BaseAction;
 import ru.geonaft.modules.loader.previewFilds.PreviewFieldsSelector;
-import ru.geonaft.view.ribbone.Ribbon;
-import ru.geonaft.view.ribbone.modulesSelector.ModuleSelector;
+import ru.geonaft.view.ribbon.BaseRibbon;
+import ru.geonaft.view.ribbon.modulesSelector.ModuleSelector;
 import ru.geonaft.view.treeProject.TreeProject;
 import ru.geonaft.view.treeProject.selectors.SubFolderSelector;
 import ru.geonaft.view.workSpace.editor.BaseWorkSpace;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static ru.geonaft.Base.Appointment.PRIMARY;
-import static ru.geonaft.Base.Appointment.SECONDARY;
 import static ru.geonaft.NameEntityToProject.*;
 import static ru.geonaft.modules.loader.previewFilds.PreviewFieldsSelector.*;
-import static ru.geonaft.view.treeProject.selectors.RootFolderSelector.PICTURES;
-import static ru.geonaft.view.treeProject.selectors.RootFolderSelector.POLYGONS;
-import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.PICTURE;
-import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.POLYGON;
 
 public class Loader extends Base implements OpenModule {
 
-//    public List<String> fileNameList;
+    public BaseRibbon ribbon;
+    public BaseWorkSpace workSpace;
+    public TreeProject treeProject;
 
     Faker faker = new Faker();
 
@@ -45,7 +41,7 @@ public class Loader extends Base implements OpenModule {
     }
 
     public Loader getRibbon() {
-        this.ribbon = new Ribbon(driver);
+        this.ribbon = new BaseRibbon(driver);
         return this;
     }
 
@@ -58,7 +54,9 @@ public class Loader extends Base implements OpenModule {
 
     public Loader(WindowsDriver<RemoteWebElement> driver) {
         super(driver);
-        this.baseAction = new BaseAction(driver);
+        this.ribbon = new BaseRibbon(driver);
+        this.workSpace = new BaseWorkSpace(driver);
+        this.treeProject = new TreeProject(driver);
     }
 
     private String loaderWindowSelector = "ЗАГРУЗЧИК ДАННЫХ";
@@ -72,20 +70,20 @@ public class Loader extends Base implements OpenModule {
     }
 
     public String getNameByIdFromPreview(PreviewFieldsSelector id) {
-        return driver.findElementByAccessibilityId(id.value).getText();
+        return driver.findElementByAccessibilityId(id.selector).getText();
     }
 
     private String comboBox = "ComboBox";
 
     public String getNameBySelectorFromPreview(PreviewFieldsSelector selector) {
-        return loaderWindow.findElementByName(selector.value)
+        return loaderWindow.findElementByName(selector.selector)
                 .findElement(By.className(comboBox))
                 .getText();
     }
 
     public void checkDataPreview(PreviewFieldsSelector selector) {
-        List<WebElement> list = loaderWindow.findElementsByName(selector.value);
-        assertThat("The data is not displayed in the preview", list, is(notNullValue()));
+        List<WebElement> list = loaderWindow.findElementsByName(selector.selector);
+        assertThat("The data is not displayed in the preview", list.size(), not(equalTo(0)));
     }
 
     public Loader doPreview(SubFolderSelector entity) {
@@ -142,11 +140,11 @@ public class Loader extends Base implements OpenModule {
     public Loader renameFieldPreview(SubFolderSelector entity) {
         switch (entity) {
             case TRAJECTORY:
-                driver.findElementByAccessibilityId(WELL_ID.value).click();
+                driver.findElementByAccessibilityId(WELL_ID.selector).click();
                 baseAction.copyInBuffer(faker.superhero().name());
                 baseAction.pastFromBuffer();
                 baseAction.enterClick();
-                driver.findElementByAccessibilityId(TRAJECTORY_ID.value).click();
+                driver.findElementByAccessibilityId(TRAJECTORY_ID.selector).click();
                 baseAction.ctr_A();
                 baseAction.copyInBuffer(faker.superhero().name());
                 baseAction.pastFromBuffer();
@@ -191,8 +189,18 @@ public class Loader extends Base implements OpenModule {
         return this;
     }
 
+    public Loader clickRandomCheckBox() {
+        List<WebElement> list =
+                loaderWindow.findElementsByName(ROW_SELECTOR.selector);
+        baseAction.clickCheckBox(
+                (RemoteWebElement) list.get(random.nextInt(list.size()))
+        );
+        return this;
+    }
+
     public Loader openEditorLoadedFile(SubFolderSelector what) {
         treeProject.openEditorFromContext(what);
+        workSpace.compareCountHeaders();
         return this;
     }
 
@@ -233,10 +241,22 @@ public class Loader extends Base implements OpenModule {
         switch (entity) {
             case SURFACE:
                 fileNameList =
-                        driver.findElementsByAccessibilityId(SURFACE_ID.value)
+                        driver.findElementsByAccessibilityId(SURFACE_ID.selector)
                                 .stream()
                                 .map(file -> file.getText())
                                 .collect(Collectors.toList());
+                baseAction.takeScreenshotToAttachOnAllureReport(loaderWindow, "multiFileSurface", PRIMARY);
+                assertThat("Multi file preview is empty", fileNameList, is(notNullValue()));
+                break;
+            case PICTURE:
+                clickRandomCheckBox();
+                fileNameList =
+                        driver.findElementsByClassName(ROW_SELECTOR.selector)
+                                .stream()
+                                .filter(row -> row.findElementByClassName("CheckBox").getAttribute("ToggleToggleState").equals(1))
+                                .map(row -> row.findElementByClassName("TextBox").getText())
+                                .collect(Collectors.toList());
+                System.out.println(fileNameList.toString());
                 baseAction.takeScreenshotToAttachOnAllureReport(loaderWindow, "multiFileSurface", PRIMARY);
                 assertThat("Multi file preview is empty", fileNameList, is(notNullValue()));
                 break;
@@ -246,9 +266,10 @@ public class Loader extends Base implements OpenModule {
 
     public Loader multiFileLoad(String from, SubFolderSelector what) {
         loaderWindow.findElementByName(openFileButtonSelector).click();
-        int count = baseAction.multiFileLoad(from);
+        baseAction.multiFileLoad(from);
+        baseAction.waitLoading(loaderWindow);
         doMultiFilePreview(what);
-        loadFileToProject();
+//        loadFileToProject();
         return this;
     }
 }
