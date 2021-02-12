@@ -216,9 +216,17 @@ public class TreeProject extends Base {
         baseAction.clickCheckBox(element);
     }
 
+    private String checkBoxState = "Toggle.ToggleState";
+    private String checkBox = "CheckBox";
     public void clickCheckBoxFolder(SubFolderSelector folder) {
+
         RemoteWebElement element= (RemoteWebElement)rootTreeFolder.findElementByName(folder.folderSelector);
+        int primaryState = Integer.parseInt(
+                element.findElementByClassName(checkBox).getAttribute(checkBoxState));
         baseAction.horizontalScroll(treeProjectWindow, element);
         baseAction.clickCheckBox(element);
+        int secondaryState = Integer.parseInt(
+                element.findElementByClassName(checkBox).getAttribute(checkBoxState));
+        assertThat("I couldn't click on the checkbox", primaryState, not(equalTo(secondaryState)) );
     }
 }

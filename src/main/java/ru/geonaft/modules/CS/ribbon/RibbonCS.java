@@ -8,7 +8,11 @@ import ru.geonaft.view.ribbon.BaseRibbon;
 import ru.geonaft.view.ribbon.modulesSelector.TabSelector;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static ru.geonaft.NameEntityToProject.*;
 
 public class RibbonCS extends BaseRibbon {
@@ -43,6 +47,7 @@ public class RibbonCS extends BaseRibbon {
                 .get(actualWellIndex);
         actualWellInProject.setName(baseAction.getFileName(well));
         well.click();
+        assertThat("Name actual well in field does not match", actualWellInProject.name, is(equalTo(actualWellField.getText())));
     }
 
     @WindowsFindBy(accessibility = "biOffsetWell")
@@ -60,6 +65,23 @@ public class RibbonCS extends BaseRibbon {
                 .get(refWellIndex);
         refWellInProject.setName(baseAction.getFileName(well));
         well.click();
+        assertThat("Name actual well in field does not match", actualWellInProject.name, is(equalTo(actualWellField.getText())));
     }
 
+    private String ribbonToggleButtonSelector = "RibbonToggleButton";
+    private String ribbonButtonSelector = "RibbonButton";
+    private String activitySelector = "IsEnabled";
+    public void checkActivityRibbonButton() {
+        ribbonPanel.findElementsByClassName(ribbonToggleButtonSelector).stream()
+                .filter(button -> !(button.getText().equals("Отклонение от плана")))
+                .forEach(button -> {
+                    assertThat("Button - "+ button.getText() +" is not active",
+                            button.getAttribute(activitySelector), is(equalTo("True")));
+                });
+        ribbonPanel.findElementsByClassName(ribbonButtonSelector).stream()
+                .forEach(button -> {
+                    assertThat("Button - "+ button.getText() +" is not active",
+                            button.getAttribute(activitySelector), is(equalTo("True")));
+                });
+    }
 }

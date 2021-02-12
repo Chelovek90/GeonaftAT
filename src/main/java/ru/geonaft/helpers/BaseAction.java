@@ -152,7 +152,7 @@ public class BaseAction {
     }
 
 
-    public byte[] createGiffFile(String fileName) {
+    public byte[] createGiffFileToAttachOnAllureReport(String fileName) {
         byte[] bytes = null;
         try {
             Files.createDirectories(Path.of(ScreenshotPaths.resultGifsDir));
@@ -263,12 +263,13 @@ public class BaseAction {
         click(window.findElementByName(openButtonSelector));
     }
 
-//    @WindowsFindBy(accessibility = "IndicatorText")
+    //    @WindowsFindBy(accessibility = "IndicatorText")
     private List<WebElement> indicatorLoad;
     private String loadIndicatorSelector = "WaitIndicator";
+
     public void waitLoading(RemoteWebElement window) {
         boolean load = true;
-         while (load) {
+        while (load) {
             List<WebElement> indicator = window.findElementsByClassName(loadIndicatorSelector);
             if (indicator.size() == 0) {
                 load = false;
@@ -296,5 +297,17 @@ public class BaseAction {
                 break;
             }
         }
+    }
+
+    private String contextMenuSelector = "ContextMenu";
+    private String menuItemSelector = "MenuItem";
+
+    public void clickItemContextMenu(RemoteWebElement window, int indexItem) {
+        actions.contextClick(window).perform();
+        driver
+                .findElementByClassName(contextMenuSelector)
+                .findElementsByClassName(menuItemSelector)
+                .get(indexItem).click();
+
     }
 }

@@ -4,15 +4,12 @@ import io.appium.java_client.windows.WindowsDriver;
 import io.qameta.allure.Step;
 import org.openqa.selenium.remote.RemoteWebElement;
 import ru.geonaft.Base;
-import ru.geonaft.modules.CS.crossSectionSpace.CrossSectionSpace;
+import ru.geonaft.modules.CS.workSpace.CrossSectionSpace;
 import ru.geonaft.modules.CS.ribbon.RibbonCS;
 import ru.geonaft.modules.loader.OpenModule;
 import ru.geonaft.view.ribbon.modulesSelector.ModuleSelector;
 import ru.geonaft.view.treeProject.TreeProject;
 import ru.geonaft.view.treeProject.selectors.SubFolderSelector;
-import ru.geonaft.view.workSpace.editor.BaseWorkSpace;
-
-import java.util.PrimitiveIterator;
 
 import static ru.geonaft.NameEntityToProject.actualWellInProject;
 import static ru.geonaft.NameEntityToProject.refWellInProject;
@@ -41,9 +38,10 @@ public class Geosteering extends Base implements OpenModule {
         return this;
     }
 
-    public Geosteering choseWellOnRibbonPanel() {
+    public Geosteering choseWellsOnRibbonPanel() {
         ribbon.chooseActualWell();
         ribbon.chooseRefWell();
+        ribbon.checkActivityRibbonButton();
         return this;
     }
 
@@ -62,6 +60,34 @@ public class Geosteering extends Base implements OpenModule {
                 .unfoldFolder(WELLS)
                 .unfoldFolder(SubFolderSelector.WELL, refWellInProject.name)
                 .clickCheckBoxFolder(SubFolderSelector.TRAJECTORY);
+        return this;
+    }
+
+    public Geosteering makeCrossSectionWindowScreen(String name, Appointment appointment) {
+        CSWorkSpace.showAllClick();
+        CSWorkSpace.takeCrossSectionScreen(name, appointment);
+        return this;
+    }
+
+    public Geosteering makeModuleScreen(String name, Appointment appointment) {
+        CSWorkSpace.takeCSModuleScreen(name, appointment);
+        return this;
+    }
+
+    public Geosteering checkDisplayedOnCrossSectionSpace(String name) {
+        baseAction.takeDiffImage(name);
+        baseAction.createGiffFileToAttachOnAllureReport(name);
+        return this;
+    }
+
+    public Geosteering showAll(String name, Appointment appointment) {
+        CSWorkSpace.showAllClick();
+        return this;
+    }
+
+    public Geosteering check() {
+        CSWorkSpace = new CrossSectionSpace(driver);
+        ribbon.checkActivityRibbonButton();
         return this;
     }
 }
