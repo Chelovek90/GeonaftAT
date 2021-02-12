@@ -8,7 +8,6 @@ import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.geonaft.Base;
 import ru.geonaft.NameEntityToProject;
-import ru.geonaft.helpers.BaseAction;
 import ru.geonaft.view.treeProject.selectors.RootFolderSelector;
 import ru.geonaft.view.treeProject.selectors.SubFolderSelector;
 
@@ -85,6 +84,14 @@ public class TreeProject extends Base {
         items.get(0).click();
     }
 
+    public void clickItemFromContextMenu(SubFolderSelector folder, int indexMenuItem) {
+        RemoteWebElement subFolderText = (RemoteWebElement) rootTreeFolder
+                .findElementByName(folder.folderSelector)
+                .findElement(By.className(clickablePoint));
+        baseAction.horizontalScroll(treeProjectWindow, subFolderText);
+        baseAction.clickItemContextMenu(subFolderText,indexMenuItem);
+    }
+
     private RemoteWebElement rootTreeFolder;
     public TreeProject unfoldFolder(RootFolderSelector folder) {
         this.rootTreeFolder = (RemoteWebElement) treeProjectWindow.findElementByName(folder.folderSelector);
@@ -105,12 +112,12 @@ public class TreeProject extends Base {
         return this;
     }
 
-    public TreeProject unfoldFolder(SubFolderSelector selector) {
-        RemoteWebElement subFolder = (RemoteWebElement) rootTreeFolder.findElementByName(selector.folderSelector);
+    public TreeProject unfoldFolder(SubFolderSelector folder) {
+        RemoteWebElement subFolder = (RemoteWebElement) rootTreeFolder.findElementByName(folder.folderSelector);
+        this.rootTreeFolder = subFolder;
         if (checkExpander(subFolder)) {
             baseAction.horizontalScroll(treeProjectWindow, subFolder);
             baseAction.doubleClick(subFolder);
-            this.rootTreeFolder = subFolder;
         }
         return this;
     }
@@ -119,20 +126,6 @@ public class TreeProject extends Base {
         baseAction.horizontalScroll(treeProjectWindow, (RemoteWebElement) targetFolder);
         openEditorFromContextMenu((RemoteWebElement)targetFolder);
     }
-
-//    public void openEditorFolder(RootFolderSelector selector) {
-//        RemoteWebElement rootFolder = (RemoteWebElement) treeProjectWindow.findElementByName(selector.folderSelector);
-//        baseAction.horizontalScroll(treeProjectWindow, rootFolder);
-//        openEditorFromContextMenu(rootFolder);
-//    }
-
-//    public void checkDataFolder(RootFolderSelector rootFolderSelector, String screenName, SubFolderSelector subFolderSelector) {
-//        unfoldFolder(rootFolderSelector);
-//        List<WebElement> list = rootTreeFolder.findElementsByClassName(subFolderSelector.folderSelector);
-//        baseAction.takeScreenshotToAttachOnAllureReport(treeProjectWindow, screenName , PRIMARY);
-//        String message = ("Folder " + rootFolderSelector+ " is empty");
-//        assertThat(message, list, is(notNullValue()));
-//    }
 
     public void openEditorFromContext(SubFolderSelector what) {
 //        getTree();
@@ -229,4 +222,10 @@ public class TreeProject extends Base {
                 element.findElementByClassName(checkBox).getAttribute(checkBoxState));
         assertThat("I couldn't click on the checkbox", primaryState, not(equalTo(secondaryState)) );
     }
+
+    public void checkFolderInTreeProject(SubFolderSelector folder) {
+        List<WebElement> subFolder = rootTreeFolder.findElementsByName(folder.folderSelector);
+        assertThat("Folder - " + folder + " was not found", subFolder.size(), not(equalTo(0)) );
+    }
+
 }

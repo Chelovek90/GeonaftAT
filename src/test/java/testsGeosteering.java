@@ -10,6 +10,9 @@ import ru.geonaft.base.BaseTest;
 import ru.geonaft.modules.CS.Geosteering;
 import ru.geonaft.view.workSpace.editor.BaseWorkSpace;
 
+import static ru.geonaft.NameEntityToProject.*;
+import static ru.geonaft.modules.CS.workSpace.CSWorkSpace.OrientationTrack.*;
+
 
 public class testsGeosteering extends BaseTest {
 
@@ -38,6 +41,56 @@ public class testsGeosteering extends BaseTest {
                 .choseWellsOnRibbonPanel()
                 .makeModuleScreen(screenName, Base.Appointment.SECONDARY)
                 .checkDisplayedOnCrossSectionSpace(screenName);
+    }
+
+    @Test
+    @DisplayName("Add vertical track")
+    @Feature(value = "Track")
+    @Story(value = "Vertical track")
+    @TmsLink("7537")
+    public void TestAddVerticalTrack(TestInfo testInfo) {
+        String screenName = testInfo.getDisplayName();
+        new Geosteering(desktopSession)
+                .openModule()
+                .makeModuleScreen(screenName, Base.Appointment.PRIMARY)
+                .addTrack(VERTICAL)
+                .makeModuleScreen(screenName, Base.Appointment.SECONDARY)
+                .checkDisplayedOnCrossSectionSpace(screenName);
+    }
+
+    @Test
+    @DisplayName("Add horizontal track")
+    @Feature(value = "Track")
+    @Story(value = "Horizontal track")
+    @TmsLink("7538")
+    public void TestAddHorizontalTrack(TestInfo testInfo) {
+        String screenName = testInfo.getDisplayName();
+        new Geosteering(desktopSession)
+                .openModule()
+                .makeModuleScreen(screenName, Base.Appointment.PRIMARY)
+                .addTrack(HORIZONTAL)
+                .makeModuleScreen(screenName, Base.Appointment.SECONDARY)
+                .checkDisplayedOnCrossSectionSpace(screenName);
+    }
+
+    @Test
+    @DisplayName("Add target on cross section window")
+    @Feature(value = "Track")
+    @Story(value = "Horizontal track")
+    @TmsLink("7589")
+    public void TestDisplayedTargetInCrossSectionWindow (TestInfo testInfo) {
+        String screenName = testInfo.getDisplayName();
+        new Geosteering(desktopSession)
+                .openModule()
+                .makeModuleScreen(screenName, Base.Appointment.PRIMARY)
+                .choseWellsOnRibbonPanel()
+                .doCopyTrajectoryWellAsPlan(actualWellInProject)
+                .activeCheckBoxPlanTrajectoryWell(actualWellInProject)
+                .showAll()
+                .makeModuleScreen(screenName, Base.Appointment.SECONDARY)
+                .checkDisplayedOnCrossSectionSpace(screenName);
+//                .makeModuleScreen(screenName, Base.Appointment.SECONDARY)
+//                .checkDisplayedOnCrossSectionSpace(screenName);
     }
 
 //    @Test
