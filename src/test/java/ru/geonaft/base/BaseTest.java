@@ -27,8 +27,8 @@ public abstract class BaseTest {
     @BeforeAll
     public static void setUp() throws IOException, InterruptedException {
 
-        File file = new File(winAppDriverPath);
-        Desktop.getDesktop().open(file);
+//        File file = new File(winAppDriverPath);
+//        Desktop.getDesktop().open(file);
 //
 //        geonaftProcess = runtime.exec(geonaftPath);
 
@@ -54,8 +54,8 @@ public abstract class BaseTest {
     @AfterAll
     public static void tearDown() throws IOException {
 //        geonaftProcess.destroy();
-        Runtime.getRuntime().exec("taskkill /F /IM WinAppDriver.exe");
-        desktopSession.quit();
+//        Runtime.getRuntime().exec("taskkill /F /IM WinAppDriver.exe");
+//        desktopSession.quit();
     }
 
     public void restartDesktopSession() throws MalformedURLException {

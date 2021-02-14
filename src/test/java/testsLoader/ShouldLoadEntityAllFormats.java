@@ -25,10 +25,8 @@ public class ShouldLoadEntityAllFormats extends BaseTest {
 
     @BeforeAll
     public static void openProject() {
-        new StartWindow(desktopSession)
-                .openProject(pathCleanProject, nameCleanProject);
-        new BaseWorkSpace(desktopSession)
-                .setCountHeaders();
+//        new StartWindow(desktopSession)
+//                .openProject(pathCleanProject, nameCleanProject);
     }
 
 //    @AfterEach

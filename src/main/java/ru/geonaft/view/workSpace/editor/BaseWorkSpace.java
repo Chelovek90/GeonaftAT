@@ -17,6 +17,7 @@ import static ru.geonaft.Base.Appointment.*;
 
 public class BaseWorkSpace extends Base {
 
+    protected int numberHeaders;
 
     protected RemoteWebElement workSpaceWindow;
     protected RemoteWebElement headersPanel;
@@ -30,6 +31,10 @@ public class BaseWorkSpace extends Base {
         super(driver);
         this.baseAction = new BaseAction(driver);
         this.workSpaceWindow = rootWindowSelector;
+        this.numberHeaders = workSpaceWindow
+                .findElementByClassName(tabHeadersPanel)
+                .findElements(By.className(closeButtonSelector))
+                .size();
     }
 
     @WindowsFindBy(accessibility = "dataPresenter")
@@ -54,13 +59,6 @@ public class BaseWorkSpace extends Base {
         }
     }
 
-    public void setCountHeaders() {
-        this.numberHeaders = workSpaceWindow
-                .findElementByClassName(tabHeadersPanel)
-                .findElements(By.className(closeButtonSelector))
-                .size();
-    }
-
     public void closeFirstTab() {
         workSpaceWindow
                 .findElementByClassName(tabHeadersPanel)
@@ -69,14 +67,12 @@ public class BaseWorkSpace extends Base {
 
     }
 
-    private String tabNameValue = "HelpTextHelpText";
-    private String tabNameSelector = "TabCaptionControl";
+    private String tabHeaderSelector = "DocumentPaneItem";
     public void checkTabName(String nameWell) {
         String tabName = workSpaceWindow
                 .findElementByClassName(tabHeadersPanel)
-                .findElement(By.className(tabNameSelector))
-                .getAttribute(tabNameValue);
-        assertThat("Tab name does not contains well name", tabName, containsString(nameWell) );
-
+                .findElement(By.className(tabHeaderSelector))
+                .getAttribute("Name");
+        assertThat("Tab name does not contains well name - " + nameWell, tabName, containsString(nameWell) );
     }
 }

@@ -100,7 +100,6 @@ public class Loader extends Base implements OpenModule {
                 trajectoryInProject.setName(getNameByIdFromPreview(TRAJECTORY_ID));
                 baseAction.takeScreenshotToAttachOnAllureReport(loaderWindow, wellInProject.name, PRIMARY);
                 assertThat("Field with trajectory name is empty", trajectoryInProject, is(notNullValue()));
-                checkDataPreview(CURVE_SELECTOR);
                 break;
             case SURFACE:
                 surfaceInProject.setName(getNameByIdFromPreview(SURFACE_ID));

@@ -34,7 +34,6 @@ public class RibbonCS extends BaseRibbon {
 
     @WindowsFindBy(accessibility = "PART_Content")
     private RemoteWebElement listBox;
-//    @FindBy(className = "ListBoxItem")
     private String wellBoxSelector = "ListBoxItem";
 
     public void chooseActualWell() {

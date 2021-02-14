@@ -2,32 +2,39 @@ package ru.geonaft.modules.CS.workSpace;
 
 import io.appium.java_client.pagefactory.WindowsFindBy;
 import io.appium.java_client.windows.WindowsDriver;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 import ru.geonaft.view.workSpace.editor.BaseWorkSpace;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class CSWorkSpace extends BaseWorkSpace {
-    public RemoteWebElement CSWorkSpace;
+public class CsWorkSpace extends BaseWorkSpace {
+
+    public RemoteWebElement csWorkSpace;
 
     private String mainWindowSelector = "ScreenshotProvider";
 
-    public CSWorkSpace(WindowsDriver<RemoteWebElement> driver) {
+    public CsWorkSpace(WindowsDriver<RemoteWebElement> driver) {
         super(driver);
-        CSWorkSpace = (RemoteWebElement) workSpaceWindow.findElementByClassName(mainWindowSelector);
+    }
+
+    public void setCsWorkSpace() {
+        csWorkSpace = (RemoteWebElement) workSpaceWindow.findElementByClassName(mainWindowSelector);
+
     }
 
     private String crossSectionSelector = "MarkerEditor";
 
     public void clickCrossSectionSpace() {
-        CSWorkSpace
+        csWorkSpace
                 .findElementByClassName(crossSectionSelector)
                 .click();
     }
 
     public void takeCrossSectionScreen(String screenName, Appointment appointment) {
-        baseAction.takeScreenshotToAttachOnAllureReport((RemoteWebElement) CSWorkSpace
+        baseAction.takeScreenshotToAttachOnAllureReport((RemoteWebElement) csWorkSpace
                 .findElementByClassName(crossSectionSelector), screenName, appointment);
     }
 
@@ -36,7 +43,7 @@ public class CSWorkSpace extends BaseWorkSpace {
     }
 
     public void showAllClick() {
-        RemoteWebElement crossSection = (RemoteWebElement) CSWorkSpace
+        RemoteWebElement crossSection = (RemoteWebElement) csWorkSpace
                 .findElementByClassName(crossSectionSelector);
         baseAction.clickItemContextMenu(crossSection, 2);
     }
@@ -70,5 +77,18 @@ public class CSWorkSpace extends BaseWorkSpace {
                 break;
 
         }
+    }
+
+
+
+    private String nameField = "TextBlock";
+    private String attributeName = "Name";
+    public void testTab() {
+       WebElement element = workSpaceWindow
+               .findElementByClassName("TabHeadersPanel")
+               .findElement(By.className("DocumentPaneItem"));
+        System.out.println(element.getAttribute("Name"));
+        System.out.println(element.getAttribute("AutomationId"));
+        System.out.println(element.getTagName());
     }
 }

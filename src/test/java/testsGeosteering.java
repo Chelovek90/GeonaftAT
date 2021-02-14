@@ -8,10 +8,9 @@ import org.junit.jupiter.api.TestInfo;
 import ru.geonaft.Base;
 import ru.geonaft.base.BaseTest;
 import ru.geonaft.modules.CS.Geosteering;
-import ru.geonaft.view.workSpace.editor.BaseWorkSpace;
 
 import static ru.geonaft.NameEntityToProject.*;
-import static ru.geonaft.modules.CS.workSpace.CSWorkSpace.OrientationTrack.*;
+import static ru.geonaft.modules.CS.workSpace.CsWorkSpace.OrientationTrack.*;
 
 
 public class testsGeosteering extends BaseTest {
@@ -24,8 +23,6 @@ public class testsGeosteering extends BaseTest {
     public static void openProject() {
 //        new StartWindow(desktopSession)
 //                .openProject(pathCleanProject, nameCleanProject);
-        new BaseWorkSpace(desktopSession)
-                .setCountHeaders();
     }
 
     @Test
@@ -110,6 +107,7 @@ public class testsGeosteering extends BaseTest {
     @Test
     public void test() {
         new Geosteering(desktopSession)
+                .openModule()
                 .check();
     }
 }

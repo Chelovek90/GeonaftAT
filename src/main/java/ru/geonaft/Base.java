@@ -24,8 +24,6 @@ public abstract class Base {
 
     protected BaseAction baseAction;
 
-    protected int numberHeaders;
-
     protected WindowsDriver<RemoteWebElement> driver;
     public static Robot robot;
     public static Actions actions;
