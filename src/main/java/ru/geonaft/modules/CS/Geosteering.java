@@ -34,16 +34,18 @@ public class Geosteering extends Base implements OpenModule {
     @Override
     public Geosteering openModule() {
         ribbon.openModule(ModuleSelector.CS);
-        workSpace.setCsWorkSpace();
-        workSpace.compareCountHeaders();
+        workSpace
+                .setCsWorkSpace()
+                .compareCountHeaders();
         return this;
     }
 
     @Step("Set actual and reference wells")
     public Geosteering choseWellsOnRibbonPanel() {
-        ribbon.chooseActualWell();
-        ribbon.chooseRefWell();
-        ribbon.checkActivityRibbonButton();
+        ribbon
+                .chooseActualWell()
+                .chooseRefWell()
+                .checkActivityRibbonButton();
         workSpace.checkTabName(refWellInProject.name);
         return this;
     }
@@ -68,18 +70,19 @@ public class Geosteering extends Base implements OpenModule {
         return this;
     }
 
-    public Geosteering makeCrossSectionWindowScreen(String name, Appointment appointment) {
-        workSpace.showAllClick();
-        workSpace.takeCrossSectionScreen(name, appointment);
+    public Geosteering makeWorkSpaceScreen(String name, Appointment appointment) {
+        workSpace
+                .showAllClick()
+                .takeWorkSpaceScreen(name, appointment);
         return this;
     }
 
-    public Geosteering makeModuleScreen(String name, Appointment appointment) {
-        workSpace.takeCSModuleScreen(name, appointment);
+    public Geosteering makeGeonaftScreen(String name, Appointment appointment) {
+        workSpace.takeGeonaftScreen(name, appointment);
         return this;
     }
 
-    public Geosteering checkDisplayedOnCrossSectionSpace(String name) {
+    public Geosteering checkDisplayedInCrossSectionWindow(String name) {
         baseAction.takeDiffImage(name);
         baseAction.createGiffFileToAttachOnAllureReport(name);
         return this;
@@ -90,7 +93,7 @@ public class Geosteering extends Base implements OpenModule {
         return this;
     }
 
-    @Step("Add {CsWorkSpace.OrientationTrack track} track")
+    @Step("Add {track} track")
     public Geosteering addTrack(CsWorkSpace.OrientationTrack track) {
         workSpace.addTrack(track);
         return this;
@@ -98,26 +101,93 @@ public class Geosteering extends Base implements OpenModule {
 
     @Step("Copy trajectory well as plan")
     public Geosteering doCopyTrajectoryWellAsPlan(NameEntityToProject wellName) {
-        treeProject.unfoldFolder(WELLS);
-        treeProject.unfoldFolder(WELL, wellName.name);
-        treeProject.clickItemFromContextMenu(TRAJECTORY, 5);
-        treeProject.checkFolderInTreeProject(PLAN_TRAJECTORIES);
+        treeProject
+                .unfoldFolder(WELLS)
+                .unfoldFolder(WELL, wellName.name);
+        if (!(treeProject.checkFolderInTreeProject(PLAN_TRAJECTORIES))) {
+            treeProject
+                    .clickItemFromContextMenu(TRAJECTORY, 5)
+                    .checkFolderInTreeProject(PLAN_TRAJECTORIES);
+        }
         return this;
     }
 
     @Step("Activate check box plan trajectory well")
-    public Geosteering activeCheckBoxPlanTrajectoryWell(NameEntityToProject wellName) {
-        workSpace.clickCrossSectionSpace();
+    public Geosteering displayPlanTrajectoryInCrossSectionWindow() {
+        workSpace
+                .clickCrossSectionSpace();
         treeProject
-//                .unfoldFolder(WELLS)
-//                .unfoldFolder(WELL, wellName.name)
                 .unfoldFolder(PLAN_TRAJECTORIES)
                 .clickCheckBoxFolder(TRAJECTORY);
         return this;
     }
 
-    public Geosteering check() {
-        workSpace.testTab();
+    @Step("Activate check box trajectory well")
+    public Geosteering displayTrajectoryInCrossSectionWindow(String actualWellName) {
+        workSpace
+                .clickCrossSectionSpace();
+        treeProject
+                .unfoldFolder(WELLS)
+                .unfoldFolder(WELL, actualWellName)
+                .clickCheckBoxFolder(TRAJECTORY);
+        return this;
+    }
+
+    @Step("Create targets trajectory")
+    public Geosteering unfoldPlanTrajectoryAndCreatedTarget() {
+        treeProject
+                .unfoldFolder(TRAJECTORY)
+                .clickItemFromContextMenu(TARGETS, 0);
+        workSpace
+                .compareCountHeaders()
+                .clickAddRowInEditor()
+                .enterMdValue()
+                .checkDataEditor("create targets")
+                .clickSaveAndExit();
+        return this;
+    }
+
+    @Step("Display targets in cross section window")
+    public Geosteering displayTargetsInCrossSectionWindow() {
+        workSpace
+                .clickCrossSectionSpace();
+        treeProject
+                .clickCheckBoxFolder(TARGETS);
+        return this;
+    }
+
+    @Step("Open editor geonavigation journal")
+    public Geosteering openEditorGeonavigationJournal(String actualWellName) {
+        treeProject
+                .unfoldFolder(TRAJECTORY)
+                .clickItemFromContextMenu(GEO_JOURNAL, 0);
+        workSpace
+                .compareCountHeaders()
+                .clickAddRowInEditor();
+        return this;
+    }
+
+    @Step("Fill in the fields geonavigation journal")
+    public Geosteering fillFieldsGeonavigationJournalSaveAdnExit() {
+        workSpace
+                .enterEngineerValue()
+                .enterSituationValue()
+                .enterRecommendationValue()
+                .enterAnnotationValue()
+                .enterCustomerValue()
+                .enterStateValue()
+                .enterMdValue()
+                .checkDataEditor("Create geonavigation journal")
+                .clickSaveAndExit();
+        return this;
+    }
+
+    @Step("Display geonavigation journal in cross section window")
+    public Geosteering displayGeonavigationJournalInCrossSectionWindow() {
+        workSpace
+                .clickCrossSectionSpace();
+        treeProject
+                .clickCheckBoxFolder(GEO_JOURNAL);
         return this;
     }
 }

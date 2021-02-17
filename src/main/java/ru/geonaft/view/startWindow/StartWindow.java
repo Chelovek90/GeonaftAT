@@ -27,7 +27,8 @@ public class StartWindow extends Base {
 
     public StartWindow clickOpenButton() {
         RemoteWebElement openButton = (RemoteWebElement) buttonsStartWindowGF.get(0);
-        baseAction.click(openButton);
+        openButton.click();
+//        baseAction.click(openButton);
         return this;
     }
 

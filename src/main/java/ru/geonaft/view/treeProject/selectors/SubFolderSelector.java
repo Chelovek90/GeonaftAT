@@ -6,6 +6,10 @@ public enum SubFolderSelector {
 
     TRAJECTORY("Geosteering.UI.Controls.DataTreeView.DataTree.TrajectoryTreeViewItem"),
 
+    TARGETS("Geosteering.UI.Controls.DataTreeView.DataTree.TargetsTreeViewItem"),
+
+    GEO_JOURNAL("Geosteering.UI.Controls.DataTreeView.DataTree.DecisionsTreeViewItem"),
+
     PLAN_TRAJECTORIES("Geosteering.UI.Controls.DataTreeView.DataTree.TrajectoriesTreeViewItem"),
 
     LOGS("Geosteering.UI.Controls.DataTreeView.DataTree.LogsTreeViewItem"),

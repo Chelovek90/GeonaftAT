@@ -33,8 +33,6 @@ public class Loader extends Base implements OpenModule {
     public BaseWorkSpace workSpace;
     public TreeProject treeProject;
 
-    Faker faker = new Faker();
-
     public Loader getTree() {
         this.treeProject = new TreeProject(driver);
         return this;
@@ -205,8 +203,9 @@ public class Loader extends Base implements OpenModule {
 
     @Step("Checking the uploaded data in the data editor")
     public Loader checkDataInEditor(NameEntityToProject entity) {
-        workSpace.checkDataEditor(entity.name);
-        workSpace.closeFirstTab();
+        workSpace
+                .checkDataEditor(entity.name)
+                .closeFirstTab();
         return this;
     }
 

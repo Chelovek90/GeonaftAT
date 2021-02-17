@@ -8,13 +8,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.geonaft.base.BaseTest;
 import ru.geonaft.modules.loader.Loader;
+import ru.geonaft.view.ribbon.BaseRibbon;
 import ru.geonaft.view.startWindow.StartWindow;
 import ru.geonaft.view.treeProject.selectors.SubFolderSelector;
-import ru.geonaft.view.workSpace.editor.BaseWorkSpace;
 
 import java.util.stream.Stream;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static ru.geonaft.NameEntityToProject.*;
 import static ru.geonaft.base.TestsDataEnums.*;
@@ -23,15 +24,15 @@ import static testsLoader.FilesForTestLoader.*;
 
 public class ShouldLoadEntityAllFormats extends BaseTest {
 
-    @BeforeAll
-    public static void openProject() {
+//    @BeforeAll
+//    public static void openProject() {
 //        new StartWindow(desktopSession)
 //                .openProject(pathCleanProject, nameCleanProject);
-    }
+//    }
 
 //    @AfterEach
 //    public void closeProject() {
-//        new Ribbon(desktopSession)
+//        new BaseRibbon(desktopSession)
 //                .closeProject();
 //    }
 

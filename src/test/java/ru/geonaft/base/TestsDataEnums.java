@@ -6,7 +6,7 @@ public enum  TestsDataEnums {
     timeLogForTest("D:\\Data for testing\\По времени", "Gavr_4P_Las_3-0_General_Time.las"),
     imageForTest("D:\\Data for testing\\Имиджы", "Имидж.las"),
 //    trajectoryForTest("D:\\Data for testing\\Траектории", "Траектория_факт"),
-    trajectoryForTest("F:\\Data for testing\\Траектории", "Траектория_факт"),
+    trajectoryForTest("D:\\Data for testing\\Траектории", "Траектория_факт"),
     polygonForTest("D:\\Data for testing\\Полигоны", "Полигон"),
     pictureForTest("D:\\ScreenShot\\форматы", null),
     paletteForTest("D:\\Data for testing\\Палитры", "Палитра для дискретной.json"),

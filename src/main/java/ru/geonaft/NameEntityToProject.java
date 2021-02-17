@@ -5,8 +5,7 @@ import java.util.List;
 
 public enum NameEntityToProject {
     wellInProject(null),
-//    actualWellInProject(null),
-    actualWellInProject("12_actual"),
+    actualWellInProject(null),
     refWellInProject(null),
     logInProject(null),
     trajectoryInProject(null),

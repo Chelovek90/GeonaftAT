@@ -36,7 +36,7 @@ public class RibbonCS extends BaseRibbon {
     private RemoteWebElement listBox;
     private String wellBoxSelector = "ListBoxItem";
 
-    public void chooseActualWell() {
+    public RibbonCS chooseActualWell() {
         clickCSTabHeader();
         actualWellField.click();
         List<WebElement> listWells = listBox
@@ -47,11 +47,12 @@ public class RibbonCS extends BaseRibbon {
         actualWellInProject.setName(baseAction.getFileName(well));
         well.click();
         assertThat("Name actual well in field does not match", actualWellInProject.name, is(equalTo(actualWellField.getText())));
+        return this;
     }
 
     @WindowsFindBy(accessibility = "biOffsetWell")
     private RemoteWebElement refWellField;
-    public void chooseRefWell() {
+    public RibbonCS chooseRefWell() {
         clickCSTabHeader();
         refWellField.click();
         List<WebElement> listWells = listBox
@@ -65,12 +66,13 @@ public class RibbonCS extends BaseRibbon {
         refWellInProject.setName(baseAction.getFileName(well));
         well.click();
         assertThat("Name actual well in field does not match", actualWellInProject.name, is(equalTo(actualWellField.getText())));
+    return this;
     }
 
     private String ribbonToggleButtonSelector = "RibbonToggleButton";
     private String ribbonButtonSelector = "RibbonButton";
     private String activitySelector = "IsEnabled";
-    public void checkActivityRibbonButton() {
+    public RibbonCS checkActivityRibbonButton() {
         ribbonPanel.findElementsByClassName(ribbonToggleButtonSelector).stream()
                 .filter(button -> !(button.getText().equals("Отклонение от плана")))
                 .forEach(button -> {
@@ -82,5 +84,6 @@ public class RibbonCS extends BaseRibbon {
                     assertThat("Button - "+ button.getText() +" is not active",
                             button.getAttribute(activitySelector), is(equalTo("True")));
                 });
+        return this;
     }
 }

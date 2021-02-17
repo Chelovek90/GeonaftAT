@@ -90,8 +90,16 @@ public class BaseAction {
 //        return bytes;
 //    }
 
+    @WindowsFindBy(accessibility = "PART_ToggleButton")
+    private RemoteWebElement btn;
     @Attachment(value = "Test screenshot", type = "image/png")
     public byte[] takeScreenshotToAttachOnAllureReport(RemoteWebElement element, String fileName, Appointment appointment) {
+        moveTo(btn);
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         byte[] bytes = null;
         File screenshot = element.getScreenshotAs(OutputType.FILE);
         switch (appointment) {
@@ -115,22 +123,31 @@ public class BaseAction {
         return bytes;
     }
 
-//    public int takeDiffImage(String fileName) {
-//        int diffPoint = 1;
-//        try {
-//            Screenshot secondaryScreenshot = new Screenshot(ImageIO.read(new File(ScreenshotPaths.secondaryDir + fileName + ".png")));
-//            Screenshot primaryScreenshot = new Screenshot(ImageIO.read(new File(ScreenshotPaths.primaryDir + fileName + ".png")));
-//            ImageDiff diff = new ImageDiffer().makeDiff(primaryScreenshot, secondaryScreenshot);
-//            File diffFile = new File(ScreenshotPaths.diffDir + fileName + ".png");
-//            ImageIO.write(diff.getMarkedImage(), "png", diffFile);
-//            diffPoint = diff.getDiffSize();
-////            Assertions.assertNotEquals(diffPoint, 0);
-//        } catch (IOException e) {
-//            System.out.println("File different is not created");
-//        }
-//        return diffPoint;
-//    }
+    public void takeScreenshot(RemoteWebElement element, String fileName, Appointment appointment) {
+        moveTo(btn);
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        File screenshot = element.getScreenshotAs(OutputType.FILE);
+        switch (appointment) {
+            case PRIMARY:
+                try {
+                    FileUtils.copyFile(screenshot, new File(ScreenshotPaths.primaryDir + fileName + ".png"));
+                } catch (IOException e) {
+                    System.out.println("Primary screenshot is not created");
+                }
 
+                break;
+            case SECONDARY:
+                try {
+                    FileUtils.copyFile(screenshot, new File(ScreenshotPaths.secondaryDir + fileName + ".png"));
+                } catch (IOException e) {
+                    System.out.println("Secondary screenshot is not created");
+                }
+        }
+    }
 
     public int takeDiffImage(String fileName) {
         int diffPoint = 1;
@@ -142,7 +159,6 @@ public class BaseAction {
             Screenshot secondaryScreen = new Screenshot(ImageIO.read(new File(ScreenshotPaths.secondaryDir + fileName + ".png")));
             ImageDiff differ = new ImageDiffer().makeDiff(primaryScreen, secondaryScreen);
 
-
             File diffImage = new File(ScreenshotPaths.diffDir + fileName + ".png");
             ImageIO.write(differ.getMarkedImage(), "png", diffImage);
         } catch (IOException e) {
@@ -151,7 +167,7 @@ public class BaseAction {
         return diffPoint;
     }
 
-
+    @Attachment(value = "Test gif", type = "image/gif")
     public byte[] createGiffFileToAttachOnAllureReport(String fileName) {
         byte[] bytes = null;
         try {
@@ -172,6 +188,7 @@ public class BaseAction {
             }
             writer.close();
             output.close();
+            bytes = Files.readAllBytes(Paths.get(ScreenshotPaths.resultGifsDir + fileName + ".gif"));
         } catch (Exception e) {
             System.out.println("Gif picture file is not created");
         }
@@ -201,10 +218,10 @@ public class BaseAction {
         actions.moveToElement(element).build().perform();
     }
 
-    public void click(WebElement element) {
-        actions.moveToElement(element).build().perform();
-        element.click();
-    }
+//    public void click(WebElement element) {
+//        actions.moveToElement(element).build().perform();
+//        element.click();
+//    }
 
     public void horizontalScroll(RemoteWebElement mainView, RemoteWebElement element) {
 
@@ -253,14 +270,17 @@ public class BaseAction {
     public void loadFile(String path, String fileName) {
         copyInBuffer(path);
         RemoteWebElement window = openingWindowSelector;
-        click(window.findElementByName(pathFieldSelector));
+        window.findElementByName(pathFieldSelector).click();
+//        click(window.findElementByName(pathFieldSelector));
         pastFromBuffer();
         enterClick();
         copyInBuffer(fileName);
         java.util.List<WebElement> nameFiled = window.findElementsByName(nameFieldSelector);
-        click(nameFiled.get(1));
+        nameFiled.get(1).click();
+//        click(nameFiled.get(1));
         pastFromBuffer();
-        click(window.findElementByName(openButtonSelector));
+        window.findElementByName(openButtonSelector).click();
+//        click(window.findElementByName(openButtonSelector));
     }
 
     //    @WindowsFindBy(accessibility = "IndicatorText")

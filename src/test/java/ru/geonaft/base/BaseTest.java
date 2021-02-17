@@ -22,14 +22,14 @@ public abstract class BaseTest {
     private static Runtime runtime = Runtime.getRuntime();
     private static Process geonaftProcess;
 
-//    @WindowsFindBy(accessibility = "MainShall")
+    @WindowsFindBy(accessibility = "MainShall")
     protected static List<RemoteWebElement> geonaftWindow;
     @BeforeAll
     public static void setUp() throws IOException, InterruptedException {
 
-//        File file = new File(winAppDriverPath);
-//        Desktop.getDesktop().open(file);
-//
+        File file = new File(winAppDriverPath);
+        Desktop.getDesktop().open(file);
+
 //        geonaftProcess = runtime.exec(geonaftPath);
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -54,8 +54,8 @@ public abstract class BaseTest {
     @AfterAll
     public static void tearDown() throws IOException {
 //        geonaftProcess.destroy();
-//        Runtime.getRuntime().exec("taskkill /F /IM WinAppDriver.exe");
-//        desktopSession.quit();
+        Runtime.getRuntime().exec("taskkill /F /IM WinAppDriver.exe");
+        desktopSession.quit();
     }
 
     public void restartDesktopSession() throws MalformedURLException {

@@ -20,32 +20,22 @@ public class CsWorkSpace extends BaseWorkSpace {
         super(driver);
     }
 
-    public void setCsWorkSpace() {
+    public CsWorkSpace setCsWorkSpace() {
         csWorkSpace = (RemoteWebElement) workSpaceWindow.findElementByClassName(mainWindowSelector);
-
+        return this;
     }
 
     private String crossSectionSelector = "MarkerEditor";
-
-    public void clickCrossSectionSpace() {
-        csWorkSpace
-                .findElementByClassName(crossSectionSelector)
-                .click();
+    @WindowsFindBy(accessibility = "MarkersLayerForWellSection")
+    private RemoteWebElement crossSectionId;
+    public CsWorkSpace clickCrossSectionSpace() {
+        crossSectionId.click();
+        return this;
     }
 
-    public void takeCrossSectionScreen(String screenName, Appointment appointment) {
-        baseAction.takeScreenshotToAttachOnAllureReport((RemoteWebElement) csWorkSpace
-                .findElementByClassName(crossSectionSelector), screenName, appointment);
-    }
-
-    public void takeCSModuleScreen(String screenName, Appointment appointment) {
-        baseAction.takeScreenshotToAttachOnAllureReport(geonaftWindow, screenName, appointment);
-    }
-
-    public void showAllClick() {
-        RemoteWebElement crossSection = (RemoteWebElement) csWorkSpace
-                .findElementByClassName(crossSectionSelector);
-        baseAction.clickItemContextMenu(crossSection, 2);
+    public CsWorkSpace showAllClick() {
+        baseAction.clickItemContextMenu(crossSectionId, 2);
+        return this;
     }
 
     public static enum OrientationTrack {
@@ -57,7 +47,7 @@ public class CsWorkSpace extends BaseWorkSpace {
     @WindowsFindBy(accessibility = "TrackBoxHorGr")
     private RemoteWebElement groupHorizontalTrack;
     private String trackSelector = "ListBoxItem";
-    public void addTrack(OrientationTrack track) {
+    public CsWorkSpace addTrack(OrientationTrack track) {
         int primaryCount;
         int secondaryCount;
         switch (track) {
@@ -75,20 +65,67 @@ public class CsWorkSpace extends BaseWorkSpace {
                 secondaryCount = groupHorizontalTrack.findElementsByClassName(trackSelector).size();
                 assertThat("Horizontal track was not added", primaryCount, not(equalTo(secondaryCount)));
                 break;
-
         }
+        return this;
     }
 
+    @WindowsFindBy(accessibility = "Engineer")
+    private RemoteWebElement engineerValueField;
+    public CsWorkSpace enterEngineerValue() {
+        String engineer = faker.superhero().name();
+        baseAction.copyInBuffer(engineer);
+        engineerValueField.click();
+        baseAction.pastFromBuffer();
+        return this;
+    }
 
+    @WindowsFindBy(accessibility = "Situation")
+    private RemoteWebElement situationValueField;
+    public CsWorkSpace enterSituationValue() {
+        String situation = faker.chuckNorris().fact();
+        baseAction.copyInBuffer(situation);
+        situationValueField.click();
+        baseAction.pastFromBuffer();
+        return this;
+    }
 
-    private String nameField = "TextBlock";
-    private String attributeName = "Name";
-    public void testTab() {
-       WebElement element = workSpaceWindow
-               .findElementByClassName("TabHeadersPanel")
-               .findElement(By.className("DocumentPaneItem"));
-        System.out.println(element.getAttribute("Name"));
-        System.out.println(element.getAttribute("AutomationId"));
-        System.out.println(element.getTagName());
+    @WindowsFindBy(accessibility = "Recommendation")
+    private RemoteWebElement recommendationValueField;
+    public CsWorkSpace enterRecommendationValue() {
+        String recommendation = faker.beer().name();
+        baseAction.copyInBuffer(recommendation);
+        recommendationValueField.click();
+        baseAction.pastFromBuffer();
+        return this;
+    }
+
+    @WindowsFindBy(accessibility = "Annotation")
+    private RemoteWebElement annotationValueField;
+    public CsWorkSpace enterAnnotationValue() {
+        String annotation = faker.beer().name();
+        baseAction.copyInBuffer(annotation);
+        annotationValueField.click();
+        baseAction.pastFromBuffer();
+        return this;
+    }
+
+    @WindowsFindBy(accessibility = "Customer")
+    private RemoteWebElement customerValueField;
+    public CsWorkSpace enterCustomerValue() {
+        String customer = faker.artist().name();
+        baseAction.copyInBuffer(customer);
+        customerValueField.click();
+        baseAction.pastFromBuffer();
+        return this;
+    }
+
+    @WindowsFindBy(accessibility = "State")
+    private RemoteWebElement stateValueField;
+    public CsWorkSpace enterStateValue() {
+        String state = faker.howIMetYourMother().catchPhrase();
+        baseAction.copyInBuffer(state);
+        stateValueField.click();
+        baseAction.pastFromBuffer();
+        return this;
     }
 }

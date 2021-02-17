@@ -1,5 +1,6 @@
 package ru.geonaft;
 
+import com.github.javafaker.Faker;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.WindowsFindBy;
 import io.appium.java_client.windows.WindowsDriver;
@@ -28,6 +29,7 @@ public abstract class Base {
     public static Robot robot;
     public static Actions actions;
     public static Random random;
+    public static Faker faker;
 
 
     public enum Appointment {
@@ -43,6 +45,7 @@ public abstract class Base {
         } catch (AWTException e) {
             e.printStackTrace();
         }
+        faker = new Faker();
         baseAction = new BaseAction(driver);
         random = new Random();
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
