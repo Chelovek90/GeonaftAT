@@ -19,6 +19,8 @@ public enum SubFolderSelector {
 
     IMAGES("Geosteering.UI.Controls.DataTreeView.DataTree.ImagesTreeViewItem"),
     IMAGE("Geosteering.UI.Controls.DataTreeView.DataTree.ImageTreeViewItem"),
+    DIP_PICKING("Geosteering.UI.Controls.DataTreeView.DataTree.DipPickingTreeViewItem"),
+    DIP_SERIES("Geosteering.UI.Controls.DataTreeView.DataTree.DipSeriesTreeViewItem"),
 
     CONTACT("Geosteering.UI.Controls.DataTreeView.DataTree.FluidContactTreeViewItem"),
 

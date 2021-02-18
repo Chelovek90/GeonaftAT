@@ -33,10 +33,10 @@ public class Geosteering extends Base implements OpenModule {
     @Step("Open geosteering")
     @Override
     public Geosteering openModule() {
-        ribbon.openModule(ModuleSelector.CS);
-        workSpace
-                .setCsWorkSpace()
-                .compareCountHeaders();
+//        ribbon.openModule(ModuleSelector.CS);
+//        workSpace
+//                .setCsWorkSpace()
+//                .compareCountHeaders();
         return this;
     }
 
@@ -149,8 +149,8 @@ public class Geosteering extends Base implements OpenModule {
 
     @Step("Display targets in cross section window")
     public Geosteering displayTargetsInCrossSectionWindow() {
-        workSpace
-                .clickCrossSectionSpace();
+//        workSpace
+//                .clickCrossSectionSpace();
         treeProject
                 .clickCheckBoxFolder(TARGETS);
         return this;
@@ -188,6 +188,23 @@ public class Geosteering extends Base implements OpenModule {
                 .clickCrossSectionSpace();
         treeProject
                 .clickCheckBoxFolder(GEO_JOURNAL);
+        return this;
+    }
+
+    @Step("Display dip.series journal in cross section window")
+    public Geosteering displayDipSeriesInCrossSectionWindow() {
+        workSpace
+                .clickCrossSectionSpace();
+        treeProject
+                .unfoldFolder(IMAGES)
+                .unfoldFolder(DIP_PICKING)
+                .clickCheckBoxFolder(DIP_SERIES);
+        return this;
+    }
+
+    public Geosteering test() {
+        workSpace
+                .selectCurveOnVerticalTrack();
         return this;
     }
 }

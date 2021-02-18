@@ -27,21 +27,6 @@ public class testsGeosteering extends BaseTest {
 //    }
 
     @Test
-    @DisplayName("Choose actual and reference well on ribbon")
-    @Feature(value = "Geosteering")
-    @Story(value = "Choose well in ribbon")
-    @TmsLink("7015")
-    public void TestChooseWells(TestInfo testInfo) {
-        String screenName = testInfo.getDisplayName();
-        new Geosteering(desktopSession)
-                .openModule()
-                .makeGeonaftScreen(screenName, PRIMARY)
-                .choseWellsOnRibbonPanel()
-                .makeGeonaftScreen(screenName, Base.Appointment.SECONDARY)
-                .checkDisplayedInCrossSectionWindow(screenName);
-    }
-
-    @Test
     @DisplayName("Add vertical track")
     @Feature(value = "Geosteering")
     @Story(value = "Vertical track")
@@ -72,9 +57,9 @@ public class testsGeosteering extends BaseTest {
     }
 
     @Test
-    @DisplayName("Add target on cross section window")
+    @DisplayName("Displayed target on cross section window")
     @Feature(value = "Geosteering")
-    @Story(value = "CS window")
+    @Story(value = "Target")
     @TmsLink("7589")
     public void TestDisplayedTargetInCrossSectionWindow (TestInfo testInfo) {
         String screenName = testInfo.getDisplayName();
@@ -91,9 +76,9 @@ public class testsGeosteering extends BaseTest {
     }
 
     @Test
-    @DisplayName("Add geonavigation journal on cross section window")
+    @DisplayName("Displayed geonavigation journal on cross section window")
     @Feature(value = "Geosteering")
-    @Story(value = "CS window")
+    @Story(value = "Geonavigation journal")
     @TmsLink("7604")
     public void TestDisplayedGeonavigationJournalInCrossSectionWindow (TestInfo testInfo) {
         String screenName = testInfo.getDisplayName();
@@ -110,8 +95,41 @@ public class testsGeosteering extends BaseTest {
     }
 
     @Test
+    @DisplayName("Choose actual and reference well on ribbon")
+    @Feature(value = "Geosteering")
+    @Story(value = "Choose wells in ribbon")
+    @TmsLink("7015")
+    public void TestChooseWells(TestInfo testInfo) {
+        String screenName = testInfo.getDisplayName();
+        new Geosteering(desktopSession)
+                .openModule()
+                .makeGeonaftScreen(screenName, PRIMARY)
+                .choseWellsOnRibbonPanel()
+                .makeGeonaftScreen(screenName, Base.Appointment.SECONDARY)
+                .checkDisplayedInCrossSectionWindow(screenName);
+    }
+
+    @Test
+    @DisplayName("Displayed dipSeries on cross section window")
+    @Feature(value = "Geosteering")
+    @Story(value = "DipSeries")
+    @TmsLink("7839")
+    public void TestDisplayedDipSeriesInCrossSectionWindow(TestInfo testInfo) {
+        String screenName = testInfo.getDisplayName();
+        new Geosteering(desktopSession)
+                .openModule()
+                .choseWellsOnRibbonPanel()
+                .displayTrajectoryInCrossSectionWindow(actualWellInProject.name)
+                .makeWorkSpaceScreen(screenName, PRIMARY)
+                .displayDipSeriesInCrossSectionWindow()
+                .makeWorkSpaceScreen(screenName, SECONDARY)
+                .checkDisplayedInCrossSectionWindow(screenName);
+    }
+
+    @Test
     public void test () {
-        Actions actions = new Actions(desktopSession);
-        actions.moveByOffset(100, 100);
+        new Geosteering(desktopSession)
+                .openModule()
+                .test();
     }
 }

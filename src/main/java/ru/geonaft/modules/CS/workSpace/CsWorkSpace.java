@@ -69,6 +69,24 @@ public class CsWorkSpace extends BaseWorkSpace {
         return this;
     }
 
+    public CsWorkSpace selectCurveOnHorizontalTrack() {
+        int heightElement = groupHorizontalTrack.getSize().getHeight();
+        actions.moveToElement(groupHorizontalTrack, 8, heightElement/2)
+                .click()
+                .build()
+                .perform();
+        return this;
+    }
+
+    public CsWorkSpace selectCurveOnVerticalTrack() {
+        int widthElement = groupVerticalTrack.getSize().getWidth();
+        actions.moveToElement(groupVerticalTrack, widthElement/2, 34)
+                .click()
+                .build()
+                .perform();
+        return this;
+    }
+
     @WindowsFindBy(accessibility = "Engineer")
     private RemoteWebElement engineerValueField;
     public CsWorkSpace enterEngineerValue() {
