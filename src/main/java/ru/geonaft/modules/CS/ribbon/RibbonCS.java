@@ -2,13 +2,13 @@ package ru.geonaft.modules.CS.ribbon;
 
 import io.appium.java_client.pagefactory.WindowsFindBy;
 import io.appium.java_client.windows.WindowsDriver;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 import ru.geonaft.view.ribbon.BaseRibbon;
-import ru.geonaft.view.ribbon.modulesSelector.TabSelector;
+import ru.geonaft.view.ribbon.buttonsSelector.TabSelector;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -38,6 +38,12 @@ public class RibbonCS extends BaseRibbon {
 
     public RibbonCS chooseActualWell() {
         clickCSTabHeader();
+
+        WebElement actualWellField = modulesGroups
+                .get(0)
+                .findElements(By.className("ComboBoxEdit"))
+                .get(0);
+
         actualWellField.click();
         List<WebElement> listWells = listBox
                 .findElementsByClassName(wellBoxSelector);
@@ -52,8 +58,15 @@ public class RibbonCS extends BaseRibbon {
 
     @WindowsFindBy(accessibility = "biOffsetWell")
     private RemoteWebElement refWellField;
+
     public RibbonCS chooseRefWell() {
         clickCSTabHeader();
+
+        WebElement refWellField = modulesGroups
+                .get(0)
+                .findElements(By.className("ComboBoxEdit"))
+                .get(1);
+
         refWellField.click();
         List<WebElement> listWells = listBox
                 .findElementsByClassName(wellBoxSelector);
@@ -65,25 +78,34 @@ public class RibbonCS extends BaseRibbon {
                 .get(refWellIndex);
         refWellInProject.setName(baseAction.getFileName(well));
         well.click();
-        assertThat("Name actual well in field does not match", actualWellInProject.name, is(equalTo(actualWellField.getText())));
-    return this;
+        assertThat("Name actual well in field does not match", refWellInProject.name, is(equalTo(refWellField.getText())));
+        return this;
     }
 
     private String ribbonToggleButtonSelector = "RibbonToggleButton";
     private String ribbonButtonSelector = "RibbonButton";
     private String activitySelector = "IsEnabled";
+
     public RibbonCS checkActivityRibbonButton() {
         ribbonPanel.findElementsByClassName(ribbonToggleButtonSelector).stream()
                 .filter(button -> !(button.getText().equals("Отклонение от плана")))
+                .filter(button -> !(button.getText().equals("Deviation from the plan")))
                 .forEach(button -> {
-                    assertThat("Button - "+ button.getText() +" is not active",
+                    assertThat("Button - " + button.getText() + " is not active",
                             button.getAttribute(activitySelector), is(equalTo("True")));
                 });
         ribbonPanel.findElementsByClassName(ribbonButtonSelector).stream()
                 .forEach(button -> {
-                    assertThat("Button - "+ button.getText() +" is not active",
+                    assertThat("Button - " + button.getText() + " is not active",
                             button.getAttribute(activitySelector), is(equalTo("True")));
                 });
+        return this;
+    }
+
+
+    public RibbonCS clickInstrument(InstrumentsCsSelector instrument) {
+        modulesGroups.get(instrument.indexGroup)
+                .findElement(By.className(instrument.buttonClassName)).click();
         return this;
     }
 }

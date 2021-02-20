@@ -1,6 +1,5 @@
 package ru.geonaft.modules.loader;
 
-import com.github.javafaker.Faker;
 import io.appium.java_client.pagefactory.WindowsFindBy;
 import io.appium.java_client.windows.WindowsDriver;
 import io.qameta.allure.Step;
@@ -9,16 +8,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 import ru.geonaft.Base;
 import ru.geonaft.NameEntityToProject;
-import ru.geonaft.helpers.BaseAction;
 import ru.geonaft.modules.loader.previewFilds.PreviewFieldsSelector;
 import ru.geonaft.view.ribbon.BaseRibbon;
-import ru.geonaft.view.ribbon.modulesSelector.ModuleSelector;
+import ru.geonaft.view.ribbon.buttonsSelector.ModuleSelector;
 import ru.geonaft.view.treeProject.TreeProject;
 import ru.geonaft.view.treeProject.selectors.SubFolderSelector;
 import ru.geonaft.view.workSpace.editor.BaseWorkSpace;
 
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -205,7 +202,7 @@ public class Loader extends Base implements OpenModule {
     public Loader checkDataInEditor(NameEntityToProject entity) {
         workSpace
                 .checkDataEditor(entity.name)
-                .closeFirstTab();
+                .closeAllTab();
         return this;
     }
 

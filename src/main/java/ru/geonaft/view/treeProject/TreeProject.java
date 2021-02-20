@@ -95,7 +95,8 @@ public class TreeProject extends Base {
     }
 
     public TreeProject clickItemFromContextMenu(SubFolderSelector folder, int indexMenuItem) {
-        RemoteWebElement subFolderText = (RemoteWebElement) rootTreeFolder
+        RemoteWebElement subFolderText =
+                (RemoteWebElement) rootTreeFolder
                 .findElementByName(folder.folderSelector)
                 .findElement(By.className(clickablePoint));
         baseAction.horizontalScroll(treeProjectWindow, subFolderText);

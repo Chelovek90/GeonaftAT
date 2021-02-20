@@ -22,10 +22,10 @@ import static ru.geonaft.base.TestsDataEnums.*;
 import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.*;
 import static testsLoader.FilesForTestLoader.*;
 
-public class ShouldLoadEntityAllFormats extends BaseTest {
+public class LoadEntityAllFormats extends BaseTest {
 
-//    @BeforeAll
-//    public static void openProject() {
+//    @BeforeEach
+//    public void openProject() {
 //        new StartWindow(desktopSession)
 //                .openProject(pathCleanProject, nameCleanProject);
 //    }

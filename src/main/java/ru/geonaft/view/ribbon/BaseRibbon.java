@@ -6,8 +6,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 import ru.geonaft.Base;
-import ru.geonaft.view.ribbon.modulesSelector.ModuleSelector;
-import ru.geonaft.view.ribbon.modulesSelector.TabSelector;
+import ru.geonaft.view.ribbon.buttonsSelector.ModuleSelector;
+import ru.geonaft.view.ribbon.buttonsSelector.TabSelector;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class BaseRibbon extends Base {
     private String groupSelector = "RibbonGroup";
     private String isSelectedSelector = "SelectionItem.IsSelected";
 
-    public void clickRibbonTab(TabSelector selector) {
+    public BaseRibbon clickRibbonTab(TabSelector selector) {
         RemoteWebElement ribbonTab = (RemoteWebElement) ribbonPanel
                 .findElementByClassName(selector.tabSelector);
         if (ribbonTab.getAttribute(isSelectedSelector).equals("False")) {
@@ -42,6 +42,7 @@ public class BaseRibbon extends Base {
         this.modulesGroups = ribbonTab
                 .findElementsByClassName(groupSelector);
         assertThat("Groups modules in ribbon not found", modulesGroups, is(not(empty())));
+        return this;
     }
 
     public void openModule(ModuleSelector moduleSelector) {
@@ -57,9 +58,17 @@ public class BaseRibbon extends Base {
     @WindowsFindBy(accessibility = "No")
     private RemoteWebElement noButton;
 
-    public void closeProject() {
+    public BaseRibbon closeProject() {
         ribbonPanel.findElementByClassName(fileButton).click();
         closeProjectButton.click();
         noButton.click();
+        return this;
+    }
+
+    private String stateButton = "Toggle.ToggleState";
+    public BaseRibbon checkOnOffButton(RemoteWebElement button) {
+        int primaryState = Integer.parseInt(
+                button.getAttribute(stateButton));
+        return this;
     }
 }

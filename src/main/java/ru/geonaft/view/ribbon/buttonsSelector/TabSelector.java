@@ -1,4 +1,4 @@
-package ru.geonaft.view.ribbon.modulesSelector;
+package ru.geonaft.view.ribbon.buttonsSelector;
 
 public enum TabSelector {
     PROJECT("ProjectTab"),

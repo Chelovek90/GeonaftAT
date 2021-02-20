@@ -14,6 +14,7 @@ public enum SubFolderSelector {
 
     LOGS("Geosteering.UI.Controls.DataTreeView.DataTree.LogsTreeViewItem"),
     LOG("Geosteering.UI.Controls.DataTreeView.DataTree.LogTreeViewItem"),
+    CURVE("Geosteering.UI.Controls.DataTreeView.DataTree.CurveTreeViewItem"),
 
     TIME_LOGS("Geosteering.UI.Controls.DataTreeView.DataTree.TimeLogsTreeViewItem"),
 
@@ -27,6 +28,8 @@ public enum SubFolderSelector {
     ZONE_GROUP("Geosteering.UI.Controls.DataTreeView.DataTree.ZonesGroupTreeViewItem"),
     ZONE("Geosteering.UI.Controls.DataTreeView.DataTree.ZoneTreeViewItem"),
 
+//    MARKERS("Geosteering.UI.Controls.DataTreeView.DataTree.WellStratigraphyTreeViewItem"), /*3.8*/
+    MARKERS("Geosteering.UI.Controls.DataTreeView.DataTree.MarkersTreeViewItem"), /*3.7*/
     MARKER("Geosteering.UI.Controls.DataTreeView.DataTree.MarkerTreeViewItem"),
 
     SURFACE("Geosteering.UI.Controls.DataTreeView.DataTree.SurfaceTreeViewItem"),

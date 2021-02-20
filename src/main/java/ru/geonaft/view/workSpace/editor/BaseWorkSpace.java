@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 import ru.geonaft.Base;
 import ru.geonaft.helpers.BaseAction;
-import ru.geonaft.modules.CS.workSpace.CsWorkSpace;
+import ru.geonaft.modules.CS.workSpace.WorkSpaceCs;
 
 import java.util.List;
 
@@ -39,8 +39,8 @@ public class BaseWorkSpace extends Base {
     }
 
     @WindowsFindBy(accessibility = "dataPresenter")
-    private RemoteWebElement dataTable;
-    private String dataString = "System.Data.DataRowView";
+    protected RemoteWebElement dataTable;
+    protected String dataString = "System.Data.DataRowView";
     public BaseWorkSpace checkDataEditor(String name){
         baseAction.takeScreenshotToAttachOnAllureReport(workSpaceWindow, name , PRIMARY);
         List<WebElement> list = dataTable.findElementsByName(dataString);
@@ -62,21 +62,33 @@ public class BaseWorkSpace extends Base {
         return this;
     }
 
-    public void closeFirstTab() {
+    public void closeAllTab() {
         workSpaceWindow
                 .findElementByClassName(tabHeadersPanel)
-                .findElement(By.className(closeButtonSelector))
-                .click();
-
+                .findElements(By.className(closeButtonSelector))
+                .stream()
+                .forEach(closeBtn -> closeBtn.click());
     }
 
     private String tabHeaderSelector = "DocumentPaneItem";
+    private String nameAttribute = "Name";
     public BaseWorkSpace checkTabName(String nameWell) {
         String tabName = workSpaceWindow
                 .findElementByClassName(tabHeadersPanel)
                 .findElement(By.className(tabHeaderSelector))
-                .getAttribute("Name");
+                .getAttribute(nameAttribute);
         assertThat("Tab name does not contains well name - " + nameWell, tabName, containsString(nameWell) );
+        return this;
+    }
+    public BaseWorkSpace clickTabModule(String tabName) {
+        WebElement tabModule = workSpaceWindow
+                .findElementByClassName(tabHeadersPanel)
+                .findElements(By.className(tabHeaderSelector))
+                .stream()
+                .filter(tab -> tab.getAttribute(nameAttribute).contains(tabName))
+                .findFirst().orElse(null);
+        assertTrue(tabModule != null, "Search tab with - " + tabName + " returned no results");
+        tabModule.click();
         return this;
     }
 
@@ -99,7 +111,6 @@ public class BaseWorkSpace extends Base {
         baseAction.pastFromBuffer();
         return this;
     }
-
 
     @WindowsFindBy(accessibility = "BarButtonItemLinkBSaveClose")
     private RemoteWebElement saveAndExitButton;

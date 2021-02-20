@@ -48,15 +48,24 @@ public class BaseAction {
     }
 
     public void pastFromBuffer() {
-        actions.sendKeys(Keys.chord(Keys.LEFT_CONTROL, "v")).build().perform();
+        actions
+                .sendKeys(Keys.chord(Keys.LEFT_CONTROL, "v"))
+                .build()
+                .perform();
     }
 
     public void ctr_A() {
-        actions.sendKeys(Keys.chord(Keys.LEFT_CONTROL, "a")).build().perform();
+        actions
+                .sendKeys(Keys.chord(Keys.LEFT_CONTROL, "a"))
+                .build()
+                .perform();
     }
 
     public void enterClick() {
-        actions.sendKeys(Keys.chord(Keys.ENTER)).build().perform();
+        actions
+                .sendKeys(Keys.chord(Keys.ENTER))
+                .build()
+                .perform();
     }
 
     private String nameField = "TextBlock";
@@ -64,7 +73,9 @@ public class BaseAction {
 
     public String getFileName(RemoteWebElement element) {
         String fileName;
-        fileName = element.findElementByClassName(nameField).getAttribute(attributeName);
+        fileName = element
+                .findElementByClassName(nameField)
+                .getAttribute(attributeName);
         return fileName;
     }
 
@@ -210,18 +221,17 @@ public class BaseAction {
     private String checkBox = "CheckBox";
 
     public void clickCheckBox(RemoteWebElement element) {
-        RemoteWebElement checkBox = (RemoteWebElement) element.findElementByClassName(this.checkBox);
+        RemoteWebElement checkBox = (RemoteWebElement) element
+                .findElementByClassName(this.checkBox);
         checkBox.click();
     }
 
     public void moveTo(RemoteWebElement element) {
-        actions.moveToElement(element).build().perform();
+        actions
+                .moveToElement(element)
+                .build()
+                .perform();
     }
-
-//    public void click(WebElement element) {
-//        actions.moveToElement(element).build().perform();
-//        element.click();
-//    }
 
     public void horizontalScroll(RemoteWebElement mainView, RemoteWebElement element) {
 
@@ -271,19 +281,15 @@ public class BaseAction {
         copyInBuffer(path);
         RemoteWebElement window = openingWindowSelector;
         window.findElementByName(pathFieldSelector).click();
-//        click(window.findElementByName(pathFieldSelector));
         pastFromBuffer();
         enterClick();
         copyInBuffer(fileName);
         java.util.List<WebElement> nameFiled = window.findElementsByName(nameFieldSelector);
         nameFiled.get(1).click();
-//        click(nameFiled.get(1));
         pastFromBuffer();
         window.findElementByName(openButtonSelector).click();
-//        click(window.findElementByName(openButtonSelector));
     }
 
-    //    @WindowsFindBy(accessibility = "IndicatorText")
     private List<WebElement> indicatorLoad;
     private String loadIndicatorSelector = "WaitIndicator";
 
