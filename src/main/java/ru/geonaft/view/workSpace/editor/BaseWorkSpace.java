@@ -105,9 +105,19 @@ public class BaseWorkSpace extends Base {
     @WindowsFindBy(accessibility = "MD")
     private RemoteWebElement mdValueField;
     public BaseWorkSpace enterMdValue() {
-        int MD = 500 + random.nextInt(1000-500);
+        int MD = 500 + random.nextInt(500);
         baseAction.copyInBuffer(String.valueOf(MD));
         mdValueField.click();
+        baseAction.pastFromBuffer();
+        return this;
+    }
+
+    @WindowsFindBy(accessibility = "TVDSS")
+    private RemoteWebElement tvdssValueField;
+    public BaseWorkSpace enterTvdssValue() {
+        int TVDSS = -500 + random.nextInt(500)*-1;
+        baseAction.copyInBuffer(String.valueOf(TVDSS));
+        tvdssValueField.click();
         baseAction.pastFromBuffer();
         return this;
     }

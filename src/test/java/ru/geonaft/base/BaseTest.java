@@ -17,7 +17,8 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class BaseTest {
     protected static WindowsDriver<RemoteWebElement> desktopSession;
-    private static String geonaftPath = "D:\\Installer\\Geonaft\\3.7.37.21\\708\\Geosteering.Launcher.exe";
+//    private static String geonaftPath = "D:\\Installer\\Geonaft\\3.7.37.23\\717\\Geonaft.exe";
+    private static String geonaftPath = "D:\\Installer\\Geonaft\\3.8.0.26\\720\\Geonaft.exe";
     private static String winAppDriverPath = "C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe";
     private static Runtime runtime = Runtime.getRuntime();
     private static Process geonaftProcess;
@@ -29,7 +30,7 @@ public abstract class BaseTest {
 
         File file = new File(winAppDriverPath);
         Desktop.getDesktop().open(file);
-
+//
 //        geonaftProcess = runtime.exec(geonaftPath);
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -39,7 +40,6 @@ public abstract class BaseTest {
 
         desktopSession = new WindowsDriver<RemoteWebElement>(new URL("http://127.0.0.1:4723"), capabilities);
         desktopSession.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-//        desktopSession.manage().window().maximize();
 
 //        boolean loadApp = true;
 //        while (loadApp) {

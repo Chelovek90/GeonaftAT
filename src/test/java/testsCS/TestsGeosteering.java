@@ -25,13 +25,13 @@ public class TestsGeosteering extends BaseTest {
 //        new StartWindow(desktopSession)
 //                .openProject(pathCleanProject, nameCleanProject);
 //    }
-
+//
 //    @AfterEach
 //    public void closeAllTabs() {
 //        new BaseWorkSpace(desktopSession)
 //                .closeAllTab();
 //    }
-
+//
 //        @AfterAll
 //    public static void closeProject() {
 //        new BaseRibbon(desktopSession)
@@ -62,10 +62,11 @@ public class TestsGeosteering extends BaseTest {
         String screenName = testInfo.getDisplayName();
         new Geosteering(desktopSession)
                 .openModuleChooseWellsAndDisplayTrajectory(actualWellInProject)
-                .makeWorkSpaceScreen(screenName, PRIMARY)
+                .showAllAndMakeWorkSpaceScreen(screenName, PRIMARY)
                 .displayPlanTrajectoryInCrossSectionWindow()
                 .openEditorTrajectory()
                 .changeInclAndAzimTrajectory()
+                .showAll()
                 .makeWorkSpaceScreen(screenName, SECONDARY)
                 .checkDisplayedInCrossSectionWindow(screenName);
     }
@@ -79,10 +80,11 @@ public class TestsGeosteering extends BaseTest {
         String screenName = testInfo.getDisplayName();
         new Geosteering(desktopSession)
                 .openModuleChooseWellsAndDisplayTrajectory(refWellInProject)
-                .makeWorkSpaceScreen(screenName, PRIMARY)
+                .showAllAndMakeWorkSpaceScreen(screenName, PRIMARY)
                 .displayPlanTrajectoryInCrossSectionWindow()
                 .openEditorTrajectory()
                 .changeInclAndAzimTrajectory()
+                .showAll()
                 .makeWorkSpaceScreen(screenName, SECONDARY)
                 .checkDisplayedInCrossSectionWindow(screenName);
     }
@@ -152,6 +154,40 @@ public class TestsGeosteering extends BaseTest {
     }
 
     @Test
+    @DisplayName("Display markers reference well on cross section window")
+    @Feature(value = "Geosteering")
+    @Story(value = "Markers")
+    @TmsLink("7568")
+    public void TestDisplayedMarkersRefWellInCrossSectionWindow(TestInfo testInfo) {
+        String screenName = testInfo.getDisplayName();
+        new Geosteering(desktopSession)
+                .openModule()
+                .choseWellsOnRibbonPanel()
+                .displayTrajectoryInCrossSectionWindow(refWellInProject.name)
+                .showAllAndMakeWorkSpaceScreen(screenName, PRIMARY)
+                .clickCheckBoxStratigraphyWellTreeProject()
+                .makeWorkSpaceScreen(screenName, SECONDARY)
+                .checkDisplayedInCrossSectionWindow(screenName);
+    }
+
+    @Test
+    @DisplayName("Display contact on cross section window")
+    @Feature(value = "Geosteering")
+    @Story(value = "Contact")
+    @TmsLink("7578")
+    public void TestDisplayedContactInCrossSectionWindow(TestInfo testInfo) {
+        String screenName = testInfo.getDisplayName();
+        new Geosteering(desktopSession)
+                .openModule()
+                .choseWellsOnRibbonPanel()
+                .displayTrajectoryInCrossSectionWindow(refWellInProject.name)
+                .showAllAndMakeWorkSpaceScreen(screenName, PRIMARY)
+                .createContactAndDisplayOnCrossSection()
+                .makeWorkSpaceScreen(screenName, SECONDARY)
+                .checkDisplayedInCrossSectionWindow(screenName);
+    }
+
+    @Test
     @DisplayName("Display target on cross section window")
     @Feature(value = "Geosteering")
     @Story(value = "Target")
@@ -163,7 +199,7 @@ public class TestsGeosteering extends BaseTest {
                 .choseWellsOnRibbonPanel()
                 .doCopyTrajectoryWellAsPlan(actualWellInProject)
                 .displayPlanTrajectoryInCrossSectionWindow()
-                .makeWorkSpaceScreen(screenName, PRIMARY)
+                .showAllAndMakeWorkSpaceScreen(screenName, PRIMARY)
                 .unfoldPlanTrajectoryAndCreatedTarget()
                 .displayTargetsInCrossSectionWindow()
                 .makeWorkSpaceScreen(screenName, SECONDARY)
@@ -181,27 +217,10 @@ public class TestsGeosteering extends BaseTest {
                 .openModule()
                 .choseWellsOnRibbonPanel()
                 .displayTrajectoryInCrossSectionWindow(actualWellInProject.name)
-                .makeWorkSpaceScreen(screenName, PRIMARY)
+                .showAllAndMakeWorkSpaceScreen(screenName, PRIMARY)
                 .openEditorGeonavigationJournal(actualWellInProject.name)
                 .fillFieldsGeonavigationJournalSaveAdnExit()
                 .displayGeonavigationJournalInCrossSectionWindow()
-                .makeWorkSpaceScreen(screenName, SECONDARY)
-                .checkDisplayedInCrossSectionWindow(screenName);
-    }
-
-    @Test
-    @DisplayName("Display markers reference well on cross section window")
-    @Feature(value = "Geosteering")
-    @Story(value = "Markers")
-    @TmsLink("7568")
-    public void TestDisplayedMarkersRefWellInCrossSectionWindow(TestInfo testInfo) {
-        String screenName = testInfo.getDisplayName();
-        new Geosteering(desktopSession)
-                .openModule()
-                .choseWellsOnRibbonPanel()
-                .displayTrajectoryInCrossSectionWindow(refWellInProject.name)
-                .makeWorkSpaceScreen(screenName, PRIMARY)
-                .clickCheckBoxStratigraphyWellTreeProject()
                 .makeWorkSpaceScreen(screenName, SECONDARY)
                 .checkDisplayedInCrossSectionWindow(screenName);
     }
@@ -217,8 +236,27 @@ public class TestsGeosteering extends BaseTest {
                 .openModule()
                 .choseWellsOnRibbonPanel()
                 .displayTrajectoryInCrossSectionWindow(actualWellInProject.name)
-                .makeWorkSpaceScreen(screenName, PRIMARY)
+                .showAllAndMakeWorkSpaceScreen(screenName, PRIMARY)
                 .displayDipSeriesInCrossSectionWindow()
+                .makeWorkSpaceScreen(screenName, SECONDARY)
+                .checkDisplayedInCrossSectionWindow(screenName);
+    }
+
+    @Test
+    @DisplayName("Set homeView")
+    @Feature(value = "Geosteering")
+    @Story(value = "Home view - Ribbon")
+    @TmsLink("7891")
+    public void TestSetHomeViewRibbon(TestInfo testInfo) {
+        String screenName = testInfo.getDisplayName();
+        new Geosteering(desktopSession)
+                .openModule()
+                .choseWellsOnRibbonPanel()
+                .displayTrajectoryInCrossSectionWindow(actualWellInProject.name)
+                .showAllAndMakeWorkSpaceScreen(screenName, PRIMARY)
+                .setHomeViewRibbon()
+                .scalingCrossSection()
+                .goHomeViewRibbon()
                 .makeWorkSpaceScreen(screenName, SECONDARY)
                 .checkDisplayedInCrossSectionWindow(screenName);
     }
@@ -241,7 +279,7 @@ public class TestsGeosteering extends BaseTest {
                 .addDipRibbon()
 //                .makeWorkSpaceScreen(screenName, PRIMARY)
 //                .checkDisplayedInCrossSectionWindow(screenName)
-                .checkAddDip()
+                .checkAddDipInEditor()
 //                .addNewDipOnCrossSection();
 //                .displayDipSeriesInCrossSectionWindow()
 //                .makeWorkSpaceScreen(screenName, SECONDARY)

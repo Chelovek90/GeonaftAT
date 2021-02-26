@@ -16,7 +16,8 @@ import ru.geonaft.view.treeProject.selectors.SubFolderSelector;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static ru.geonaft.NameEntityToProject.*;
-import static ru.geonaft.modules.CS.ribbon.InstrumentsCsSelector.AddNewDip;
+import static ru.geonaft.modules.CS.ribbon.InstrumentsCsSelector.*;
+import static ru.geonaft.view.ribbon.buttonsSelector.TabSelector.*;
 import static ru.geonaft.view.treeProject.selectors.RootFolderSelector.*;
 import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.*;
 
@@ -83,9 +84,14 @@ public class Geosteering extends Base implements OpenModule {
         return this;
     }
 
-    public Geosteering makeWorkSpaceScreen(String name, Appointment appointment) {
+    public Geosteering showAllAndMakeWorkSpaceScreen(String name, Appointment appointment) {
         workSpace
                 .showAllClick()
+                .takeWorkSpaceScreen(name, appointment);
+        return this;
+    }
+    public Geosteering makeWorkSpaceScreen(String name, Appointment appointment) {
+        workSpace
                 .takeWorkSpaceScreen(name, appointment);
         return this;
     }
@@ -176,8 +182,28 @@ public class Geosteering extends Base implements OpenModule {
                 .compareCountHeaders()
                 .clickAddRowInEditor()
                 .enterMdValue()
-                .checkDataEditor("create targets")
-                .clickSaveAndExit();
+                .checkDataEditor("create target")
+                .clickSaveAndExit()
+                .compareCountHeaders();
+        return this;
+    }
+
+    @Step("Create contact in editor")
+    public Geosteering createContactAndDisplayOnCrossSection() {
+        treeProject
+                .openEditorRootFolder(CONTACTS);
+        workSpace
+                .compareCountHeaders()
+                .clickAddRowInEditor()
+                .enterTvdssValue()
+                .checkDataEditor("create contact")
+                .clickSaveAndExit()
+                .compareCountHeaders();
+        workSpace
+                .clickCrossSectionSpace();
+        treeProject
+                .unfoldFolder(CONTACTS)
+                .clickCheckBoxFolder(CONTACT);
         return this;
     }
 
@@ -319,9 +345,35 @@ public class Geosteering extends Base implements OpenModule {
     }
 
     @Step("Add dip - ribbon")
-    public Geosteering checkAddDip() {
+    public Geosteering checkAddDipInEditor() {
         switchTab("Геологические дипы");
         workSpace.checkCountDips();
+        return this;
+    }
+
+    @Step("Set home view - ribbon")
+    public Geosteering setHomeViewRibbon() {
+        ribbon
+                .clickRibbonTab(CS_SCALING);
+        ribbon
+                .clickInstrument(SetHomeView);
+
+        return this;
+    }
+
+    @Step("Go home view - ribbon")
+    public Geosteering goHomeViewRibbon() {
+        ribbon
+                .clickRibbonTab(CS_SCALING);
+        ribbon
+                .clickInstrument(GoHomeView);
+
+        return this;
+    }
+
+    @Step("Scaling crossSection")
+    public Geosteering scalingCrossSection() {
+        workSpace.scaling();
         return this;
     }
 

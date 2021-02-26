@@ -11,6 +11,7 @@ import ru.geonaft.view.ribbon.buttonsSelector.TabSelector;
 
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
@@ -41,7 +42,7 @@ public class BaseRibbon extends Base {
         }
         this.modulesGroups = ribbonTab
                 .findElementsByClassName(groupSelector);
-        assertThat("Groups modules in ribbon not found", modulesGroups, is(not(empty())));
+        assertThat("Groups modules in ribbon not found", modulesGroups.size(), not(equalTo(0)));
         return this;
     }
 

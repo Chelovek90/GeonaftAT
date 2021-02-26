@@ -95,8 +95,7 @@ public class TreeProject extends Base {
     }
 
     public TreeProject clickItemFromContextMenu(SubFolderSelector folder, int indexMenuItem) {
-        RemoteWebElement subFolderText =
-                (RemoteWebElement) rootTreeFolder
+        RemoteWebElement subFolderText = rootTreeFolder
                 .findElementByName(folder.folderSelector)
                 .findElement(By.className(clickablePoint));
         baseAction.horizontalScroll(treeProjectWindow, subFolderText);
@@ -141,8 +140,15 @@ public class TreeProject extends Base {
         return this;
     }
 
+    public TreeProject openEditorRootFolder(RootFolderSelector folder) {
+        WebElement rootFolder = treeProjectWindow
+                .findElementByName(folder.folderSelector);
+        baseAction.horizontalScroll(treeProjectWindow, (RemoteWebElement) rootFolder);
+        openEditorFromContextMenu((RemoteWebElement) rootFolder);
+        return this;
+    }
+
     public TreeProject openEditorFromContext(SubFolderSelector what) {
-//        getTree();
         switch (what) {
             case LOG:
                 unfoldFolder(WELLS);
@@ -216,13 +222,6 @@ public class TreeProject extends Base {
 //                assertThat("Polygon is not loaded", list, is(notNullValue()));
 //                break;
         }
-        return this;
-    }
-
-    public TreeProject clickCheckBoxFolder(SubFolderSelector folder, NameEntityToProject entity) {
-        RemoteWebElement element = searchElementByName(folder, entity.name);
-        baseAction.horizontalScroll(treeProjectWindow, element);
-        baseAction.clickCheckBox(element);
         return this;
     }
 

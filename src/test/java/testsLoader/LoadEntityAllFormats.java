@@ -24,20 +24,19 @@ import static testsLoader.FilesForTestLoader.*;
 
 public class LoadEntityAllFormats extends BaseTest {
 
-//    @BeforeEach
-//    public void openProject() {
-//        new StartWindow(desktopSession)
-//                .openProject(pathCleanProject, nameCleanProject);
-//    }
+    @BeforeEach
+    public void openProject() {
+        new StartWindow(desktopSession)
+                .openProject(pathCleanProject, nameCleanProject);
+    }
 
-//    @AfterEach
-//    public void closeProject() {
-//        new BaseRibbon(desktopSession)
-//                .closeProject();
-//    }
+    @AfterEach
+    public void closeProject() {
+        new BaseRibbon(desktopSession)
+                .closeProject();
+    }
 
-
-        @Disabled
+    @Disabled
     @Test
     @DisplayName("Checking the activity of preview window elements")
     @Feature(value = "Loader")
@@ -49,8 +48,7 @@ public class LoadEntityAllFormats extends BaseTest {
                 .checkWorkElementsPreviewWindow();
     }
 
-
-//        @Disabled
+    @Disabled
     @Test
     @DisplayName("Checking loading polygon")
     @Feature(value = "Loader")
@@ -68,7 +66,7 @@ public class LoadEntityAllFormats extends BaseTest {
         return Stream.of("CPS.cps3", "GRD.grd", "Zmap.zmap", "IRAP.irap");
     }
 
-    //    @Disabled
+    @Disabled
     @ParameterizedTest
     @MethodSource("surfaceNameGenerator")
     @DisplayName("Checking loading surfaces of all formats")
@@ -83,7 +81,7 @@ public class LoadEntityAllFormats extends BaseTest {
                 .checkDataInEditor(surfaceInProject);
     }
 
-        @Disabled
+    @Disabled
     @Test
     @DisplayName("Renaming a trajectory in the loader")
     @Feature(value = "Loader")
@@ -97,7 +95,7 @@ public class LoadEntityAllFormats extends BaseTest {
                 .checkDataInEditor(trajectoryInProject);
     }
 
-        @Disabled
+    @Disabled
     @Test
     @DisplayName("Checking loading trajectory")
     @Feature(value = "Loader")
@@ -111,7 +109,7 @@ public class LoadEntityAllFormats extends BaseTest {
                 .checkDataInEditor(trajectoryInProject);
     }
 
-        @Disabled
+    @Disabled
     @Test
     @DisplayName("Checking loading log")
     @Feature(value = "Loader")
@@ -125,7 +123,7 @@ public class LoadEntityAllFormats extends BaseTest {
                 .checkDataInEditor(logInProject);
     }
 
-        @Disabled
+    @Disabled
     @Test
     @DisplayName("Checking loading image")
     @Feature(value = "Loader")
@@ -147,7 +145,7 @@ public class LoadEntityAllFormats extends BaseTest {
         return Stream.of("Шаблон карты.json", "Шаблон разреза.json", "Шаблон скважины.json");
     }
 
-        @Disabled
+    @Disabled
     @ParameterizedTest
     @MethodSource("patternNameGenerator")
     @DisplayName("Checking preview in the window loader pattern: Map, Well, Cross section")
@@ -166,7 +164,7 @@ public class LoadEntityAllFormats extends BaseTest {
         return Stream.of("bmp.bmp", "jpeg.jpg", "png.png", "tif.tif");
     }
 
-    //    @Disabled
+    @Disabled
     @ParameterizedTest
     @MethodSource("pictureNameGenerator")
     @DisplayName("Check loading picture")
@@ -180,7 +178,7 @@ public class LoadEntityAllFormats extends BaseTest {
                 .checkDataFolder(PICTURE);
     }
 
-        @Disabled
+    @Disabled
     @Test
     @DisplayName("Checking multi-file pictures loading")
     @Feature(value = "Loader")
@@ -198,7 +196,7 @@ public class LoadEntityAllFormats extends BaseTest {
     /*
      *Исправить номер кейса для многофайловой загрузки
      */
-        @Disabled
+    @Disabled
     @Test
     @DisplayName("Checking multi-file surfaces loading")
     @Feature(value = "Loader")

@@ -5,6 +5,7 @@ public enum TabSelector {
     PROJECT_TOOLS("ProjectToolsTab"),
     OPTION("OptionsTab"),
     CS("CsMainTab"),
+    CS_SCALING("CsScalingTab"),
     ;
 
     public final String tabSelector;

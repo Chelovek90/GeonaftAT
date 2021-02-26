@@ -268,4 +268,11 @@ public class WorkSpaceCs extends BaseWorkSpace {
                 });
         return this;
     }
+
+
+    public WorkSpaceCs scaling () {
+        baseAction.moveTo((RemoteWebElement) crossSectionWindow);
+        robot.mouseWheel(+100);
+        return this;
+    }
 }
