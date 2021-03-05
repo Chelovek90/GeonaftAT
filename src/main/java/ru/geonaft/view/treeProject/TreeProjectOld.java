@@ -7,7 +7,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.geonaft.Base;
-import ru.geonaft.NameEntityToProject;
 import ru.geonaft.view.treeProject.selectors.RootFolderSelector;
 import ru.geonaft.view.treeProject.selectors.SubFolderSelector;
 
@@ -22,7 +21,7 @@ import static ru.geonaft.NameEntityToProject.*;
 import static ru.geonaft.view.treeProject.selectors.RootFolderSelector.*;
 import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.*;
 
-public class TreeProject extends Base {
+public class TreeProjectOld extends Base {
 
     private WebElement targetFolder;
 
@@ -31,7 +30,7 @@ public class TreeProject extends Base {
     @WindowsFindBy(accessibility = "TreeView")
     private RemoteWebElement treeProjectSelector;
 
-    public TreeProject(WindowsDriver<RemoteWebElement> driver) {
+    public TreeProjectOld(WindowsDriver<RemoteWebElement> driver) {
         super(driver);
         this.treeProjectWindow = treeProjectSelector;
     }
@@ -87,14 +86,14 @@ public class TreeProject extends Base {
     @WindowsFindBy(accessibility = "OKButton")
     protected RemoteWebElement okButton;
 
-    public TreeProject openEditorFromContextMenu(RemoteWebElement element) {
+    public TreeProjectOld openEditorFromContextMenu(RemoteWebElement element) {
         baseAction.rightClick(element);
         List<WebElement> items = contextMenu.findElementsByClassName(menuItem);
         items.get(0).click();
         return this;
     }
 
-    public TreeProject clickItemFromContextMenu(SubFolderSelector folder, int indexMenuItem) {
+    public TreeProjectOld clickItemFromContextMenu(SubFolderSelector folder, int indexMenuItem) {
         RemoteWebElement subFolderText = rootTreeFolder
                 .findElementByName(folder.folderSelector)
                 .findElement(By.className(clickablePoint));
@@ -105,7 +104,7 @@ public class TreeProject extends Base {
 
     private RemoteWebElement rootTreeFolder;
 
-    public TreeProject unfoldFolder(RootFolderSelector folder) {
+    public TreeProjectOld unfoldFolder(RootFolderSelector folder) {
         this.rootTreeFolder = (RemoteWebElement) treeProjectWindow.findElementByName(folder.folderSelector);
         if (checkExpander(rootTreeFolder)) {
             baseAction.horizontalScroll(treeProjectWindow, rootTreeFolder);
@@ -114,7 +113,7 @@ public class TreeProject extends Base {
         return this;
     }
 
-    public TreeProject unfoldFolder(SubFolderSelector selector, String folderName) {
+    public TreeProjectOld unfoldFolder(SubFolderSelector selector, String folderName) {
         searchElementByName(selector, folderName);
         this.rootTreeFolder = (RemoteWebElement) targetFolder;
         if (checkExpander(rootTreeFolder)) {
@@ -124,7 +123,7 @@ public class TreeProject extends Base {
         return this;
     }
 
-    public TreeProject unfoldFolder(SubFolderSelector folder) {
+    public TreeProjectOld unfoldFolder(SubFolderSelector folder) {
         RemoteWebElement subFolder = (RemoteWebElement) rootTreeFolder.findElementByName(folder.folderSelector);
         this.rootTreeFolder = subFolder;
         if (checkExpander(subFolder)) {
@@ -134,13 +133,13 @@ public class TreeProject extends Base {
         return this;
     }
 
-    public TreeProject openEditorTargetFolder() {
+    public TreeProjectOld openEditorTargetFolder() {
         baseAction.horizontalScroll(treeProjectWindow, (RemoteWebElement) targetFolder);
         openEditorFromContextMenu((RemoteWebElement) targetFolder);
         return this;
     }
 
-    public TreeProject openEditorRootFolder(RootFolderSelector folder) {
+    public TreeProjectOld openEditorRootFolder(RootFolderSelector folder) {
         WebElement rootFolder = treeProjectWindow
                 .findElementByName(folder.folderSelector);
         baseAction.horizontalScroll(treeProjectWindow, (RemoteWebElement) rootFolder);
@@ -148,7 +147,7 @@ public class TreeProject extends Base {
         return this;
     }
 
-    public TreeProject openEditorFromContext(SubFolderSelector what) {
+    public TreeProjectOld openEditorFromContext(SubFolderSelector what) {
         switch (what) {
             case LOG:
                 unfoldFolder(WELLS);
@@ -189,7 +188,7 @@ public class TreeProject extends Base {
         return this;
     }
 
-    public TreeProject checkDataFolder(SubFolderSelector folder) {
+    public TreeProjectOld checkDataFolder(SubFolderSelector folder) {
         switch (folder) {
             case PICTURE:
                 unfoldFolder(PICTURES);
@@ -228,7 +227,7 @@ public class TreeProject extends Base {
     private String checkBoxState = "Toggle.ToggleState";
     private String checkBox = "CheckBox";
 
-    public TreeProject clickCheckBoxFolder(SubFolderSelector folder) {
+    public TreeProjectOld clickCheckBoxFolder(SubFolderSelector folder) {
         RemoteWebElement element = (RemoteWebElement) rootTreeFolder.findElementByName(folder.folderSelector);
         int primaryState = Integer.parseInt(
                 element.findElementByClassName(checkBox).getAttribute(checkBoxState));

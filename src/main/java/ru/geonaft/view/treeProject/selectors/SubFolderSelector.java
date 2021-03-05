@@ -40,6 +40,8 @@ public enum SubFolderSelector {
 
     PALETTE("Geosteering.UI.Controls.DataTreeView.DataTree.PalettesTreeViewItem"),
 
+    MODULE("Geosteering.UI.Controls.DataTreeView.DataTree.ModuleTreeViewItem"),
+
     PATTERN("Geosteering.UI.Controls.DataTreeView.DataTree.PalettesTreeViewItem"),
     ;
 

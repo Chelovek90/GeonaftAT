@@ -9,9 +9,6 @@ import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import ru.geonaft.helpers.BaseAction;
-import ru.geonaft.view.ribbon.BaseRibbon;
-import ru.geonaft.view.treeProject.TreeProject;
-import ru.geonaft.view.workSpace.editor.BaseWorkSpace;
 
 import java.awt.*;
 import java.util.Random;
@@ -30,6 +27,8 @@ public abstract class Base {
     public static Actions actions;
     public static Random random;
     public static Faker faker;
+
+    protected String enableButtonAttribute = "IsEnabled";
 
 
     public enum Appointment {

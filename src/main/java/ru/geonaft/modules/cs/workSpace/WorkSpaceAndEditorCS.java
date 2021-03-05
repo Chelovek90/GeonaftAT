@@ -1,21 +1,18 @@
-package ru.geonaft.modules.CS.workSpace;
+package ru.geonaft.modules.cs.workSpace;
 
 import io.appium.java_client.pagefactory.WindowsFindBy;
 import io.appium.java_client.windows.WindowsDriver;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
-import ru.geonaft.view.workSpace.editor.BaseWorkSpace;
+import ru.geonaft.view.workSpaces.workSpaceWithEditor.BaseWorkSpaceAndEditor;
 
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class WorkSpaceCs extends BaseWorkSpace {
+public class WorkSpaceAndEditorCS extends BaseWorkSpaceAndEditor {
 
     int countDips;
     WebElement crossSectionWindow;
@@ -24,13 +21,13 @@ public class WorkSpaceCs extends BaseWorkSpace {
 
     private String mainWindowSelector = "ScreenshotProvider";
 
-    public WorkSpaceCs(WindowsDriver<RemoteWebElement> driver) {
+    public WorkSpaceAndEditorCS(WindowsDriver<RemoteWebElement> driver) {
         super(driver);
     }
 
     @WindowsFindBy(accessibility = "MarkersLayerForWellSection")
     private RemoteWebElement crossSectionId;
-    public WorkSpaceCs setCsWorkSpace() {
+    public WorkSpaceAndEditorCS setCsWorkSpace() {
         csWorkSpace =
                 (RemoteWebElement) workSpaceWindow
                 .findElementByClassName(mainWindowSelector);
@@ -38,12 +35,12 @@ public class WorkSpaceCs extends BaseWorkSpace {
         return this;
     }
 
-    public WorkSpaceCs clickCrossSectionSpace() {
+    public WorkSpaceAndEditorCS clickCrossSectionSpace() {
         crossSectionWindow.click();
         return this;
     }
 
-    public WorkSpaceCs showAllClick() {
+    public WorkSpaceAndEditorCS showAllClick() {
         baseAction
                 .clickItemContextMenu((RemoteWebElement) crossSectionWindow, 2);
         return this;
@@ -60,7 +57,7 @@ public class WorkSpaceCs extends BaseWorkSpace {
     private RemoteWebElement groupHorizontalTrack;
     private String trackSelector = "ListBoxItem";
 
-    public WorkSpaceCs addTrack(OrientationTrack track) {
+    public WorkSpaceAndEditorCS addTrack(OrientationTrack track) {
         int primaryCount;
         int secondaryCount;
         switch (track) {
@@ -82,7 +79,7 @@ public class WorkSpaceCs extends BaseWorkSpace {
         return this;
     }
 
-    public WorkSpaceCs clickOnTrack(OrientationTrack track) {
+    public WorkSpaceAndEditorCS clickOnTrack(OrientationTrack track) {
         switch (track) {
             case VERTICAL:
                 groupVerticalTrack.click();
@@ -94,7 +91,7 @@ public class WorkSpaceCs extends BaseWorkSpace {
         return this;
     }
 
-    public BaseWorkSpace takeTracksScreen(OrientationTrack track, String screenName, Appointment appointment) {
+    public BaseWorkSpaceAndEditor takeTracksScreen(OrientationTrack track, String screenName, Appointment appointment) {
         baseAction.takeScreenshot(workSpaceWindow, screenName, appointment);
         switch (track) {
             case VERTICAL:
@@ -107,7 +104,7 @@ public class WorkSpaceCs extends BaseWorkSpace {
         return this;
     }
 
-    public WorkSpaceCs selectCurveOnHorizontalTrack() {
+    public WorkSpaceAndEditorCS selectCurveOnHorizontalTrack() {
         int heightElement = groupHorizontalTrack.getSize().getHeight();
         actions.moveToElement(groupHorizontalTrack, 8, heightElement / 2)
                 .click()
@@ -116,7 +113,7 @@ public class WorkSpaceCs extends BaseWorkSpace {
         return this;
     }
 
-    public WorkSpaceCs selectCurveOnVerticalTrack() {
+    public WorkSpaceAndEditorCS selectCurveOnVerticalTrack() {
         int widthElement = groupVerticalTrack.getSize().getWidth();
         actions.moveToElement(groupVerticalTrack, widthElement / 2, 34)
                 .click()
@@ -128,7 +125,7 @@ public class WorkSpaceCs extends BaseWorkSpace {
     @WindowsFindBy(accessibility = "Engineer")
     private RemoteWebElement engineerValueField;
 
-    public WorkSpaceCs enterEngineerValue() {
+    public WorkSpaceAndEditorCS enterEngineerValue() {
         String engineer = faker.superhero().name();
         baseAction.copyInBuffer(engineer);
         engineerValueField.click();
@@ -139,7 +136,7 @@ public class WorkSpaceCs extends BaseWorkSpace {
     @WindowsFindBy(accessibility = "Situation")
     private RemoteWebElement situationValueField;
 
-    public WorkSpaceCs enterSituationValue() {
+    public WorkSpaceAndEditorCS enterSituationValue() {
         String situation = faker.chuckNorris().fact();
         baseAction.copyInBuffer(situation);
         situationValueField.click();
@@ -150,7 +147,7 @@ public class WorkSpaceCs extends BaseWorkSpace {
     @WindowsFindBy(accessibility = "Recommendation")
     private RemoteWebElement recommendationValueField;
 
-    public WorkSpaceCs enterRecommendationValue() {
+    public WorkSpaceAndEditorCS enterRecommendationValue() {
         String recommendation = faker.beer().name();
         baseAction.copyInBuffer(recommendation);
         recommendationValueField.click();
@@ -161,7 +158,7 @@ public class WorkSpaceCs extends BaseWorkSpace {
     @WindowsFindBy(accessibility = "Annotation")
     private RemoteWebElement annotationValueField;
 
-    public WorkSpaceCs enterAnnotationValue() {
+    public WorkSpaceAndEditorCS enterAnnotationValue() {
         String annotation = faker.beer().name();
         baseAction.copyInBuffer(annotation);
         annotationValueField.click();
@@ -172,7 +169,7 @@ public class WorkSpaceCs extends BaseWorkSpace {
     @WindowsFindBy(accessibility = "Customer")
     private RemoteWebElement customerValueField;
 
-    public WorkSpaceCs enterCustomerValue() {
+    public WorkSpaceAndEditorCS enterCustomerValue() {
         String customer = faker.artist().name();
         baseAction.copyInBuffer(customer);
         customerValueField.click();
@@ -183,7 +180,7 @@ public class WorkSpaceCs extends BaseWorkSpace {
     @WindowsFindBy(accessibility = "State")
     private RemoteWebElement stateValueField;
 
-    public WorkSpaceCs enterStateValue() {
+    public WorkSpaceAndEditorCS enterStateValue() {
         String state = faker.howIMetYourMother().catchPhrase();
         baseAction.copyInBuffer(state);
         stateValueField.click();
@@ -192,20 +189,20 @@ public class WorkSpaceCs extends BaseWorkSpace {
     }
 
 
-    public WorkSpaceCs checkAddDipOnTable() {
+    public WorkSpaceAndEditorCS checkAddDipOnTable() {
         List<WebElement> list = dataTable.findElementsByName(dataString);
         assertTrue(list.size() != 0, "Table is empty");
         return this;
     }
 
-    public WorkSpaceCs setCountDips() {
+    public WorkSpaceAndEditorCS setCountDips() {
         List<WebElement> list = dataTable.findElementsByName(dataString);
         assertTrue(list.size() != 0, "Table is empty");
         countDips = list.size();
         return this;
     }
 
-    public WorkSpaceCs checkCountDips() {
+    public WorkSpaceAndEditorCS checkCountDips() {
         List<WebElement> list = dataTable.findElementsByName(dataString);
         assertTrue(list.size() != 0, "Table is empty");
         assertThat("New dip was not added", countDips, not(equalTo(list.size())));
@@ -234,7 +231,7 @@ public class WorkSpaceCs extends BaseWorkSpace {
 //        return this;
 //    }
 
-    public WorkSpaceCs clickRandomCrossSection() {
+    public WorkSpaceAndEditorCS clickRandomCrossSection() {
         int xOffSet = crossSectionWindow.getSize().getWidth() / (random.nextInt(15) + 2);
         int yOffSet = crossSectionWindow.getSize().getHeight() / (random.nextInt(15) + 2);
         actions
@@ -249,7 +246,7 @@ public class WorkSpaceCs extends BaseWorkSpace {
     private List<RemoteWebElement> inclFields;
     @WindowsFindBy(accessibility = "Azim")
     private List<RemoteWebElement> azimFields;
-    public BaseWorkSpace changeValueInclAndAzimTrajectory() {
+    public BaseWorkSpaceAndEditor changeValueInclAndAzimTrajectory() {
         inclFields.stream()
                 .skip(1)
                 .forEach(cell -> {
@@ -270,7 +267,7 @@ public class WorkSpaceCs extends BaseWorkSpace {
     }
 
 
-    public WorkSpaceCs scaling () {
+    public WorkSpaceAndEditorCS scaling () {
         baseAction.moveTo((RemoteWebElement) crossSectionWindow);
         robot.mouseWheel(+100);
         return this;

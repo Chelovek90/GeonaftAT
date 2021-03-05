@@ -11,9 +11,9 @@ import ru.geonaft.NameEntityToProject;
 import ru.geonaft.modules.loader.previewFilds.PreviewFieldsSelector;
 import ru.geonaft.view.ribbon.BaseRibbon;
 import ru.geonaft.view.ribbon.buttonsSelector.ModuleSelector;
-import ru.geonaft.view.treeProject.TreeProject;
+import ru.geonaft.view.treeProject.TreeProjectOld;
 import ru.geonaft.view.treeProject.selectors.SubFolderSelector;
-import ru.geonaft.view.workSpace.editor.BaseWorkSpace;
+import ru.geonaft.view.workSpaces.workSpaceWithEditor.BaseWorkSpaceAndEditor;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,11 +27,11 @@ import static ru.geonaft.modules.loader.previewFilds.PreviewFieldsSelector.*;
 public class Loader extends Base implements OpenModule {
 
     public BaseRibbon ribbon;
-    public BaseWorkSpace workSpace;
-    public TreeProject treeProject;
+    public BaseWorkSpaceAndEditor workSpace;
+    public TreeProjectOld treeProjectOld;
 
     public Loader getTree() {
-        this.treeProject = new TreeProject(driver);
+        this.treeProjectOld = new TreeProjectOld(driver);
         return this;
     }
 
@@ -41,7 +41,7 @@ public class Loader extends Base implements OpenModule {
     }
 
     public Loader getWorkSpace() {
-        this.workSpace = new BaseWorkSpace(driver);
+        this.workSpace = new BaseWorkSpaceAndEditor(driver);
         return this;
     }
 
@@ -50,8 +50,8 @@ public class Loader extends Base implements OpenModule {
     public Loader(WindowsDriver<RemoteWebElement> driver) {
         super(driver);
         this.ribbon = new BaseRibbon(driver);
-        this.workSpace = new BaseWorkSpace(driver);
-        this.treeProject = new TreeProject(driver);
+        this.workSpace = new BaseWorkSpaceAndEditor(driver);
+        this.treeProjectOld = new TreeProjectOld(driver);
     }
 
     private String loaderWindowSelector = "ЗАГРУЗЧИК ДАННЫХ";
@@ -193,7 +193,7 @@ public class Loader extends Base implements OpenModule {
     }
 
     public Loader openEditorLoadedFile(SubFolderSelector what) {
-        treeProject.openEditorFromContext(what);
+        treeProjectOld.openEditorFromContext(what);
         workSpace.compareCountHeaders();
         return this;
     }
@@ -208,7 +208,7 @@ public class Loader extends Base implements OpenModule {
 
     @Step("Checking data in the folder")
     public Loader checkDataFolder(SubFolderSelector subFolder) {
-        treeProject.checkDataFolder(subFolder);
+        treeProjectOld.checkDataFolder(subFolder);
         return this;
     }
 

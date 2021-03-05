@@ -1,4 +1,4 @@
-package ru.geonaft.view.workSpace.editor;
+package ru.geonaft.view.workSpaces.workSpaceWithEditor;
 
 import io.appium.java_client.pagefactory.WindowsFindBy;
 import io.appium.java_client.windows.WindowsDriver;
@@ -7,7 +7,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 import ru.geonaft.Base;
 import ru.geonaft.helpers.BaseAction;
-import ru.geonaft.modules.CS.workSpace.WorkSpaceCs;
 
 import java.util.List;
 
@@ -16,19 +15,20 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static ru.geonaft.Base.Appointment.*;
 
-public class BaseWorkSpace extends Base {
+public class BaseWorkSpaceAndEditor extends Base {
 
     protected int numberHeaders;
 
-    protected RemoteWebElement workSpaceWindow;
-    protected RemoteWebElement headersPanel;
     @WindowsFindBy(accessibility = "DocumentHost")
     private RemoteWebElement rootWindowSelector;
+    protected RemoteWebElement workSpaceWindow;
+
     private String tabHeadersPanel = "TabHeadersPanel";
+    protected RemoteWebElement headersPanel;
 
     private String closeButtonSelector = "ControlBoxButtonPresenter";
 
-    public BaseWorkSpace(WindowsDriver<RemoteWebElement> driver) {
+    public BaseWorkSpaceAndEditor(WindowsDriver<RemoteWebElement> driver) {
         super(driver);
         this.baseAction = new BaseAction(driver);
         this.workSpaceWindow = rootWindowSelector;
@@ -41,7 +41,7 @@ public class BaseWorkSpace extends Base {
     @WindowsFindBy(accessibility = "dataPresenter")
     protected RemoteWebElement dataTable;
     protected String dataString = "System.Data.DataRowView";
-    public BaseWorkSpace checkDataEditor(String name){
+    public BaseWorkSpaceAndEditor checkDataEditor(String name){
         baseAction.takeScreenshotToAttachOnAllureReport(workSpaceWindow, name , PRIMARY);
         List<WebElement> list = dataTable.findElementsByName(dataString);
         assertTrue(list.size() != 0, "Data is empty");
@@ -50,7 +50,7 @@ public class BaseWorkSpace extends Base {
 
     @WindowsFindBy(accessibility = "PART_CloseButton")
     private List<RemoteWebElement> closeButtons;
-    public BaseWorkSpace compareCountHeaders() {
+    public BaseWorkSpaceAndEditor compareCountHeaders() {
         int count = workSpaceWindow
                 .findElementByClassName(tabHeadersPanel)
                 .findElements(By.className(closeButtonSelector))
@@ -72,7 +72,7 @@ public class BaseWorkSpace extends Base {
 
     private String tabHeaderSelector = "DocumentPaneItem";
     private String nameAttribute = "Name";
-    public BaseWorkSpace checkTabName(String nameWell) {
+    public BaseWorkSpaceAndEditor checkTabName(String nameWell) {
         String tabName = workSpaceWindow
                 .findElementByClassName(tabHeadersPanel)
                 .findElement(By.className(tabHeaderSelector))
@@ -80,7 +80,8 @@ public class BaseWorkSpace extends Base {
         assertThat("Tab name does not contains well name - " + nameWell, tabName, containsString(nameWell) );
         return this;
     }
-    public BaseWorkSpace clickTabModule(String tabName) {
+
+    public BaseWorkSpaceAndEditor clickTabModule(String tabName) {
         WebElement tabModule = workSpaceWindow
                 .findElementByClassName(tabHeadersPanel)
                 .findElements(By.className(tabHeaderSelector))
@@ -94,7 +95,7 @@ public class BaseWorkSpace extends Base {
 
     private String panelButtonsSelector = "Bar";
     private String buttonsSelector = "BarButtonItemLinkControl";
-    public BaseWorkSpace clickAddRowInEditor() {
+    public BaseWorkSpaceAndEditor clickAddRowInEditor() {
         workSpaceWindow
                 .findElementByClassName(panelButtonsSelector)
                 .findElements(By.className(buttonsSelector)).get(2)
@@ -104,7 +105,7 @@ public class BaseWorkSpace extends Base {
 
     @WindowsFindBy(accessibility = "MD")
     private RemoteWebElement mdValueField;
-    public BaseWorkSpace enterMdValue() {
+    public BaseWorkSpaceAndEditor enterMdValue() {
         int MD = 500 + random.nextInt(500);
         baseAction.copyInBuffer(String.valueOf(MD));
         mdValueField.click();
@@ -114,7 +115,7 @@ public class BaseWorkSpace extends Base {
 
     @WindowsFindBy(accessibility = "TVDSS")
     private RemoteWebElement tvdssValueField;
-    public BaseWorkSpace enterTvdssValue() {
+    public BaseWorkSpaceAndEditor enterTvdssValue() {
         int TVDSS = -500 + random.nextInt(500)*-1;
         baseAction.copyInBuffer(String.valueOf(TVDSS));
         tvdssValueField.click();
@@ -124,7 +125,7 @@ public class BaseWorkSpace extends Base {
 
     @WindowsFindBy(accessibility = "BarButtonItemLinkBSaveClose")
     private RemoteWebElement saveAndExitButton;
-    public BaseWorkSpace clickSaveAndExit() {
+    public BaseWorkSpaceAndEditor clickSaveAndExit() {
         workSpaceWindow
                 .findElementByClassName(panelButtonsSelector)
                 .findElements(By.className(buttonsSelector)).get(1)
@@ -132,12 +133,12 @@ public class BaseWorkSpace extends Base {
         return this;
     }
 
-    public BaseWorkSpace takeWorkSpaceScreen(String screenName, Appointment appointment) {
+    public BaseWorkSpaceAndEditor takeWorkSpaceScreen(String screenName, Appointment appointment) {
         baseAction.takeScreenshot(workSpaceWindow, screenName, appointment);
         return this;
     }
 
-    public BaseWorkSpace takeGeonaftScreen(String screenName, Appointment appointment) {
+    public BaseWorkSpaceAndEditor takeGeonaftScreen(String screenName, Appointment appointment) {
         baseAction.takeScreenshot(geonaftWindow, screenName, appointment);
         return this;
     }

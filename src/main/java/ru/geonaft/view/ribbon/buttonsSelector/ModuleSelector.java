@@ -7,6 +7,7 @@ public enum ModuleSelector {
     CP(1, "Geosteering.Geonaft.Module.CorrelationPanel.Modularity.CorrelationPanelToolbarInfo"),
     QIDIP(1, "Geosteering.Geonaft.Module.QIDip.Modularity.QiDipToolbarInfo"),
     AUTOLOADER(1, "Geosteering.Geonaft.Module.RealTime.RealTimeToolbarInfo"),
+    PRESSURE(1, "Geosteering.Geonaft.Module.Pressures.Modularity.PressuresToolbarInfo"),
     ;
 
     public final String moduleSelector;

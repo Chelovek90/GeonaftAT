@@ -1,4 +1,4 @@
-package ru.geonaft.modules.CS.ribbon;
+package ru.geonaft.modules.cs.ribbonCS;
 
 import io.appium.java_client.pagefactory.WindowsFindBy;
 import io.appium.java_client.windows.WindowsDriver;

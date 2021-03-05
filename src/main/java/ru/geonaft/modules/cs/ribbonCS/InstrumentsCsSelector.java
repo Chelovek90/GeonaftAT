@@ -1,4 +1,4 @@
-package ru.geonaft.modules.CS.ribbon;
+package ru.geonaft.modules.cs.ribbonCS;
 
 public enum InstrumentsCsSelector {
     DipsProcessing(4,1,"RibbonToggleButton"),

@@ -6,15 +6,15 @@ import io.qameta.allure.TmsLink;
 import org.junit.jupiter.api.*;
 import ru.geonaft.Base;
 import ru.geonaft.base.BaseTest;
-import ru.geonaft.modules.CS.Geosteering;
+import ru.geonaft.modules.cs.Geosteering;
 
 import static ru.geonaft.Base.Appointment.*;
 import static ru.geonaft.NameEntityToProject.*;
-import static ru.geonaft.modules.CS.ribbon.InstrumentsCsSelector.DipsProcessing;
-import static ru.geonaft.modules.CS.workSpace.WorkSpaceCs.OrientationTrack.*;
+import static ru.geonaft.modules.cs.ribbonCS.InstrumentsCsSelector.DipsProcessing;
+import static ru.geonaft.modules.cs.workSpace.WorkSpaceAndEditorCS.OrientationTrack.*;
 
 
-public class TestsGeosteering extends BaseTest {
+public class TestGeosteering extends BaseTest {
 
     static String pathCleanProject = "D:\\Data for testing\\Проекты";
     static String nameCleanProject = "ProjectWithWellsForTests3.8.0.24";
