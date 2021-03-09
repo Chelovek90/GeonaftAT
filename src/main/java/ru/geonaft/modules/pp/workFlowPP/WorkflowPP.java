@@ -2,6 +2,7 @@ package ru.geonaft.modules.pp.workFlowPP;
 
 import io.appium.java_client.pagefactory.WindowsFindBy;
 import io.appium.java_client.windows.WindowsDriver;
+import org.openqa.selenium.By;
 import org.openqa.selenium.remote.RemoteWebElement;
 import ru.geonaft.view.workSpaces.workFlow.BaseWorkFlow;
 
@@ -20,6 +21,7 @@ public class WorkflowPP extends BaseWorkFlow {
     }
 
     private String buttonMenuSelector = "NavBarItemControl";
+
     public WorkflowPP checkStepsPanelMenuRUS() {
         List<String> expectedSteps = Arrays.asList(
                 "D-экспонента",
@@ -43,8 +45,9 @@ public class WorkflowPP extends BaseWorkFlow {
         return this;
     }
 
-   private String nameFieldSelector = "TextBlock";
+    private String nameFieldSelector = "TextBlock";
     private String comboBoxSelector = "ComboBox";
+
     public WorkflowPP checkOptionViewStepConfigurationDataRUS() {
         List<String> expectedNameField = Arrays.asList(
                 "1. Скважина",
@@ -72,9 +75,10 @@ public class WorkflowPP extends BaseWorkFlow {
 
     @WindowsFindBy(accessibility = "cbWellCollection")
     RemoteWebElement wellComboBox;
+
     public WorkflowPP chooseWell() {
         wellComboBox.click();
-        actions.moveToElement(wellComboBox,20,35)
+        actions.moveToElement(wellComboBox, 20, 35)
                 .click()
                 .build()
                 .perform();
@@ -87,7 +91,7 @@ public class WorkflowPP extends BaseWorkFlow {
                         .get(1)
                         .getAttribute(enableButtonAttribute),
                 equalTo("True")
-                );
+        );
 
         return this;
     }
@@ -98,7 +102,7 @@ public class WorkflowPP extends BaseWorkFlow {
                 .get(1)
                 .click();
 
-        actions.moveToElement(        optionView
+        actions.moveToElement(optionView
                 .findElementsByClassName(comboBoxSelector)
                 .get(1), 20, 35)
                 .click()
@@ -128,11 +132,61 @@ public class WorkflowPP extends BaseWorkFlow {
         return this;
     }
 
-    public WorkflowPP chooseWellAndLogClickApply() {
-        chooseWell();
-        chooseLog();
-        clickApplyButton();
-        checkStepConfigurationForActivity();
+    public WorkflowPP clickOverburdenPressure() {
+        panelMenu
+                .findElementsByClassName(buttonMenuSelector)
+                .get(1)
+                .click();
+        setOptionViewForStepWorkflow();
+        return this;
+    }
+
+    public WorkflowPP checkOptionViewStepOverburdenPressureRUS() {
+        List<String> expectedNameField = Arrays.asList(
+                "",
+                " ",
+                "1. Результаты расчета",
+                "2. Параметры скважины",
+                "3. Параметры экстраполяции",
+                "4. Входные данные:",
+                "TVD",
+                "Высота столба воздуха:",
+                "Глубина моря:",
+                "Градиент литостатического давления:",
+                "Конечная TVD :",
+                "Литостатическое давление:",
+                "Начальная TVD :",
+                "Плотность",
+                "Плотность воды:",
+                "Плотность:",
+                "Применить",
+                "Экстраполированная плотность:",
+                "г/см³",
+                "м",
+                "м",
+                "м",
+                "м");
+        List<String> actualNameFieldList = optionView
+                .findElementsByClassName(nameFieldSelector)
+                .stream()
+                .map(element -> element.getText())
+                .sorted()
+                .collect(Collectors.toList());
+
+        assertThat("Name fields does not equal expected name",
+                actualNameFieldList,
+                equalTo(expectedNameField));
+        return this;
+    }
+
+    @WindowsFindBy(accessibility = "DensityCurvesCollection")
+    private RemoteWebElement densityCurveComboBox;
+    public WorkflowPP chooseDensityCurve() {
+        densityCurveComboBox.click();
+        actions.moveToElement(densityCurveComboBox, 20, 35)
+                .click()
+                .build()
+                .perform();
         return this;
     }
 

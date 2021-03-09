@@ -10,6 +10,8 @@ import ru.geonaft.modules.pp.workFlowPP.WorkflowPP;
 import ru.geonaft.modules.pp.workSpacePP.WorkSpacePP;
 import ru.geonaft.view.ribbon.buttonsSelector.ModuleSelector;
 
+import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.*;
+
 public class PorePressure extends Base implements OpenModule {
 
     public RibbonPP ribbon;
@@ -37,26 +39,39 @@ public class PorePressure extends Base implements OpenModule {
 
     public PorePressure chooseWellAndLogClickApply() {
         workflow
+                .checkStepsPanelMenuRUS()
+                .checkOptionViewStepConfigurationDataRUS()
                 .chooseWell()
                 .chooseLog()
                 .clickApplyButton();
+        ribbon
+                .checkActivityRibbonButton();
         workflow
                 .checkStepConfigurationForActivity();
         treeProject
-                .checkCreateSubfolderModule();
+                .checkCreateSubfolderModule()
+                .checkCreateFolder(PRESSURE);
         workSpace
-                .checkCreateTrackWithCurve(2,1);
+                .checkCreateTrackWithCurve(1,1);
         return this;
     }
 
-    public PorePressure OverburdenPressureCalculation() {
-
+    public PorePressure overburdenPressureCalculation() {
+        workflow
+                .clickOverburdenPressure()
+                .checkOptionViewStepOverburdenPressureRUS()
+                .chooseDensityCurve()
+                .clickApplyButton()
+                .waitLoading();
+        workSpace
+                .checkCreateTrackWithCurve(3,5);
+        treeProject
+                .checkCalculatedCurveInFolder(3);
         return this;
     }
 
     public PorePressure Test() {
-        workflow
-                .chooseWellAndLogClickApply();
+
         return this;
     }
 }

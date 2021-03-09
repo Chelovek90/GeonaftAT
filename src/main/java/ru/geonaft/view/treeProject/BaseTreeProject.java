@@ -113,12 +113,22 @@ public class BaseTreeProject extends Base {
         return this;
     }
 
-    public BaseTreeProject checkDataFolder(SubFolderSelector folder) {
-        assertThat("Submodule folder not found",
+    public BaseTreeProject checkFolder(SubFolderSelector folder) {
+        assertThat("Folder not found",
                 rootTreeFolder
                         .findElementsByName(folder.folderSelector)
                         .size(),
                 not(equalTo(0))
+        );
+        return this;
+    }
+
+    public BaseTreeProject checkCurveInFolder(SubFolderSelector folder, int expectedCount) {
+        assertThat("Count curves is not equal expected",
+                rootTreeFolder
+                        .findElementsByName(folder.folderSelector)
+                        .size(),
+                equalTo(expectedCount)
         );
         return this;
     }

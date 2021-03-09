@@ -73,13 +73,13 @@ public class BaseWorkSpace extends Base {
         return this;
     }
 
-    private String trackBoxSelector = "TrackBox";
     private String trackSelector = "Geosteering.UI.Infrastructure.ViewModels.Tracks.GraphicTrackViewModel";
 
+    @WindowsFindBy(accessibility = "TracksListBox")
+    private RemoteWebElement trackBox;
     public BaseWorkSpace checkCountTrack(int expectedCount) {
         assertThat("Tracks count not equal expected",
-                workSpace
-                        .findElementByClassName(trackBoxSelector)
+                trackBox
                         .findElements(By.name(trackSelector))
                         .size(),
                 equalTo(expectedCount));

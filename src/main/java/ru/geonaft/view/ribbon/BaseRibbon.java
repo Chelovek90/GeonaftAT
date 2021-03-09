@@ -6,6 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 import ru.geonaft.Base;
+import ru.geonaft.modules.cs.ribbonCS.RibbonCS;
 import ru.geonaft.view.ribbon.buttonsSelector.ModuleSelector;
 import ru.geonaft.view.ribbon.buttonsSelector.TabSelector;
 
@@ -70,6 +71,24 @@ public class BaseRibbon extends Base {
     public BaseRibbon checkOnOffButton(RemoteWebElement button) {
         int primaryState = Integer.parseInt(
                 button.getAttribute(stateButton));
+        return this;
+    }
+
+    private String ribbonToggleButtonSelector = "RibbonToggleButton";
+    private String ribbonButtonSelector = "RibbonButton";
+    public BaseRibbon checkActivityRibbonButton() {
+        ribbonPanel.findElementsByClassName(ribbonToggleButtonSelector).stream()
+                .filter(button -> !(button.getText().equals("Отклонение от плана")))
+                .filter(button -> !(button.getText().equals("Deviation from the plan")))
+                .forEach(button -> {
+                    assertThat("Button - " + button.getText() + " is not active",
+                            button.getAttribute(enableButtonAttribute), is(equalTo("True")));
+                });
+        ribbonPanel.findElementsByClassName(ribbonButtonSelector).stream()
+                .forEach(button -> {
+                    assertThat("Button - " + button.getText() + " is not active",
+                            button.getAttribute(enableButtonAttribute), is(equalTo("True")));
+                });
         return this;
     }
 }

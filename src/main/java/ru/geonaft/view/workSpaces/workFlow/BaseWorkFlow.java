@@ -5,6 +5,7 @@ import io.appium.java_client.windows.WindowsDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.remote.RemoteWebElement;
 import ru.geonaft.Base;
+import ru.geonaft.modules.pp.workFlowPP.WorkflowPP;
 
 import java.util.List;
 
@@ -20,7 +21,6 @@ public class BaseWorkFlow extends Base {
 
     @WindowsFindBy(accessibility = "Workflow")
     private RemoteWebElement mainViewID;
-    protected RemoteWebElement mainView;
 
     private String headersPanelSelector = "TabHeadersPanel";
     protected RemoteWebElement headersPanel;
@@ -28,14 +28,12 @@ public class BaseWorkFlow extends Base {
     private String headersSelector = "DocumentPaneItem";
 
     private String workflowSelector = "DocumentPanel";
-    protected RemoteWebElement workflow;
 
     private String panelMenuSelector = "NavPaneActiveGroupControl";
     protected RemoteWebElement panelMenu;
 
-    private String optionViewSelector = "DataWorkflowView";
+    private String optionViewSelector = "ScrollViewer";
     protected RemoteWebElement optionView;
-
 
     public BaseWorkFlow(WindowsDriver<RemoteWebElement> driver) {
         super(driver);
@@ -54,10 +52,7 @@ public class BaseWorkFlow extends Base {
                         .findElementByClassName(workflowSelector)
                         .findElement(By.className(panelMenuSelector));
 
-        this.optionView =
-                mainViewID
-                        .findElementByClassName(workflowSelector)
-                        .findElement(By.className(optionViewSelector));
+        setOptionViewForStepWorkflow();
     }
 
     public BaseWorkFlow compareCountHeaders() {
@@ -94,6 +89,14 @@ public class BaseWorkFlow extends Base {
         System.out.println(logInProject.name);
         assertThat("Tab name does not contains well name - " + wellName, tabName, containsString(wellName));
         assertThat("Tab name does not contains log name - " + logName, tabName, containsString(logName));
+        return this;
+    }
+
+    public  BaseWorkFlow setOptionViewForStepWorkflow() {
+        this.optionView =
+                mainViewID
+                        .findElementByClassName(workflowSelector)
+                        .findElement(By.className(optionViewSelector));
         return this;
     }
 
@@ -139,6 +142,15 @@ public class BaseWorkFlow extends Base {
         return this;
     }
 
+
+    public BaseWorkFlow waitLoading() {
+        baseAction
+                .waitLoading(
+                        (RemoteWebElement) mainViewID
+                                .findElementByClassName(workflowSelector)
+                );
+        return this;
+    }
 
 
 }

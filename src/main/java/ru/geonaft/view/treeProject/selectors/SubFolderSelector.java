@@ -43,6 +43,9 @@ public enum SubFolderSelector {
     MODULE("Geosteering.UI.Controls.DataTreeView.DataTree.ModuleTreeViewItem"),
 
     PATTERN("Geosteering.UI.Controls.DataTreeView.DataTree.PalettesTreeViewItem"),
+
+    PRESSURE("Geosteering.Geonaft.Module.Pressures.Resources.DataTree.PressuresTreeViewItem"),
+    CALC_CURVE("Geosteering.UI.Controls.DataTreeView.DataTree.CalculatableCurveTreeViewItem"),
     ;
 
     public final String folderSelector;
