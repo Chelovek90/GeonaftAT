@@ -9,13 +9,16 @@ import org.openqa.selenium.remote.RemoteWebElement;
 
 import java.awt.*;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 public abstract class BaseTest {
+    protected static Properties properties = new Properties();
     protected static WindowsDriver<RemoteWebElement> desktopSession;
 //    private static String geonaftPath = "D:\\Installer\\Geonaft\\3.7.37.23\\717\\Geonaft.exe";
     private static String geonaftPath = "D:\\Installer\\Geonaft\\3.8.0.26\\720\\Geonaft.exe";
@@ -67,5 +70,13 @@ public abstract class BaseTest {
         desktopSession = new WindowsDriver<RemoteWebElement>(new URL("http://127.0.0.1:4723"), capabilities);
         desktopSession.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
+    }
+
+    protected static void loadProperties(String propertyName) {
+        try {
+            properties.load(new FileInputStream("src\\test\\resources\\" + propertyName + ".properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -5,7 +5,9 @@ import io.appium.java_client.windows.WindowsDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
+import org.openqa.selenium.support.FindBy;
 import ru.geonaft.Base;
+import ru.geonaft.modules.pp.treeProjectPP.TreeProjectPP;
 import ru.geonaft.view.treeProject.selectors.RootFolderSelector;
 import ru.geonaft.view.treeProject.selectors.SubFolderSelector;
 
@@ -20,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static ru.geonaft.NameEntityToProject.fileNameList;
 import static ru.geonaft.NameEntityToProject.pictureInProject;
 import static ru.geonaft.view.treeProject.selectors.RootFolderSelector.*;
+import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.MODULE;
 import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.PICTURE;
 
 public class BaseTreeProject extends Base {
@@ -62,7 +65,7 @@ public class BaseTreeProject extends Base {
 
     private String clickablePoint = "TextBlock";
 
-    public RemoteWebElement searchElementByName(SubFolderSelector folder, String folderName) {
+    public BaseTreeProject searchElementByName(SubFolderSelector folder, String folderName) {
         List<WebElement> list =
                 rootTreeFolder
                         .findElementsByName(folder.folderSelector);
@@ -73,12 +76,12 @@ public class BaseTreeProject extends Base {
                         .findFirst().orElse(null);
 
         assertTrue(targetFolder != null, "Search element by name " + folderName + " returned no results");
-        return targetFolder;
+        return this;
     }
 
-    private RemoteWebElement treeProjectWindow;
-    private RemoteWebElement rootTreeFolder;
-    private RemoteWebElement targetFolder;
+    protected RemoteWebElement treeProjectWindow;
+    protected RemoteWebElement rootTreeFolder;
+    protected RemoteWebElement targetFolder;
 
     public BaseTreeProject unfoldFolder(RootFolderSelector folder) {
         this.rootTreeFolder =
@@ -113,12 +116,12 @@ public class BaseTreeProject extends Base {
         return this;
     }
 
-    public BaseTreeProject checkFolder(SubFolderSelector folder) {
+    public BaseTreeProject checkFolder(SubFolderSelector folder, int expectedCount) {
         assertThat("Folder not found",
                 rootTreeFolder
                         .findElementsByName(folder.folderSelector)
                         .size(),
-                not(equalTo(0))
+                equalTo(expectedCount)
         );
         return this;
     }
@@ -132,4 +135,44 @@ public class BaseTreeProject extends Base {
         );
         return this;
     }
+
+    public BaseTreeProject checkCreateSubfolderModule(int expectedCount) {
+        unfoldFolder(MODULES);
+        checkFolder(MODULE, expectedCount);
+        return this;
+    }
+
+    public String getFolderNameInRootFolder(SubFolderSelector folder) {
+        String folderName = baseAction.getFileName(
+                (RemoteWebElement) rootTreeFolder
+                        .findElementByClassName(folder.folderSelector)
+        );
+        return folderName;
+    }
+
+    public BaseTreeProject clickItemFromContextMenu(SubFolderSelector folder, int indexMenuItem) {
+        RemoteWebElement subFolderText = rootTreeFolder
+                .findElementByName(folder.folderSelector)
+                .findElement(By.className(clickablePoint));
+        baseAction.horizontalScroll(treeProjectWindow, subFolderText);
+        baseAction.clickItemContextMenu(subFolderText, indexMenuItem);
+        return this;
+    }
+
+
+    @FindBy(className = "ContextMenu")
+    private RemoteWebElement contextMenu;
+    private String menuItem = "MenuItem";
+
+    public BaseTreeProject openEditorTargetFolder() {
+        baseAction
+                .horizontalScroll(treeProjectWindow, targetFolder);
+        baseAction.rightClick(targetFolder);
+        List<WebElement> items = contextMenu.findElementsByClassName(menuItem);
+        items.get(0).click();
+
+        return this;
+    }
+
+
 }

@@ -18,6 +18,11 @@ public class WorkSpacePP extends BaseWorkSpace {
         return this;
     }
 
+    public WorkSpacePP checkCrateTrackZone(int expectedCountTrack) {
+        checkCountTrackZones(expectedCountTrack);
+        return this;
+    }
+
 
 
 

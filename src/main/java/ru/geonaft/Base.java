@@ -29,6 +29,13 @@ public abstract class Base {
     public static Faker faker;
 
     protected String enableButtonAttribute = "IsEnabled";
+    protected String valueAttribute = "ValueValue";
+    protected String nameAttribute = "Name";
+    protected String textBoxSelector = "TextBox";
+    protected String textBlockSelector = "TextBlock";
+    protected String comboBoxSelector = "ComboBox";
+
+
 
 
     public enum Appointment {

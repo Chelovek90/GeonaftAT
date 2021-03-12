@@ -10,6 +10,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import ru.geonaft.Base;
 import ru.geonaft.ScreenshotPaths;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
@@ -41,31 +42,35 @@ public class BaseAction {
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
     }
 
-    public void copyInBuffer(String s) {
+    public BaseAction copyInBuffer(String s) {
         StringSelection stringSelection = new StringSelection(s);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, null);
+        return this;
     }
 
-    public void pastFromBuffer() {
+    public BaseAction pastFromBuffer() {
         actions
                 .sendKeys(Keys.chord(Keys.LEFT_CONTROL, "v"))
                 .build()
                 .perform();
+        return this;
     }
 
-    public void ctr_A() {
+    public BaseAction ctr_A() {
         actions
                 .sendKeys(Keys.chord(Keys.LEFT_CONTROL, "a"))
                 .build()
                 .perform();
+        return this;
     }
 
-    public void enterClick() {
+    public BaseAction enterClick() {
         actions
                 .sendKeys(Keys.chord(Keys.ENTER))
                 .build()
                 .perform();
+        return this;
     }
 
     private String nameField = "TextBlock";
@@ -79,27 +84,13 @@ public class BaseAction {
         return fileName;
     }
 
-//    @Attachment(value = "Test screenshot", type = "image/png")
-//    public byte[] takeScreenshotToAttachOnAllureReport(RemoteWebElement element, String fileName, Appointment appointment) {
-//        byte[] bytes = null;
-//        File screen = element.getScreenshotAs(OutputType.FILE);
-//        if (appointment == appointment.SECONDARY) {
-//            try {
-//                FileUtils.copyFile(screen, new File(ScreenshotPaths.secondaryDir + fileName + ".png"));
-//                bytes = Files.readAllBytes(Paths.get(String.valueOf(screen)));
-//            } catch (IOException e) {
-//                System.out.println("Secondary screenshot is not created");
-//            }
-//        } else if (appointment == appointment.PRIMARY){
-//            try {
-//                FileUtils.copyFile(screen, new File(ScreenshotPaths.primaryDir + fileName + ".png"));
-//                bytes = Files.readAllBytes(Paths.get(String.valueOf(screen)));
-//            } catch (IOException e) {
-//                System.out.println("Primary screenshot is not created");
-//            }
-//        }
-//        return bytes;
-//    }
+    public BaseAction enterValues(RemoteWebElement element, String values) {
+        element.click();
+        copyInBuffer(values);
+        pastFromBuffer();
+        enterClick();
+        return this;
+    }
 
     @WindowsFindBy(accessibility = "PART_ToggleButton")
     private RemoteWebElement btn;
@@ -134,7 +125,7 @@ public class BaseAction {
         return bytes;
     }
 
-    public void takeScreenshot(RemoteWebElement element, String fileName, Appointment appointment) {
+    public BaseAction takeScreenshot(RemoteWebElement element, String fileName, Appointment appointment) {
         moveTo(btn);
         try {
             Thread.sleep(300);
@@ -158,6 +149,7 @@ public class BaseAction {
                     System.out.println("Secondary screenshot is not created");
                 }
         }
+        return this;
     }
 
     public int takeDiffImage(String fileName) {
@@ -208,32 +200,45 @@ public class BaseAction {
 
     private String clickablePoint = "TextBlock";
 
-    public void doubleClick(RemoteWebElement element) {
-        RemoteWebElement elementButton = (RemoteWebElement) element.findElementByClassName(clickablePoint);
-        actions.doubleClick(elementButton).perform();
+    public BaseAction doubleClick(RemoteWebElement element) {
+        RemoteWebElement elementButton =
+                (RemoteWebElement) element
+                .findElementByClassName(clickablePoint);
+        actions
+                .doubleClick(elementButton)
+                .perform();
+        return this;
     }
 
-    public void rightClick(RemoteWebElement element) {
-        RemoteWebElement elementButton = (RemoteWebElement) element.findElementByClassName(clickablePoint);
-        actions.contextClick(elementButton).perform();
+    public BaseAction rightClick(RemoteWebElement element) {
+        RemoteWebElement elementButton =
+                (RemoteWebElement) element
+                        .findElementByClassName(clickablePoint);
+        actions
+                .contextClick(elementButton)
+                .perform();
+        return this;
     }
 
     private String checkBox = "CheckBox";
 
-    public void clickCheckBox(RemoteWebElement element) {
-        RemoteWebElement checkBox = (RemoteWebElement) element
+    public BaseAction clickCheckBox(RemoteWebElement element) {
+        RemoteWebElement checkBox =
+                (RemoteWebElement) element
                 .findElementByClassName(this.checkBox);
         checkBox.click();
+        return this;
     }
 
-    public void moveTo(RemoteWebElement element) {
+    public BaseAction moveTo(RemoteWebElement element) {
         actions
                 .moveToElement(element)
                 .build()
                 .perform();
+        return this;
     }
 
-    public void horizontalScroll(RemoteWebElement mainView, RemoteWebElement element) {
+    public BaseAction horizontalScroll(RemoteWebElement mainView, RemoteWebElement element) {
 
         int topMainView = mainView.getLocation().getY();
         int heightMainView = mainView.getSize().getHeight();
@@ -255,6 +260,7 @@ public class BaseAction {
                 robot.mouseWheel(+1);
             }
         }
+        return this;
     }
 
     @FindBy(name = "Открытие")
@@ -265,7 +271,7 @@ public class BaseAction {
     private String CancelButtonSelector = "Отмена";
 
 
-    public void multiFileLoad(String path) {
+    public BaseAction multiFileLoad(String path) {
         copyInBuffer(path);
         RemoteWebElement window = openingWindowSelector;
         window.findElementByName(pathFieldSelector).click();
@@ -274,10 +280,11 @@ public class BaseAction {
         window.findElementByClassName("UIItemsView").click();
         ctr_A();
         window.findElementByName(openButtonSelector).click();
+        return this;
     }
 
 
-    public void loadFile(String path, String fileName) {
+    public BaseAction loadFile(String path, String fileName) {
         copyInBuffer(path);
         RemoteWebElement window = openingWindowSelector;
         window.findElementByName(pathFieldSelector).click();
@@ -288,12 +295,13 @@ public class BaseAction {
         nameFiled.get(1).click();
         pastFromBuffer();
         window.findElementByName(openButtonSelector).click();
+        return this;
     }
 
     private List<WebElement> indicatorLoad;
     private String loadIndicatorSelector = "WaitIndicator";
 
-    public void waitLoading(RemoteWebElement window) {
+    public BaseAction waitLoading(RemoteWebElement window) {
         boolean load = true;
         while (load) {
             List<WebElement> indicator = window.findElementsByClassName(loadIndicatorSelector);
@@ -301,6 +309,7 @@ public class BaseAction {
                 load = false;
             }
         }
+        return this;
     }
 
     @FindBy(className = "Window")
@@ -309,7 +318,7 @@ public class BaseAction {
     @WindowsFindBy(accessibility = "OKButton")
     private RemoteWebElement okAttentionWindow;
 
-    public void clickOkInAttention(RemoteWebElement window) {
+    public BaseAction clickOkInAttention(RemoteWebElement window) {
         for (int i = 0; i <= 3; i++) {
             try {
                 Thread.sleep(1000);
@@ -323,17 +332,19 @@ public class BaseAction {
                 break;
             }
         }
+        return this;
     }
 
     private String contextMenuSelector = "ContextMenu";
     private String menuItemSelector = "MenuItem";
 
-    public void clickItemContextMenu(RemoteWebElement window, int indexItem) {
+    public BaseAction clickItemContextMenu(RemoteWebElement window, int indexItem) {
         actions.contextClick(window).perform();
         driver
                 .findElementByClassName(contextMenuSelector)
                 .findElementsByClassName(menuItemSelector)
                 .get(indexItem).click();
-
+        return this;
     }
+
 }

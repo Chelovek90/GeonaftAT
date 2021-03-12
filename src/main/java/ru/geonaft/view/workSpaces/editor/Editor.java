@@ -5,6 +5,7 @@ import io.appium.java_client.windows.WindowsDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
+import ru.geonaft.view.workSpaces.workSpace.BaseWorkSpace;
 import ru.geonaft.view.workSpaces.workSpaceWithEditor.BaseWorkSpaceAndEditor;
 
 import java.util.List;
@@ -12,28 +13,39 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static ru.geonaft.Base.Appointment.PRIMARY;
 
-public class Editor extends BaseWorkSpaceAndEditor {
-
-    private RemoteWebElement tableEditor;
+public class Editor extends BaseWorkSpace {
 
     public Editor(WindowsDriver<RemoteWebElement> driver) {
         super(driver);
     }
 
-    @WindowsFindBy(accessibility = "dataPresenter")
-    protected RemoteWebElement dataTable;
-    protected String dataString = "System.Data.DataRowView";
-    public BaseWorkSpaceAndEditor checkDataEditor(String name){
-        baseAction.takeScreenshotToAttachOnAllureReport(workSpaceWindow, name , PRIMARY);
-        List<WebElement> list = dataTable.findElementsByName(dataString);
+    private String editorSelector = "DataEditorView";
+    private RemoteWebElement editor;
+
+    private Editor getEditor() {
+        editor =
+                (RemoteWebElement) mainViewID
+                        .findElementByClassName(editorSelector);
+        return this;
+    }
+
+    protected String dataTableSelector = "DataPanel";
+    protected String rowTableSelector = "System.Data.DataRowView";
+
+    public Editor checkDataEditor(String name) {
+        baseAction.takeScreenshotToAttachOnAllureReport(editor, name, PRIMARY);
+        List<WebElement> list = editor
+                .findElementByName(dataTableSelector)
+                .findElements(By.name(rowTableSelector));
         assertTrue(list.size() != 0, "Data is empty");
         return this;
     }
 
     private String panelButtonsSelector = "Bar";
     private String buttonsSelector = "BarButtonItemLinkControl";
-    public BaseWorkSpaceAndEditor clickAddRowInEditor() {
-        workSpaceWindow
+
+    public Editor clickAddRowInEditor() {
+        editor
                 .findElementByClassName(panelButtonsSelector)
                 .findElements(By.className(buttonsSelector)).get(2)
                 .click();
@@ -42,7 +54,8 @@ public class Editor extends BaseWorkSpaceAndEditor {
 
     @WindowsFindBy(accessibility = "MD")
     private RemoteWebElement mdValueField;
-    public BaseWorkSpaceAndEditor enterMdValue() {
+
+    public Editor enterMdValue() {
         int MD = 500 + random.nextInt(500);
         baseAction.copyInBuffer(String.valueOf(MD));
         mdValueField.click();
@@ -52,8 +65,9 @@ public class Editor extends BaseWorkSpaceAndEditor {
 
     @WindowsFindBy(accessibility = "TVDSS")
     private RemoteWebElement tvdssValueField;
-    public BaseWorkSpaceAndEditor enterTvdssValue() {
-        int TVDSS = -500 + random.nextInt(500)*-1;
+
+    public Editor enterTvdssValue() {
+        int TVDSS = -500 + random.nextInt(500) * -1;
         baseAction.copyInBuffer(String.valueOf(TVDSS));
         tvdssValueField.click();
         baseAction.pastFromBuffer();
@@ -62,11 +76,13 @@ public class Editor extends BaseWorkSpaceAndEditor {
 
     @WindowsFindBy(accessibility = "BarButtonItemLinkBSaveClose")
     private RemoteWebElement saveAndExitButton;
-    public BaseWorkSpaceAndEditor clickSaveAndExit() {
-        workSpaceWindow
+
+    public Editor clickSaveAndExit() {
+        editor
                 .findElementByClassName(panelButtonsSelector)
                 .findElements(By.className(buttonsSelector)).get(1)
                 .click();
         return this;
     }
+
 }

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.geonaft.base.BaseTest;
-import ru.geonaft.modules.loader.Loader;
+import ru.geonaft.modules.loader.Loaderold;
 import ru.geonaft.view.ribbon.BaseRibbon;
 import ru.geonaft.view.startWindow.StartWindow;
 import ru.geonaft.view.treeProject.selectors.SubFolderSelector;
@@ -43,7 +43,7 @@ public class LoadEntityAllFormats extends BaseTest {
     @Story(value = "Preview")
     @TmsLink("6439")
     public void TestWorkWithWindow() {
-        new Loader(desktopSession)
+        new Loaderold(desktopSession)
                 .openModule()
                 .checkWorkElementsPreviewWindow();
     }
@@ -55,7 +55,7 @@ public class LoadEntityAllFormats extends BaseTest {
     @Story(value = "Polygon")
     @TmsLink("6582")
     public void TestLoadedPolygon() {
-        new Loader(desktopSession)
+        new Loaderold(desktopSession)
                 .openModule()
                 .loadEntity(polygonForTest.path, polygonForTest.name, POLYGON)
                 .checkDataFolder(POLYGON);
@@ -74,7 +74,7 @@ public class LoadEntityAllFormats extends BaseTest {
     @Story(value = "Surfaces")
     @TmsLink("7460")
     public void TestLoadedSurfaces(String fileName) {
-        new Loader(desktopSession)
+        new Loaderold(desktopSession)
                 .openModule()
                 .loadEntity(surfaceForTest.path, fileName, SubFolderSelector.SURFACE)
                 .openEditorLoadedFile(SURFACE)
@@ -88,7 +88,7 @@ public class LoadEntityAllFormats extends BaseTest {
     @Story(value = "Trajectory")
     @TmsLink("7456")
     public void TestChangeNameLoaderTrajectory() {
-        new Loader(desktopSession)
+        new Loaderold(desktopSession)
                 .openModule()
                 .loadEntityWithRename(trajectoryForTest.path, trajectoryForTest.name, TRAJECTORY)
                 .openEditorLoadedFile(TRAJECTORY)
@@ -102,7 +102,7 @@ public class LoadEntityAllFormats extends BaseTest {
     @Story(value = "Trajectory")
     @TmsLink("7798")
     public void TestLoadedTrajectory() {
-        new Loader(desktopSession)
+        new Loaderold(desktopSession)
                 .openModule()
                 .loadEntity(trajectoryForTest.path, trajectoryForTest.name, TRAJECTORY)
                 .openEditorLoadedFile(TRAJECTORY)
@@ -116,7 +116,7 @@ public class LoadEntityAllFormats extends BaseTest {
     @Story(value = "Log")
     @TmsLink("7800")
     public void TestLoadedLog() {
-        new Loader(desktopSession)
+        new Loaderold(desktopSession)
                 .openModule()
                 .loadEntity(logForTest.path, logForTest.name, LOG)
                 .openEditorLoadedFile(LOG)
@@ -130,7 +130,7 @@ public class LoadEntityAllFormats extends BaseTest {
     @Story(value = "Image")
     @TmsLink("7802")
     public void TestLoadedImage() {
-        new Loader(desktopSession)
+        new Loaderold(desktopSession)
                 .openModule()
                 .loadEntity(imageForTest.path, imageForTest.name, IMAGE)
                 .openEditorLoadedFile(IMAGE)
@@ -153,7 +153,7 @@ public class LoadEntityAllFormats extends BaseTest {
     @Story(value = "Pattern")
     @TmsLink("7802")
     public void TestLoadedPattern_Map_Well_CrossSection(String name) {
-        new Loader(desktopSession)
+        new Loaderold(desktopSession)
                 .openModule()
                 .loadFileFromWindow(patternForTest.path, name)
                 .doPreview(PATTERN);
@@ -172,7 +172,7 @@ public class LoadEntityAllFormats extends BaseTest {
     @Story(value = "Picture")
     @TmsLink("9326")
     public void TestLoadedPicture(String name) {
-        new Loader(desktopSession)
+        new Loaderold(desktopSession)
                 .openModule()
                 .loadEntity(pictureForTest.path, name, PICTURE)
                 .checkDataFolder(PICTURE);
@@ -185,7 +185,7 @@ public class LoadEntityAllFormats extends BaseTest {
     @Story(value = "Multi-file(pictures)")
     @TmsLink("9327")
     public void TestMultiFileLoadedPicture() {
-        new Loader(desktopSession)
+        new Loaderold(desktopSession)
                 .openModule()
                 .multiFileLoad(pictureForTest.path, PICTURE)
                 .doMultiFilePreview(PICTURE);
@@ -203,7 +203,7 @@ public class LoadEntityAllFormats extends BaseTest {
     @Story(value = "Multi-file(surfaces)")
     @TmsLink("11382")
     public void TestMultiFileLoadedSurfaces() {
-        new Loader(desktopSession)
+        new Loaderold(desktopSession)
                 .openModule()
                 .multiFileLoad(surfaceForTest.path, SURFACE)
                 .checkDataFolder(SURFACE);
@@ -220,7 +220,7 @@ public class LoadEntityAllFormats extends BaseTest {
     @Story(value = "Log")
     @TmsLink("12821")
     public void TestPreviewInTheWindowLoader() {
-        new Loader(desktopSession)
+        new Loaderold(desktopSession)
                 .openModule()
                 .loadEntity(logForTest.path, logForTest.name, LOG);
     }

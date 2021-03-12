@@ -15,12 +15,6 @@ public class TreeProjectPP extends BaseTreeProject {
         super(driver);
     }
 
-    public TreeProjectPP checkCreateSubfolderModule() {
-        unfoldFolder(MODULES);
-        checkFolder(MODULE);
-        return this;
-    }
-
     public TreeProjectPP unfoldLogFolder() {
         unfoldFolder(WELLS);
         unfoldFolder(WELL);
@@ -31,7 +25,7 @@ public class TreeProjectPP extends BaseTreeProject {
 
     public TreeProjectPP checkCreateFolder(SubFolderSelector folder) {
         unfoldLogFolder();
-        checkFolder(folder);
+        checkFolder(folder, 1);
         return this;
     }
 

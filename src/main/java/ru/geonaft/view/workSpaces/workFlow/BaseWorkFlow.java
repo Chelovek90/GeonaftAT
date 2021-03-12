@@ -8,7 +8,10 @@ import ru.geonaft.Base;
 import ru.geonaft.modules.pp.workFlowPP.WorkflowPP;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static ru.geonaft.NameEntityToProject.*;
@@ -20,14 +23,14 @@ public class BaseWorkFlow extends Base {
     protected RemoteWebElement well;
 
     @WindowsFindBy(accessibility = "Workflow")
-    private RemoteWebElement mainViewID;
+    protected RemoteWebElement mainViewID;
 
     private String headersPanelSelector = "TabHeadersPanel";
     protected RemoteWebElement headersPanel;
 
     private String headersSelector = "DocumentPaneItem";
 
-    private String workflowSelector = "DocumentPanel";
+    protected String workflowSelector = "DocumentPanel";
 
     private String panelMenuSelector = "NavPaneActiveGroupControl";
     protected RemoteWebElement panelMenu;
@@ -77,7 +80,6 @@ public class BaseWorkFlow extends Base {
     }
 
     private String headersName = "TabCaptionControl";
-    private String nameAttribute = "Name";
 
     public BaseWorkFlow checkTabNameWorkflowHeaders(String wellName, String logName) {
         String tabName = headersPanel
@@ -92,7 +94,7 @@ public class BaseWorkFlow extends Base {
         return this;
     }
 
-    public  BaseWorkFlow setOptionViewForStepWorkflow() {
+    public BaseWorkFlow setOptionViewForStepWorkflow() {
         this.optionView =
                 mainViewID
                         .findElementByClassName(workflowSelector)
@@ -103,6 +105,7 @@ public class BaseWorkFlow extends Base {
     private String listWellsNameSelector = "Geosteering.Core.Infrastructure.ViewModels.EntityInfoViewModel`1[System.Guid]";
     private String listWellsClassSelector = "ListBoxItem";
     private String entityNameSelector = "TextBlock";
+
     public BaseWorkFlow chooseRandomEntityFromList() {
         List<RemoteWebElement> entity = driver
                 .findElementsByName(listWellsNameSelector);
@@ -115,13 +118,12 @@ public class BaseWorkFlow extends Base {
         return this;
     }
 
-
     public BaseWorkFlow chooseWellForModule() {
         chooseRandomEntityFromList();
 
         wellInProject.setName(well
-                        .findElementByClassName(entityNameSelector)
-                        .getText());
+                .findElementByClassName(entityNameSelector)
+                .getText());
 
         return this;
     }
@@ -135,6 +137,7 @@ public class BaseWorkFlow extends Base {
     }
 
     protected String applyButtonSelector = "Button";
+
     public BaseWorkFlow clickApplyButton() {
         optionView
                 .findElementByClassName(applyButtonSelector)
@@ -142,6 +145,14 @@ public class BaseWorkFlow extends Base {
         return this;
     }
 
+    public BaseWorkFlow checkEnableApplyButton() {
+        assertThat("Apply button is enabled",
+                optionView
+                        .findElementByClassName(applyButtonSelector)
+                        .getAttribute(enableButtonAttribute),
+                equalTo("False"));
+        return this;
+    }
 
     public BaseWorkFlow waitLoading() {
         baseAction
@@ -152,5 +163,35 @@ public class BaseWorkFlow extends Base {
         return this;
     }
 
+    public BaseWorkFlow primitiveChooseFromComboBox(RemoteWebElement comboBox) {
+        comboBox.click();
+        actions.moveToElement(comboBox, 20, 35)
+                .click()
+                .build()
+                .perform();
+        return this;
+    }
+
+    public List<String> getAllTextFromOptionView(RemoteWebElement view) {
+        return view
+                .findElementsByClassName(textBlockSelector)
+                .stream()
+                .map(element -> element.getText())
+                .distinct()
+                .filter(text -> !text.trim().isEmpty())
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    private String buttonMenuSelector = "NavBarItemControl";
+
+    public List<String> getAllStepsNameWorkflow() {
+        return panelMenu
+                .findElementsByClassName(buttonMenuSelector)
+                .stream()
+                .map(element -> element.getText())
+                .sorted()
+                .collect(Collectors.toList());
+    }
 
 }

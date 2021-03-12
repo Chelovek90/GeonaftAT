@@ -14,7 +14,7 @@ public class BaseWorkSpace extends Base {
     protected int numberHeaders;
 
     @WindowsFindBy(accessibility = "DocumentHost")
-    private RemoteWebElement mainViewID;
+    protected RemoteWebElement mainViewID;
 
     private String headersPanelSelector = "TabHeadersPanel";
     protected RemoteWebElement headersPanel;
@@ -67,8 +67,7 @@ public class BaseWorkSpace extends Base {
     public BaseWorkSpace checkHeadersName(String nameWell) {
         String tabName = headersPanel
                 .findElementByClassName(headersSelector)
-                .findElement(By.className(headersName))
-                .getAttribute(nameAttribute);
+                .getText();
         assertThat("Tab name does not contains well name - " + nameWell, tabName, containsString(nameWell));
         return this;
     }
@@ -81,6 +80,17 @@ public class BaseWorkSpace extends Base {
         assertThat("Tracks count not equal expected",
                 trackBox
                         .findElements(By.name(trackSelector))
+                        .size(),
+                equalTo(expectedCount));
+        return this;
+    }
+
+    private String trackZonesSelector = "Geosteering.UI.Infrastructure.ViewModels.Tracks.ZonesTrackViewModel";
+
+    public BaseWorkSpace checkCountTrackZones(int expectedCount) {
+        assertThat("Track zones count not equal expected",
+                trackBox
+                        .findElements(By.name(trackZonesSelector))
                         .size(),
                 equalTo(expectedCount));
         return this;

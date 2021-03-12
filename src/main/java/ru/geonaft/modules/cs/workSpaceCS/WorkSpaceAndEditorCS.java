@@ -1,4 +1,4 @@
-package ru.geonaft.modules.cs.workSpace;
+package ru.geonaft.modules.cs.workSpaceCS;
 
 import io.appium.java_client.pagefactory.WindowsFindBy;
 import io.appium.java_client.windows.WindowsDriver;

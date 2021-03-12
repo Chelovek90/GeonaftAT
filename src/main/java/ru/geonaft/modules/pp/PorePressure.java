@@ -10,7 +10,7 @@ import ru.geonaft.modules.pp.workFlowPP.WorkflowPP;
 import ru.geonaft.modules.pp.workSpacePP.WorkSpacePP;
 import ru.geonaft.view.ribbon.buttonsSelector.ModuleSelector;
 
-import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.*;
+import static ru.geonaft.view.treeProject.selectors.SubFolderSelector.PRESSURE;
 
 public class PorePressure extends Base implements OpenModule {
 
@@ -40,7 +40,7 @@ public class PorePressure extends Base implements OpenModule {
     public PorePressure chooseWellAndLogClickApply() {
         workflow
                 .checkStepsPanelMenuRUS()
-                .checkOptionViewStepConfigurationDataRUS()
+                .checkOptionViewStepConfigurationRUS()
                 .chooseWell()
                 .chooseLog()
                 .clickApplyButton();
@@ -49,12 +49,35 @@ public class PorePressure extends Base implements OpenModule {
         workflow
                 .checkStepConfigurationForActivity();
         treeProject
-                .checkCreateSubfolderModule()
-                .checkCreateFolder(PRESSURE);
+                .checkCreateFolder(PRESSURE)
+                .checkCreateSubfolderModule(1);
         workSpace
                 .checkCreateTrackWithCurve(1,1);
         return this;
     }
+
+    public PorePressure chooseWellLogAndZoneClickApply() {
+        workflow
+                .checkStepsPanelMenuRUS()
+                .checkOptionViewStepConfigurationRUS()
+                .chooseWell()
+                .chooseLog()
+                .chooseZone()
+                .clickApplyButton();
+        ribbon
+                .checkActivityRibbonButton();
+        workflow
+                .checkStepConfigurationForActivity();
+        treeProject
+                .checkCreateFolder(PRESSURE)
+                .checkCreateSubfolderModule(1);
+        workSpace
+                .checkCreateTrackWithCurve(1,1)
+                .checkCrateTrackZone(1);
+        return this;
+    }
+
+    /*Overburden Pressure*/
 
     public PorePressure overburdenPressureCalculation() {
         workflow
@@ -64,9 +87,53 @@ public class PorePressure extends Base implements OpenModule {
                 .clickApplyButton()
                 .waitLoading();
         workSpace
-                .checkCreateTrackWithCurve(3,5);
+                .checkCreateTrackWithCurve(3, 5);
         treeProject
                 .checkCalculatedCurveInFolder(3);
+        return this;
+    }
+
+    /*D-Exponent*/
+
+    public PorePressure clickDExponent() {
+        workflow
+                .clickDExponent();
+        return this;
+    }
+
+    public PorePressure dExponentCalculation() {
+        workflow
+                .clickDExponent()
+                .checkOptionViewStepDExponentWithoutZoneRUS()
+                .chooseCurvesParameterDExponent()
+                .clickApplyButton()
+                .waitLoading();
+        workSpace
+                .checkCreateTrackWithCurve(2, 2);
+        treeProject
+                .checkCalculatedCurveInFolder(1);
+        return this;
+    }
+
+    public PorePressure dExponentCheckRangeConstants() {
+        workflow
+                .clickDExponent()
+                .checkEnableApplyButton();
+        workflow
+                .checkOptionViewStepDExponentWithoutZoneRUS()
+                .checkEnterInvalidValuesConstants();
+        return this;
+    }
+
+    public PorePressure dExponentCalculationCalculatedMethod(WorkflowPP.calculateMethodsDExponent method) {
+        workflow
+                .chooseCalculationMethod(method)
+                .chooseCurvesParameterDExponent()
+                .clickApplyButton();
+        workSpace
+                .checkCreateTrackWithCurve(2,2);
+        treeProject
+                .checkCalculatedCurveInFolder(1);
         return this;
     }
 

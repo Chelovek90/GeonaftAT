@@ -102,8 +102,8 @@ public class RibbonCS extends BaseRibbon {
         return this;
     }
 
-
     private String buttonClassName = "RibbonControl";
+
     public RibbonCS clickInstrument(InstrumentsCsSelector instrument) {
         modulesGroups.get(instrument.indexGroup)
                 .findElements(By.className(buttonClassName))
